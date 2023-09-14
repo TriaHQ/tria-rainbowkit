@@ -5,7 +5,8 @@ import { braveWallet } from './walletConnectors/braveWallet/braveWallet';
 import { coinbaseWallet } from './walletConnectors/coinbaseWallet/coinbaseWallet';
 import { injectedWallet } from './walletConnectors/injectedWallet/injectedWallet';
 import { metaMaskWallet } from './walletConnectors/metaMaskWallet/metaMaskWallet';
-import { rainbowWallet } from './walletConnectors/rainbowWallet/rainbowWallet';
+// import { rainbowWallet } from './walletConnectors/rainbowWallet/rainbowWallet';
+import { triaWallet } from './walletConnectors/triaWallet/triaWallet';
 import { safeWallet } from './walletConnectors/safeWallet/safeWallet';
 import { walletConnectWallet } from './walletConnectors/walletConnectWallet/walletConnectWallet';
 
@@ -27,7 +28,8 @@ export const getDefaultWallets = ({
       wallets: [
         injectedWallet({ chains }),
         safeWallet({ chains }),
-        rainbowWallet({ chains, projectId }),
+        // rainbowWallet({ chains, projectId }),
+        triaWallet({ chains, projectId }),
         coinbaseWallet({ appName, chains }),
         metaMaskWallet({ chains, projectId }),
         walletConnectWallet({ chains, projectId }),
