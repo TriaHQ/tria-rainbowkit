@@ -28,18 +28,16 @@ export const triaWallet = ({
   projectId,
   walletConnectOptions,
   walletConnectVersion = '2',
-  ...options
 }: TriaWalletLegacyOptions | TriaWalletOptions): Wallet => {
   return {
     id: 'tria',
     iconBackground: '#000',
     name: 'Tria Wallet',
-    iconUrl: async () => (await import('./triaWallet.svg')).default,
+    iconUrl: async () => (await import('./triaWallet.png')).default,
     downloadUrls: {
-      android: 'https://play.google.com/store/apps/details?id=com.ledger.live',
-      ios: 'https://apps.apple.com/us/app/ledger-live-web3-wallet/id1361671700',
-      mobile: 'https://www.ledger.com/ledger-live',
-      qrCode: 'https://ledger.com/ledger-live',
+      ios: 'https://apps.apple.com/app/apple-store/id6443944476',
+      mobile: 'https://app.tria.so/',
+      qrCode: 'https://app.tria.so/',
     },
     createConnector: () => {
       const connector = getWalletConnectConnector({
@@ -60,6 +58,31 @@ export const triaWallet = ({
             return isAndroid()
               ? uri
               : `tria://wc?uri=${encodeURIComponent(uri)}`;
+          },
+        },
+        qrCode: {
+          getUri: async () =>
+            getWalletConnectUri(connector, walletConnectVersion),
+          instructions: {
+            learnMoreUrl: 'https://tria.so/',
+            steps: [
+              {
+                description: 'Install Tria wallet from App store.',
+                step: 'install',
+                title: 'Open the Tria app',
+              },
+              {
+                description: 'Create a new wallet or import an existing one.',
+                step: 'create',
+                title: 'Create or Import a Wallet',
+              },
+              {
+                description:
+                  'Tap the QR icon on your homescreen, scan the code and confirm the prompt to connect.',
+                step: 'scan',
+                title: 'Tap the QR icon and scan',
+              },
+            ],
           },
         },
         desktop: {
