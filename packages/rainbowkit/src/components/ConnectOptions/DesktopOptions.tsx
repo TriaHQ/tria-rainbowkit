@@ -1,25 +1,33 @@
-import React, { Fragment, useContext, useEffect, useState } from 'react';
-import { touchableStyles } from '../../css/touchableStyles';
+// import { AuthController } from '@tria-sdk/core';
+import axios from 'axios';
+
+import React, {
+  Fragment,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
+import { useSocialLoginConnectors } from '../../socialLogins/socialLoginConnectors';
 import { isSafari } from '../../utils/browsers';
-import { groupBy } from '../../utils/groupBy';
 import {
   useWalletConnectors,
   WalletConnector,
 } from '../../wallets/useWalletConnectors';
+import { AsyncImage } from '../AsyncImage/AsyncImage';
 import { Box } from '../Box/Box';
 import { CloseButton } from '../CloseButton/CloseButton';
 import { ConnectModalIntro } from '../ConnectModal/ConnectModalIntro';
-import { DisclaimerLink } from '../Disclaimer/DisclaimerLink';
-import { DisclaimerText } from '../Disclaimer/DisclaimerText';
-import { BackIcon } from '../Icons/Back';
-import { InfoButton } from '../InfoButton/InfoButton';
+import EnterTriaPassword from '../EnterTriaPassword/EnterTriaPassword';
+import LoginInput from '../LoginInput/LoginInput';
 import { ModalSelection } from '../ModalSelection/ModalSelection';
-import { AppContext } from '../RainbowKitProvider/AppContext';
 import {
   ModalSizeContext,
   ModalSizeOptions,
 } from '../RainbowKitProvider/ModalSizeContext';
+import TagView from '../TagView/TagView';
 import { Text } from '../Text/Text';
+import WelcomeView from '../Welcome/Welcome';
 
 import {
   ConnectDetail,
@@ -29,11 +37,13 @@ import {
   InstructionExtensionDetail,
   InstructionMobileDetail,
 } from './ConnectDetails';
-import {
-  ScrollClassName,
-  sidebar,
-  sidebarCompactMode,
-} from './DesktopOptions.css';
+import { ScrollClassName } from './DesktopOptions.css';
+
+enum ConnectType {
+  Tria = 'Continue with Tria',
+  EmailSocial = 'Email & Social Login',
+  ConnectWallet = 'Connect a Wallet',
+}
 
 export enum WalletStep {
   None = 'NONE',
@@ -46,25 +56,94 @@ export enum WalletStep {
   InstructionsExtension = 'INSTRUCTIONS_EXTENSION',
 }
 
+export enum SocialLoginStep {
+  NotStarted = 'NotStarted',
+  TriaNameCreation = 'TriaNameCreation',
+  ExtraLayerSecurity = 'ExtraLayerSecurity',
+}
+
+enum ContinueWithTriaStep {
+  EnterUserName = 'EnterUserName',
+  EnterPassword = 'EnterPassword',
+}
+
 export function DesktopOptions({ onClose }: { onClose: () => void }) {
-  const titleId = 'rk_connect_title';
   const safari = isSafari();
   const [selectedOptionId, setSelectedOptionId] = useState<
     string | undefined
   >();
+  const [searchingOtherWallet, setIsSearchingOtherWallet] =
+    useState<bool>(false);
+
   const [selectedWallet, setSelectedWallet] = useState<WalletConnector>();
   const [qrCodeUri, setQrCodeUri] = useState<string>();
-  const hasQrCode = !!selectedWallet?.qrCode && qrCodeUri;
   const [connectionError, setConnectionError] = useState(false);
+  const [connectType, setConnectType] = useState<ConnectType>(ConnectType.Tria);
   const modalSize = useContext(ModalSizeContext);
   const compactModeEnabled = modalSize === ModalSizeOptions.COMPACT;
-  const { disclaimer: Disclaimer } = useContext(AppContext);
+  const [walletStep, setWalletStep] = useState<WalletStep>(WalletStep.None);
+  const [socialLoginStep, setSocialLoginStep] = useState<SocialLoginStep>(
+    SocialLoginStep.NotStarted
+  );
+  const [continueWithTriaStep, setContinueWithTriaStep] =
+    useState<ContinueWithTriaStep>(ContinueWithTriaStep.EnterUserName);
+  const [triaName, setTriaName] = useState('');
+  const [isSocialLoginInProgress, setIsSocialLoginInProgress] = useState(false);
+  const [socialFirstName, setSocialFirstName] = useState('');
+
+  const socialLogins = useSocialLoginConnectors();
 
   const wallets = useWalletConnectors()
     .filter(wallet => wallet.ready || !!wallet.extensionDownloadUrl)
     .sort((a, b) => a.groupIndex - b.groupIndex);
 
-  const groupedWallets = groupBy(wallets, wallet => wallet.groupName);
+  useEffect(() => {
+    async function submitData() {
+      const searchParams = new URLSearchParams(location.search);
+      const code = searchParams.get('code');
+      const scope = searchParams.get('scope');
+
+      if (code && scope && !isSocialLoginInProgress) {
+        setIsSocialLoginInProgress(true);
+        const {
+          data: { email, firstName },
+        } = await axios.get(
+          `http://localhost:8000/api/v1/auth/google/callback?code=${code}&scope=${scope}`
+        );
+        const { data } = await axios.get(
+          `http://localhost:8000/api/v1/get-name-recommendation?name=${firstName}`
+        );
+        setSocialFirstName(
+          data?.data?.length > 0 ? data.data[0] : firstName ? firstName : email
+        );
+        setIsSocialLoginInProgress(false);
+      }
+    }
+    submitData();
+  });
+
+  const checkUsername = useCallback(async (username: string) => {
+    try {
+      const response = await authController.checkUsername(username);
+
+      if (response.success && !response.isExist) {
+        return Promise.resolve(false);
+      }
+
+      return Promise.resolve(true);
+    } catch (error) {
+      return Promise.reject(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (socialFirstName.length !== 0) {
+      setSocialLoginStep(SocialLoginStep.TriaNameCreation);
+      checkUsername(socialFirstName);
+    }
+  }, [socialFirstName, checkUsername]);
+
+  const numberOfWalletsShown = 3;
 
   const connectToWallet = (wallet: WalletConnector) => {
     setConnectionError(false);
@@ -180,21 +259,185 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
   const [initialWalletStep, setInitialWalletStep] = useState<WalletStep>(
     WalletStep.None
   );
-  const [walletStep, setWalletStep] = useState<WalletStep>(WalletStep.None);
 
   let walletContent = null;
-  let headerLabel = null;
-  let headerBackButtonLink: WalletStep | null = null;
-  let headerBackButtonCallback: () => void;
+  let socialLoginContent = null;
 
   useEffect(() => {
     setConnectionError(false);
   }, [walletStep, selectedWallet]);
 
-  const hasExtension = !!selectedWallet?.extensionDownloadUrl;
-  const hasExtensionAndMobile = !!(
-    hasExtension && selectedWallet?.mobileDownloadUrl
+  let searchWallet = (
+    <div
+      style={{
+        borderImage: 'linear-gradient(#9F8BFF4D, #7053FF4D) 30',
+        borderRadius: '16px',
+        borderStyle: 'solid',
+        borderWidth: '1.5px',
+        display: 'flex',
+        flexDirection: 'column',
+        padding: 16,
+      }}
+    >
+      <Text>Connect a Wallet</Text>
+      <input
+        placeholder="Search wallet"
+        style={{
+          background: 'rgba(16, 16, 16, 0.05)',
+          borderRadius: '35px',
+          borderWidth: '0px',
+          flex: 1,
+          height: '70px',
+          marginBottom: '20px',
+          marginRight: '12px',
+          marginTop: '20px',
+          paddingLeft: '20px',
+        }}
+      />
+      <Box className={ScrollClassName} paddingBottom="18">
+        {wallets.length > 0 && (
+          <Fragment key={0}>
+            <Box
+              display="flex"
+              flexDirection="column"
+              gap="4"
+              style={{ marginLeft: -6, marginTop: 20 }}
+            >
+              {wallets.map(wallet => {
+                return (
+                  <ModalSelection
+                    currentlySelected={wallet.id === selectedOptionId}
+                    iconBackground={wallet.iconBackground}
+                    iconUrl={wallet.iconUrl}
+                    key={wallet.id}
+                    name={wallet.name}
+                    onClick={() => {
+                      selectWallet(wallet);
+                      setIsSearchingOtherWallet(false);
+                    }}
+                    ready={wallet.ready}
+                    recent={wallet.recent}
+                    testId={`wallet-option-${wallet.id}`}
+                  />
+                );
+              })}
+            </Box>
+            <Box
+              onClick={() => {
+                setIsSearchingOtherWallet(true);
+              }}
+            >
+              <Text> Dont have a wallet? </Text>
+            </Box>
+          </Fragment>
+        )}
+      </Box>
+    </div>
   );
+
+  const logo = async () => (await import('./Opensea.png')).default;
+  const triaLogo = async () =>
+    (await import('../../wallets/walletConnectors/triaWallet/triaWallet.png'))
+      .default;
+  const triaAndOpenSeaLogoIntersection = (
+    <div
+      style={{
+        alignItems: 'center',
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        marginTop: 24,
+      }}
+    >
+      <div
+        style={{
+          borderRadius: '16!important',
+          borderStyle: 'solid',
+          borderWidth: '0px',
+          zIndex: 2,
+        }}
+      >
+        {' '}
+        <AsyncImage height={95} src={triaLogo} width={95} />{' '}
+      </div>
+      <div style={{ marginRight: -120, position: 'absolute' }}>
+        {' '}
+        <AsyncImage height={95} src={logo} width={95} />{' '}
+      </div>
+    </div>
+  );
+
+  switch (socialLoginStep) {
+    case SocialLoginStep.NotStarted:
+      socialLoginContent = <></>;
+      break;
+    case SocialLoginStep.TriaNameCreation:
+      socialLoginContent = (
+        <div
+          style={{
+            display: 'flex',
+            flex: 1,
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+          }}
+        >
+          <div style={{ display: 'flex', flex: 0.5, flexDirection: 'column' }}>
+            {triaAndOpenSeaLogoIntersection}
+            <Text style={{ alignSelf: 'center', marginTop: 24 }}>
+              {' '}
+              Creating your Tria account{' '}
+            </Text>
+          </div>
+          <div
+            style={{
+              display: 'flex',
+              flex: 0.5,
+              flexDirection: 'row',
+              padding: 16,
+            }}
+          >
+            <Box
+              cursor="pointer"
+              onClick={() => setConnectType(ConnectType.EmailSocial)}
+              style={{
+                alignSelf: 'flex-end',
+                borderImage: 'linear-gradient(#9F8BFF4D, #7053FF4D) 30',
+                borderRadius: '16!important',
+                borderStyle: 'solid',
+                borderWidth: '1.5px',
+                flex: 1,
+                padding: 16,
+              }}
+            >
+              <Text> Create your tria name </Text>
+              <Text>
+                {' '}
+                Your @tria name is your shareable identity to get paid, log-in
+                to Web3 applications, or to get on every blockchain network.{' '}
+              </Text>
+              <LoginInput
+                ctaClicked={() =>
+                  setSocialLoginStep(SocialLoginStep.ExtraLayerSecurity)
+                }
+                ctaTitle="Next"
+                value={socialFirstName}
+              />
+            </Box>
+          </div>
+        </div>
+      );
+      break;
+    case SocialLoginStep.ExtraLayerSecurity:
+      socialLoginContent = (
+        <WelcomeView
+          logo={triaAndOpenSeaLogoIntersection}
+          username={socialFirstName}
+        />
+      );
+      break;
+    default:
+      break;
+  }
 
   switch (walletStep) {
     case WalletStep.None:
@@ -209,15 +452,9 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
           getWallet={() => changeWalletStep(WalletStep.Get)}
         />
       );
-      headerLabel = 'What is a Wallet?';
-      headerBackButtonLink = WalletStep.None;
       break;
     case WalletStep.Get:
       walletContent = <GetDetail getWalletDownload={getWalletDownload} />;
-      headerLabel = 'Get a Wallet';
-      headerBackButtonLink = compactModeEnabled
-        ? WalletStep.LearnCompact
-        : WalletStep.None;
       break;
     case WalletStep.Connect:
       walletContent = selectedWallet && (
@@ -231,17 +468,6 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
           wallet={selectedWallet}
         />
       );
-      headerLabel =
-        hasQrCode &&
-        `Scan with ${
-          selectedWallet.name === 'WalletConnect'
-            ? 'your phone'
-            : selectedWallet.name
-        }`;
-      headerBackButtonLink = compactModeEnabled ? WalletStep.None : null;
-      headerBackButtonCallback = compactModeEnabled
-        ? clearSelectedWallet
-        : () => {};
       break;
     case WalletStep.DownloadOptions:
       walletContent = selectedWallet && (
@@ -250,9 +476,6 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
           wallet={selectedWallet}
         />
       );
-      headerLabel = selectedWallet && `Get ${selectedWallet.name}`;
-      headerBackButtonLink =
-        hasExtensionAndMobile && WalletStep.Connect ? initialWalletStep : null;
       break;
     case WalletStep.Download:
       walletContent = selectedWallet && (
@@ -261,10 +484,6 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
           wallet={selectedWallet}
         />
       );
-      headerLabel = selectedWallet && `Install ${selectedWallet.name}`;
-      headerBackButtonLink = hasExtensionAndMobile
-        ? WalletStep.DownloadOptions
-        : initialWalletStep;
       break;
     case WalletStep.InstructionsMobile:
       walletContent = selectedWallet && (
@@ -273,246 +492,294 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
           wallet={selectedWallet}
         />
       );
-      headerLabel =
-        selectedWallet &&
-        `Get started with ${
-          compactModeEnabled
-            ? selectedWallet.shortName || selectedWallet.name
-            : selectedWallet.name
-        }`;
-      headerBackButtonLink = WalletStep.Download;
       break;
     case WalletStep.InstructionsExtension:
       walletContent = selectedWallet && (
         <InstructionExtensionDetail wallet={selectedWallet} />
       );
-      headerLabel =
-        selectedWallet &&
-        `Get started with ${
-          compactModeEnabled
-            ? selectedWallet.shortName || selectedWallet.name
-            : selectedWallet.name
-        }`;
-      headerBackButtonLink = WalletStep.DownloadOptions;
       break;
     default:
       break;
   }
+  const backPress = () => {
+    setSelectedOptionId(undefined);
+  };
+
+  if (continueWithTriaStep === ContinueWithTriaStep.EnterPassword) {
+    return (
+      <div
+        style={{
+          display: 'flex',
+          flex: 1,
+          height: 600,
+          margin: 10,
+          width: 400,
+        }}
+      >
+        <div style={{ display: 'flex', flex: 1 }}>
+          <EnterTriaPassword
+            logo={triaAndOpenSeaLogoIntersection}
+            triaName={triaName}
+          />
+        </div>
+      </div>
+    );
+  }
+
+  if (
+    socialLoginStep === SocialLoginStep.TriaNameCreation ||
+    socialLoginStep === SocialLoginStep.ExtraLayerSecurity
+  ) {
+    return (
+      <div
+        style={{
+          display: 'flex',
+          flex: 1,
+          height: 600,
+          margin: 10,
+          width: 400,
+        }}
+      >
+        <div style={{ display: 'flex', flex: 1 }}>{socialLoginContent}</div>
+      </div>
+    );
+  }
+
+  const triaNameEntered = name => {
+    setTriaName(name);
+    setContinueWithTriaStep(ContinueWithTriaStep.EnterPassword);
+  };
+
+  const socialLoginClicked = async () => {
+    await window.open(
+      'http://localhost:8000/api/v1/auth/oauth/google',
+      '_self'
+    );
+  };
+
   return (
-    <Box
-      display="flex"
-      flexDirection="row"
-      style={{ maxHeight: compactModeEnabled ? 468 : 504 }}
-    >
-      {(compactModeEnabled ? walletStep === WalletStep.None : true) && (
-        <Box
-          className={compactModeEnabled ? sidebarCompactMode : sidebar}
-          display="flex"
-          flexDirection="column"
-          marginTop="16"
+    <div style={{ flex: 1, height: 600, margin: 10, width: 400 }}>
+      <div style={{ display: 'flex', flex: 1, flexDirection: 'column' }}>
+        {selectedOptionId && !searchingOtherWallet && (
+          <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
+            <Box marginRight="16">
+              <CloseButton onClose={backPress} />
+            </Box>
+          </div>
+        )}
+        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <Box marginRight="16">
+            <CloseButton onClose={onClose} />
+          </Box>
+        </div>
+
+        <div
+          style={{
+            alignItems: 'center',
+            display: 'flex',
+            flex: 1,
+            flexDirection: 'column',
+            justifyContent: 'center',
+          }}
         >
-          <Box display="flex" justifyContent="space-between">
-            {compactModeEnabled && Disclaimer && (
-              <Box marginLeft="16" width="28">
-                <InfoButton
-                  onClick={() => changeWalletStep(WalletStep.LearnCompact)}
-                />
-              </Box>
-            )}
-            {compactModeEnabled && !Disclaimer && (
-              <Box marginLeft="16" width="28" />
-            )}
-            <Box
-              marginLeft={compactModeEnabled ? '0' : '6'}
-              paddingBottom="8"
-              paddingTop="2"
-              paddingX="18"
-            >
-              <Text
-                as="h1"
-                color="modalText"
-                id={titleId}
-                size="18"
-                weight="heavy"
-              >
-                Connect a Wallet
-              </Text>
-            </Box>
-            {compactModeEnabled && (
-              <Box marginRight="16">
-                <CloseButton onClose={onClose} />
-              </Box>
-            )}
-          </Box>
-          <Box className={ScrollClassName} paddingBottom="18">
-            {Object.entries(groupedWallets).map(
-              ([groupName, wallets], index) =>
-                wallets.length > 0 && (
-                  <Fragment key={index}>
-                    {groupName ? (
-                      <Box marginBottom="8" marginTop="16" marginX="6">
-                        <Text
-                          color="modalTextSecondary"
-                          size="14"
-                          weight="bold"
-                        >
-                          {groupName}
-                        </Text>
-                      </Box>
-                    ) : null}
-                    <Box display="flex" flexDirection="column" gap="4">
-                      {wallets.map(wallet => {
-                        return (
-                          <ModalSelection
-                            currentlySelected={wallet.id === selectedOptionId}
-                            iconBackground={wallet.iconBackground}
-                            iconUrl={wallet.iconUrl}
-                            key={wallet.id}
-                            name={wallet.name}
-                            onClick={() => selectWallet(wallet)}
-                            ready={wallet.ready}
-                            recent={wallet.recent}
-                            testId={`wallet-option-${wallet.id}`}
-                          />
-                        );
-                      })}
-                    </Box>
-                  </Fragment>
-                )
-            )}
-          </Box>
-          {compactModeEnabled && (
-            <>
-              <Box background="generalBorder" height="1" marginTop="-1" />
-              {Disclaimer ? (
-                <Box paddingX="24" paddingY="16" textAlign="center">
-                  <Disclaimer Link={DisclaimerLink} Text={DisclaimerText} />
-                </Box>
-              ) : (
-                <Box
-                  alignItems="center"
-                  display="flex"
-                  justifyContent="space-between"
-                  paddingX="24"
-                  paddingY="16"
-                >
-                  <Box paddingY="4">
-                    <Text color="modalTextSecondary" size="14" weight="medium">
-                      New to Ethereum wallets?
-                    </Text>
-                  </Box>
-                  <Box
-                    alignItems="center"
-                    display="flex"
-                    flexDirection="row"
-                    gap="4"
-                    justifyContent="center"
-                  >
-                    <Box
-                      className={touchableStyles({
-                        active: 'shrink',
-                        hover: 'grow',
-                      })}
-                      cursor="pointer"
-                      onClick={() => changeWalletStep(WalletStep.LearnCompact)}
-                      paddingY="4"
-                      style={{ willChange: 'transform' }}
-                      transition="default"
-                    >
-                      <Text color="accentColor" size="14" weight="bold">
-                        Learn More
-                      </Text>
-                    </Box>
-                  </Box>
-                </Box>
-              )}
-            </>
-          )}
-        </Box>
-      )}
-      {(compactModeEnabled ? walletStep !== WalletStep.None : true) && (
-        <>
-          {!compactModeEnabled && (
-            <Box background="generalBorder" minWidth="1" width="1" />
-          )}
-          <Box
-            display="flex"
-            flexDirection="column"
-            margin="16"
-            style={{ flexGrow: 1 }}
-          >
-            <Box
-              alignItems="center"
-              display="flex"
-              justifyContent="space-between"
-              marginBottom="12"
-            >
-              <Box width="28">
-                {headerBackButtonLink && (
-                  <Box
-                    as="button"
-                    className={touchableStyles({
-                      active: 'shrinkSm',
-                      hover: 'growLg',
-                    })}
-                    color="accentColor"
-                    onClick={() => {
-                      headerBackButtonLink &&
-                        changeWalletStep(headerBackButtonLink, true);
-                      headerBackButtonCallback?.();
-                    }}
-                    paddingX="8"
-                    paddingY="4"
-                    style={{
-                      boxSizing: 'content-box',
-                      height: 17,
-                      willChange: 'transform',
-                    }}
-                    transition="default"
-                    type="button"
-                  >
-                    <BackIcon />
-                  </Box>
-                )}
-              </Box>
-              <Box
-                display="flex"
-                justifyContent="center"
-                style={{ flexGrow: 1 }}
-              >
-                {headerLabel && (
-                  <Text
-                    color="modalText"
-                    size="18"
-                    textAlign="center"
-                    weight="heavy"
-                  >
-                    {headerLabel}
-                  </Text>
-                )}
-              </Box>
-              <CloseButton onClose={onClose} />
-            </Box>
-            <Box
-              display="flex"
-              flexDirection="column"
-              style={{ minHeight: compactModeEnabled ? 396 : 432 }}
+          <div style={{ marginTop: 24 }}>
+            <AsyncImage height={95} src={logo} width={95} />
+          </div>
+          <div style={{ marginBottom: 24, marginTop: 24 }}>
+            <Text color="modalText" size="14">
+              Connect with Opensea
+            </Text>
+          </div>
+        </div>
+
+        {!searchingOtherWallet && selectedOptionId == null && (
+          <div>
+            <div
+              style={{
+                borderImage:
+                  connectType === ConnectType.Tria
+                    ? 'linear-gradient(#9F8BFF4D, #7053FF4D) 30'
+                    : 'linear-gradient(#10101008, #10101008) 30',
+                borderRadius: '16px',
+                borderStyle: 'solid',
+                borderWidth: '1.5px',
+                display: 'flex',
+                padding: 16,
+              }}
             >
               <Box
-                alignItems="center"
+                cursor="pointer"
                 display="flex"
                 flexDirection="column"
-                gap="6"
-                height="full"
-                justifyContent="center"
-                marginX="8"
+                onClick={() => setConnectType(ConnectType.Tria)}
+                style={{ width: 780 }}
               >
-                {walletContent}
+                <div display="flex">
+                  <TagView
+                    backgroundColor="rgba(112, 83, 255, 0.12)"
+                    title="decentralized"
+                    titleColor="rgba(112, 83, 255, 0.9)"
+                  />
+                </div>
+
+                {connectType === ConnectType.Tria && (
+                  <div>
+                    <LoginInput
+                      ctaClicked={triaNameEntered}
+                      placeholder="@tria name"
+                    />
+                    <div
+                      style={{
+                        alignItems: 'center',
+                        display: 'flex',
+                        flexDirection: 'row',
+                      }}
+                    >
+                      <Text color="modalText" size="14" weight="bold">
+                        Get started \t
+                      </Text>
+                      <Text color="modalText" size="14">
+                        with Tria
+                      </Text>
+                    </div>
+                  </div>
+                )}
               </Box>
-            </Box>
+            </div>
+
+            <div
+              style={{
+                borderImage:
+                  connectType === ConnectType.EmailSocial
+                    ? 'linear-gradient(#9F8BFF4D, #7053FF4D) 30'
+                    : 'linear-gradient(#10101008, #10101008) 30',
+                borderRadius: '16!important',
+                borderStyle: 'solid',
+                borderWidth: '1.5px',
+                padding: 16,
+              }}
+            >
+              <Box
+                cursor="pointer"
+                onClick={() => setConnectType(ConnectType.EmailSocial)}
+              >
+                <Text color="modalText" size="18">
+                  Email and Social Logins
+                </Text>
+                {connectType === ConnectType.EmailSocial && (
+                  <div>
+                    <LoginInput placeholder="your@email.com" />
+                  </div>
+                )}
+                {connectType === ConnectType.EmailSocial && (
+                  <div
+                    style={{
+                      alignItems: 'center',
+                      display: 'flex',
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    {socialLogins.map(socialLogin => {
+                      return (
+                        <Box
+                          cursor="pointer"
+                          key={socialLogin.id}
+                          onClick={() => {
+                            socialLoginClicked(socialLogin);
+                          }}
+                        >
+                          <AsyncImage
+                            borderRadius="full"
+                            height={40}
+                            src={socialLogin.iconUrl}
+                            width={40}
+                          />
+                        </Box>
+                      );
+                    })}
+                  </div>
+                )}
+              </Box>
+            </div>
+
+            <div
+              style={{
+                borderImage:
+                  connectType === ConnectType.ConnectWallet
+                    ? 'linear-gradient(#9F8BFF4D, #7053FF4D) 30'
+                    : 'linear-gradient(#10101008, #10101008) 30',
+                borderRadius: '16px',
+                borderStyle: 'solid',
+                borderWidth: '1.5px',
+                padding: 16,
+              }}
+            >
+              <Box
+                cursor="pointer"
+                onClick={() => setConnectType(ConnectType.ConnectWallet)}
+              >
+                <Text color="modalText" size="18">
+                  Connect a Wallet
+                </Text>
+                {connectType === ConnectType.ConnectWallet && (
+                  <Box className={ScrollClassName} paddingBottom="18">
+                    {wallets.length > 0 && (
+                      <Fragment key={0}>
+                        <Box
+                          display="flex"
+                          flexDirection="column"
+                          gap="4"
+                          style={{ marginLeft: -6, marginTop: 20 }}
+                        >
+                          {wallets
+                            .filter(
+                              (_blank, index) => index < numberOfWalletsShown
+                            )
+                            .map(wallet => {
+                              return (
+                                <ModalSelection
+                                  currentlySelected={
+                                    wallet.id === selectedOptionId
+                                  }
+                                  iconBackground={wallet.iconBackground}
+                                  iconUrl={wallet.iconUrl}
+                                  key={wallet.id}
+                                  name={wallet.name}
+                                  onClick={() => selectWallet(wallet)}
+                                  ready={wallet.ready}
+                                  recent={wallet.recent}
+                                  testId={`wallet-option-${wallet.id}`}
+                                />
+                              );
+                            })}
+                        </Box>
+                        <Box onClick={() => setIsSearchingOtherWallet(true)}>
+                          <Text> Explore other wallets </Text>
+                        </Box>
+                      </Fragment>
+                    )}
+                  </Box>
+                )}
+              </Box>
+            </div>
+          </div>
+        )}
+        {!searchingOtherWallet && selectedOptionId && (
+          <Box
+            alignItems="center"
+            display="flex"
+            flexDirection="column"
+            gap="6"
+            height="full"
+            justifyContent="center"
+            marginX="8"
+          >
+            {walletContent}
           </Box>
-        </>
-      )}
-    </Box>
+        )}
+        {searchingOtherWallet && <Box>{searchWallet}</Box>}
+      </div>
+    </div>
   );
 }

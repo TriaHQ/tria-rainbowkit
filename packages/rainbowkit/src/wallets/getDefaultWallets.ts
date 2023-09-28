@@ -6,8 +6,8 @@ import { coinbaseWallet } from './walletConnectors/coinbaseWallet/coinbaseWallet
 import { injectedWallet } from './walletConnectors/injectedWallet/injectedWallet';
 import { metaMaskWallet } from './walletConnectors/metaMaskWallet/metaMaskWallet';
 // import { rainbowWallet } from './walletConnectors/rainbowWallet/rainbowWallet';
-import { triaWallet } from './walletConnectors/triaWallet/triaWallet';
 import { safeWallet } from './walletConnectors/safeWallet/safeWallet';
+import { triaWallet } from './walletConnectors/triaWallet/triaWallet';
 import { walletConnectWallet } from './walletConnectors/walletConnectWallet/walletConnectWallet';
 
 export const getDefaultWallets = ({

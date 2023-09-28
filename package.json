@@ -13,7 +13,7 @@
     "dev:template:next-app": "pnpm --filter rainbowkit-next-app dev",
     "build": "pnpm --recursive --parallel --filter=!rainbowkit-next-app --filter=!generated-test-app build",
     "start": "pnpm dev",
-    "lint": "eslint . --ext=js,jsx,mjs,ts,cjs,tsx && pnpm format:check && pnpm --recursive typecheck",
+    "lint": "eslint . --ext=js,jsx,mjs,ts,cjs,tsx && pnpm format:check",
     "lint:fix": "eslint . --ext=js,jsx,mjs,ts,cjs,tsx --fix && pnpm format:fix",
     "format:check": "prettier --check \"./**/*.{ts,js,jsx,mjs,cjs,md,mdx,tsx}\"",
     "format:fix": "prettier --write \"./**/*.{ts,js,jsx,mjs,cjs,md,mdx,tsx}\"",

@@ -9,7 +9,6 @@ export const dialogContent = style([
     borderStyle: 'solid',
     borderWidth: '1',
     boxShadow: 'dialog',
-    display: 'flex',
     flexDirection: 'column',
     overflow: 'hidden',
     position: 'relative',
@@ -46,7 +45,7 @@ export const dialogContentWideDesktop = style([
   {
     '@media': {
       [`screen and (min-width: ${largeScreenMinWidth}px)`]: {
-        width: '720px',
+        width: '420px',
       },
     },
   },

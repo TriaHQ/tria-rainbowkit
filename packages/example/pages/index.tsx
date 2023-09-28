@@ -51,7 +51,6 @@ const Example = ({ authEnabled }: AppContextProps) => {
     useState<ChainStatus>(defaultProps.chainStatus.smallScreen);
   const [chainStatusLargeScreen, setChainStatusLargeScreen] =
     useState<ChainStatus>(defaultProps.chainStatus.largeScreen);
-
   const [showBalanceSmallScreen, setShowBalanceSmallScreen] = useState<boolean>(
     defaultProps.showBalance.smallScreen
   );
@@ -119,6 +118,9 @@ const Example = ({ authEnabled }: AppContextProps) => {
 
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
+  useEffect(() => {
+    openConnectModal();
+  });
 
   const ready = mounted && (!authEnabled || status !== 'loading');
   const connected =
@@ -191,7 +193,12 @@ const Example = ({ authEnabled }: AppContextProps) => {
                 {(() => {
                   if (!connected) {
                     return (
-                      <button onClick={openConnectModal} type="button">
+                      <button
+                        onClick={() => {
+                          openConnectModal();
+                        }}
+                        type="button"
+                      >
                         Connect Wallet
                       </button>
                     );
