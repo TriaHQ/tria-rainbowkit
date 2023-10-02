@@ -21,7 +21,6 @@ import {
 import TagView from "../TagView/TagView";
 import { Text } from "../Text/Text";
 import WelcomeView from "../Welcome/Welcome";
-import { KeyringController } from "@tria-sdk/web";
 
 import {
   ConnectDetail,
@@ -84,6 +83,7 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
   const [triaName, setTriaName] = useState("");
   const [isSocialLoginInProgress, setIsSocialLoginInProgress] = useState(false);
   const [socialFirstName, setSocialFirstName] = useState("");
+  const [userId, setUserId] = useState("");
 
   const socialLogins = useSocialLoginConnectors();
 
@@ -100,36 +100,23 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
       if (code && scope && !isSocialLoginInProgress) {
         setIsSocialLoginInProgress(true);
         const {
-          data: { email, firstName },
+          data: { email, firstName, userId },
         } = await axios.get(
           `http://localhost:8000/api/v1/auth/google/callback?code=${code}&scope=${scope}`
         );
         const { data } = await axios.get(
           `http://localhost:8000/api/v1/get-name-recommendation?name=${firstName}`
         );
-        console.log(`login response: ${data}`);
-        setSocialFirstName(
-          data?.data?.length > 0 ? data.data[0] : firstName ? firstName : email
-        );
+        const parsedFirstName =
+          data?.data?.length > 0 ? data.data[0] : firstName ? firstName : email;
+        console.log(`first name: ${parsedFirstName}`);
+        setUserId(userId);
+        setSocialFirstName(parsedFirstName);
         setIsSocialLoginInProgress(false);
       }
     }
     submitData();
   }, [isSocialLoginInProgress]);
-
-  async function createAccountWithoutPassword(username: string) {
-    const keyringController = new KeyringController({
-      baseUrl: "http://localhost:8000",
-    });
-
-    const res = await keyringController.socialogin({
-      password: "",
-      platform: "google",
-      userId: username,
-      isPasswordLess: true,
-    });
-    console.log(`res: ${res}`);
-  }
 
   // const checkUsername = useCallback(async (username: string) => {
   //   try {
@@ -150,7 +137,6 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
     if (socialFirstName.length !== 0) {
       setSocialLoginStep(SocialLoginStep.TriaNameCreation);
       // checkUsername(socialFirstName);
-      createAccountWithoutPassword(socialFirstName);
     }
   }, [socialFirstName]);
 
