@@ -1,33 +1,27 @@
-// import { AuthController } from '@tria-sdk/core';
-import axios from 'axios';
+import axios from "axios";
 
-import React, {
-  Fragment,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
-import { useSocialLoginConnectors } from '../../socialLogins/socialLoginConnectors';
-import { isSafari } from '../../utils/browsers';
+import React, { Fragment, useContext, useEffect, useState } from "react";
+import { useSocialLoginConnectors } from "../../socialLogins/socialLoginConnectors";
+import { isSafari } from "../../utils/browsers";
 import {
-  useWalletConnectors,
   WalletConnector,
-} from '../../wallets/useWalletConnectors';
-import { AsyncImage } from '../AsyncImage/AsyncImage';
-import { Box } from '../Box/Box';
-import { CloseButton } from '../CloseButton/CloseButton';
-import { ConnectModalIntro } from '../ConnectModal/ConnectModalIntro';
-import EnterTriaPassword from '../EnterTriaPassword/EnterTriaPassword';
-import LoginInput from '../LoginInput/LoginInput';
-import { ModalSelection } from '../ModalSelection/ModalSelection';
+  useWalletConnectors,
+} from "../../wallets/useWalletConnectors";
+import { AsyncImage } from "../AsyncImage/AsyncImage";
+import { Box } from "../Box/Box";
+import { CloseButton } from "../CloseButton/CloseButton";
+import { ConnectModalIntro } from "../ConnectModal/ConnectModalIntro";
+import EnterTriaPassword from "../EnterTriaPassword/EnterTriaPassword";
+import LoginInput from "../LoginInput/LoginInput";
+import { ModalSelection } from "../ModalSelection/ModalSelection";
 import {
   ModalSizeContext,
   ModalSizeOptions,
-} from '../RainbowKitProvider/ModalSizeContext';
-import TagView from '../TagView/TagView';
-import { Text } from '../Text/Text';
-import WelcomeView from '../Welcome/Welcome';
+} from "../RainbowKitProvider/ModalSizeContext";
+import TagView from "../TagView/TagView";
+import { Text } from "../Text/Text";
+import WelcomeView from "../Welcome/Welcome";
+import { KeyringController } from "@tria-sdk/web";
 
 import {
   ConnectDetail,
@@ -36,35 +30,35 @@ import {
   GetDetail,
   InstructionExtensionDetail,
   InstructionMobileDetail,
-} from './ConnectDetails';
-import { ScrollClassName } from './DesktopOptions.css';
+} from "./ConnectDetails";
+import { ScrollClassName } from "./DesktopOptions.css";
 
 enum ConnectType {
-  Tria = 'Continue with Tria',
-  EmailSocial = 'Email & Social Login',
-  ConnectWallet = 'Connect a Wallet',
+  Tria = "Continue with Tria",
+  EmailSocial = "Email & Social Login",
+  ConnectWallet = "Connect a Wallet",
 }
 
 export enum WalletStep {
-  None = 'NONE',
-  LearnCompact = 'LEARN_COMPACT',
-  Get = 'GET',
-  Connect = 'CONNECT',
-  DownloadOptions = 'DOWNLOAD_OPTIONS',
-  Download = 'DOWNLOAD',
-  InstructionsMobile = 'INSTRUCTIONS_MOBILE',
-  InstructionsExtension = 'INSTRUCTIONS_EXTENSION',
+  None = "NONE",
+  LearnCompact = "LEARN_COMPACT",
+  Get = "GET",
+  Connect = "CONNECT",
+  DownloadOptions = "DOWNLOAD_OPTIONS",
+  Download = "DOWNLOAD",
+  InstructionsMobile = "INSTRUCTIONS_MOBILE",
+  InstructionsExtension = "INSTRUCTIONS_EXTENSION",
 }
 
 export enum SocialLoginStep {
-  NotStarted = 'NotStarted',
-  TriaNameCreation = 'TriaNameCreation',
-  ExtraLayerSecurity = 'ExtraLayerSecurity',
+  NotStarted = "NotStarted",
+  TriaNameCreation = "TriaNameCreation",
+  ExtraLayerSecurity = "ExtraLayerSecurity",
 }
 
 enum ContinueWithTriaStep {
-  EnterUserName = 'EnterUserName',
-  EnterPassword = 'EnterPassword',
+  EnterUserName = "EnterUserName",
+  EnterPassword = "EnterPassword",
 }
 
 export function DesktopOptions({ onClose }: { onClose: () => void }) {
@@ -87,21 +81,21 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
   );
   const [continueWithTriaStep, setContinueWithTriaStep] =
     useState<ContinueWithTriaStep>(ContinueWithTriaStep.EnterUserName);
-  const [triaName, setTriaName] = useState('');
+  const [triaName, setTriaName] = useState("");
   const [isSocialLoginInProgress, setIsSocialLoginInProgress] = useState(false);
-  const [socialFirstName, setSocialFirstName] = useState('');
+  const [socialFirstName, setSocialFirstName] = useState("");
 
   const socialLogins = useSocialLoginConnectors();
 
   const wallets = useWalletConnectors()
-    .filter(wallet => wallet.ready || !!wallet.extensionDownloadUrl)
+    .filter((wallet) => wallet.ready || !!wallet.extensionDownloadUrl)
     .sort((a, b) => a.groupIndex - b.groupIndex);
 
   useEffect(() => {
     async function submitData() {
       const searchParams = new URLSearchParams(location.search);
-      const code = searchParams.get('code');
-      const scope = searchParams.get('scope');
+      const code = searchParams.get("code");
+      const scope = searchParams.get("scope");
 
       if (code && scope && !isSocialLoginInProgress) {
         setIsSocialLoginInProgress(true);
@@ -113,6 +107,7 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
         const { data } = await axios.get(
           `http://localhost:8000/api/v1/get-name-recommendation?name=${firstName}`
         );
+        console.log(`login response: ${data}`);
         setSocialFirstName(
           data?.data?.length > 0 ? data.data[0] : firstName ? firstName : email
         );
@@ -120,28 +115,44 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
       }
     }
     submitData();
-  });
+  }, [isSocialLoginInProgress]);
 
-  const checkUsername = useCallback(async (username: string) => {
-    try {
-      const response = await authController.checkUsername(username);
+  async function createAccountWithoutPassword(username: string) {
+    const keyringController = new KeyringController({
+      baseUrl: "http://localhost:8000",
+    });
 
-      if (response.success && !response.isExist) {
-        return Promise.resolve(false);
-      }
+    const res = await keyringController.socialogin({
+      password: "",
+      platform: "google",
+      userId: username,
+      isPasswordLess: true,
+    });
+    console.log(`res: ${res}`);
+  }
 
-      return Promise.resolve(true);
-    } catch (error) {
-      return Promise.reject(true);
-    }
-  }, []);
+  // const checkUsername = useCallback(async (username: string) => {
+  //   try {
+  //     const response = await authController.checkUsername(username);
+
+  //     if (response.success && !response.isExist) {
+  //       return Promise.resolve(false);
+  //     }
+
+  //     return Promise.resolve(true);
+  //   } catch (error) {
+  //     console.log(error);
+  //     return Promise.reject(true);
+  //   }
+  // }, []);
 
   useEffect(() => {
     if (socialFirstName.length !== 0) {
       setSocialLoginStep(SocialLoginStep.TriaNameCreation);
-      checkUsername(socialFirstName);
+      // checkUsername(socialFirstName);
+      createAccountWithoutPassword(socialFirstName);
     }
-  }, [socialFirstName, checkUsername]);
+  }, [socialFirstName]);
 
   const numberOfWalletsShown = 3;
 
@@ -157,7 +168,7 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
         // if desktop deep link, wait for uri
         setTimeout(async () => {
           const uri = await getDesktopDeepLink();
-          window.open(uri, safari ? '_blank' : '_self');
+          window.open(uri, safari ? "_blank" : "_self");
         }, 0);
       }
     }
@@ -178,7 +189,7 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
         if (callbackFired) return;
         callbackFired = true;
 
-        const sWallet = wallets.find(w => wallet.id === w.id);
+        const sWallet = wallets.find((w) => wallet.id === w.id);
         const uri = await sWallet?.qrCode?.getUri();
         setQrCodeUri(uri);
 
@@ -202,11 +213,11 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
             selectWallet(wallet);
           };
           const removeHandlers = () => {
-            connection.off('close', handleConnectionClose);
-            connection.off('open', removeHandlers);
+            connection.off("close", handleConnectionClose);
+            connection.off("open", removeHandlers);
           };
-          connection.on('close', handleConnectionClose);
-          connection.on('open', removeHandlers);
+          connection.on("close", handleConnectionClose);
+          connection.on("open", removeHandlers);
         }
       });
     } else {
@@ -221,7 +232,7 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
 
   const getWalletDownload = (id: string) => {
     setSelectedOptionId(id);
-    const sWallet = wallets.find(w => id === w.id);
+    const sWallet = wallets.find((w) => id === w.id);
     const isMobile = sWallet?.downloadUrls?.qrCode;
     const isExtension = !!sWallet?.extensionDownloadUrl;
     setSelectedWallet(sWallet);
@@ -239,10 +250,7 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
     setSelectedWallet(undefined);
     setQrCodeUri(undefined);
   };
-  const changeWalletStep = (
-    newWalletStep: WalletStep,
-    isBack: boolean = false
-  ) => {
+  const changeWalletStep = (newWalletStep: WalletStep, isBack = false) => {
     if (
       isBack &&
       newWalletStep === WalletStep.Get &&
@@ -263,19 +271,20 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
   let walletContent = null;
   let socialLoginContent = null;
 
+  // biome-ignore lint/nursery/useExhaustiveDependencies: TODO
   useEffect(() => {
     setConnectionError(false);
   }, [walletStep, selectedWallet]);
 
-  let searchWallet = (
+  const searchWallet = (
     <div
       style={{
-        borderImage: 'linear-gradient(#9F8BFF4D, #7053FF4D) 30',
-        borderRadius: '16px',
-        borderStyle: 'solid',
-        borderWidth: '1.5px',
-        display: 'flex',
-        flexDirection: 'column',
+        borderImage: "linear-gradient(#9F8BFF4D, #7053FF4D) 30",
+        borderRadius: "16px",
+        borderStyle: "solid",
+        borderWidth: "1.5px",
+        display: "flex",
+        flexDirection: "column",
         padding: 16,
       }}
     >
@@ -283,15 +292,15 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
       <input
         placeholder="Search wallet"
         style={{
-          background: 'rgba(16, 16, 16, 0.05)',
-          borderRadius: '35px',
-          borderWidth: '0px',
+          background: "rgba(16, 16, 16, 0.05)",
+          borderRadius: "35px",
+          borderWidth: "0px",
           flex: 1,
-          height: '70px',
-          marginBottom: '20px',
-          marginRight: '12px',
-          marginTop: '20px',
-          paddingLeft: '20px',
+          height: "70px",
+          marginBottom: "20px",
+          marginRight: "12px",
+          marginTop: "20px",
+          paddingLeft: "20px",
         }}
       />
       <Box className={ScrollClassName} paddingBottom="18">
@@ -303,7 +312,7 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
               gap="4"
               style={{ marginLeft: -6, marginTop: 20 }}
             >
-              {wallets.map(wallet => {
+              {wallets.map((wallet) => {
                 return (
                   <ModalSelection
                     currentlySelected={wallet.id === selectedOptionId}
@@ -335,64 +344,64 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
     </div>
   );
 
-  const logo = async () => (await import('./Opensea.png')).default;
+  const logo = async () => (await import("./Opensea.png")).default;
   const triaLogo = async () =>
-    (await import('../../wallets/walletConnectors/triaWallet/triaWallet.png'))
+    (await import("../../wallets/walletConnectors/triaWallet/triaWallet.png"))
       .default;
   const triaAndOpenSeaLogoIntersection = (
     <div
       style={{
-        alignItems: 'center',
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'center',
+        alignItems: "center",
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "center",
         marginTop: 24,
       }}
     >
       <div
         style={{
-          borderRadius: '16!important',
-          borderStyle: 'solid',
-          borderWidth: '0px',
+          borderRadius: "16!important",
+          borderStyle: "solid",
+          borderWidth: "0px",
           zIndex: 2,
         }}
       >
-        {' '}
-        <AsyncImage height={95} src={triaLogo} width={95} />{' '}
+        {" "}
+        <AsyncImage height={95} src={triaLogo} width={95} />{" "}
       </div>
-      <div style={{ marginRight: -120, position: 'absolute' }}>
-        {' '}
-        <AsyncImage height={95} src={logo} width={95} />{' '}
+      <div style={{ marginRight: -120, position: "absolute" }}>
+        {" "}
+        <AsyncImage height={95} src={logo} width={95} />{" "}
       </div>
     </div>
   );
 
   switch (socialLoginStep) {
     case SocialLoginStep.NotStarted:
-      socialLoginContent = <></>;
+      socialLoginContent = null;
       break;
     case SocialLoginStep.TriaNameCreation:
       socialLoginContent = (
         <div
           style={{
-            display: 'flex',
+            display: "flex",
             flex: 1,
-            flexDirection: 'column',
-            justifyContent: 'space-between',
+            flexDirection: "column",
+            justifyContent: "space-between",
           }}
         >
-          <div style={{ display: 'flex', flex: 0.5, flexDirection: 'column' }}>
+          <div style={{ display: "flex", flex: 0.5, flexDirection: "column" }}>
             {triaAndOpenSeaLogoIntersection}
-            <Text style={{ alignSelf: 'center', marginTop: 24 }}>
-              {' '}
-              Creating your Tria account{' '}
+            <Text style={{ alignSelf: "center", marginTop: 24 }}>
+              {" "}
+              Creating your Tria account{" "}
             </Text>
           </div>
           <div
             style={{
-              display: 'flex',
+              display: "flex",
               flex: 0.5,
-              flexDirection: 'row',
+              flexDirection: "row",
               padding: 16,
             }}
           >
@@ -400,20 +409,20 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
               cursor="pointer"
               onClick={() => setConnectType(ConnectType.EmailSocial)}
               style={{
-                alignSelf: 'flex-end',
-                borderImage: 'linear-gradient(#9F8BFF4D, #7053FF4D) 30',
-                borderRadius: '16!important',
-                borderStyle: 'solid',
-                borderWidth: '1.5px',
+                alignSelf: "flex-end",
+                borderImage: "linear-gradient(#9F8BFF4D, #7053FF4D) 30",
+                borderRadius: "16!important",
+                borderStyle: "solid",
+                borderWidth: "1.5px",
                 flex: 1,
                 padding: 16,
               }}
             >
               <Text> Create your tria name </Text>
               <Text>
-                {' '}
+                {" "}
                 Your @tria name is your shareable identity to get paid, log-in
-                to Web3 applications, or to get on every blockchain network.{' '}
+                to Web3 applications, or to get on every blockchain network.{" "}
               </Text>
               <LoginInput
                 ctaClicked={() =>
@@ -509,14 +518,14 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
     return (
       <div
         style={{
-          display: 'flex',
+          display: "flex",
           flex: 1,
           height: 600,
           margin: 10,
           width: 400,
         }}
       >
-        <div style={{ display: 'flex', flex: 1 }}>
+        <div style={{ display: "flex", flex: 1 }}>
           <EnterTriaPassword
             logo={triaAndOpenSeaLogoIntersection}
             triaName={triaName}
@@ -533,41 +542,41 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
     return (
       <div
         style={{
-          display: 'flex',
+          display: "flex",
           flex: 1,
           height: 600,
           margin: 10,
           width: 400,
         }}
       >
-        <div style={{ display: 'flex', flex: 1 }}>{socialLoginContent}</div>
+        <div style={{ display: "flex", flex: 1 }}>{socialLoginContent}</div>
       </div>
     );
   }
 
-  const triaNameEntered = name => {
+  const triaNameEntered = (name) => {
     setTriaName(name);
     setContinueWithTriaStep(ContinueWithTriaStep.EnterPassword);
   };
 
   const socialLoginClicked = async () => {
     await window.open(
-      'http://localhost:8000/api/v1/auth/oauth/google',
-      '_self'
+      "http://localhost:8000/api/v1/auth/oauth/google",
+      "_self"
     );
   };
 
   return (
     <div style={{ flex: 1, height: 600, margin: 10, width: 400 }}>
-      <div style={{ display: 'flex', flex: 1, flexDirection: 'column' }}>
+      <div style={{ display: "flex", flex: 1, flexDirection: "column" }}>
         {selectedOptionId && !searchingOtherWallet && (
-          <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
+          <div style={{ display: "flex", justifyContent: "flex-start" }}>
             <Box marginRight="16">
               <CloseButton onClose={backPress} />
             </Box>
           </div>
         )}
-        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <div style={{ display: "flex", justifyContent: "flex-end" }}>
           <Box marginRight="16">
             <CloseButton onClose={onClose} />
           </Box>
@@ -575,11 +584,11 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
 
         <div
           style={{
-            alignItems: 'center',
-            display: 'flex',
+            alignItems: "center",
+            display: "flex",
             flex: 1,
-            flexDirection: 'column',
-            justifyContent: 'center',
+            flexDirection: "column",
+            justifyContent: "center",
           }}
         >
           <div style={{ marginTop: 24 }}>
@@ -598,12 +607,12 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
               style={{
                 borderImage:
                   connectType === ConnectType.Tria
-                    ? 'linear-gradient(#9F8BFF4D, #7053FF4D) 30'
-                    : 'linear-gradient(#10101008, #10101008) 30',
-                borderRadius: '16px',
-                borderStyle: 'solid',
-                borderWidth: '1.5px',
-                display: 'flex',
+                    ? "linear-gradient(#9F8BFF4D, #7053FF4D) 30"
+                    : "linear-gradient(#10101008, #10101008) 30",
+                borderRadius: "16px",
+                borderStyle: "solid",
+                borderWidth: "1.5px",
+                display: "flex",
                 padding: 16,
               }}
             >
@@ -630,9 +639,9 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
                     />
                     <div
                       style={{
-                        alignItems: 'center',
-                        display: 'flex',
-                        flexDirection: 'row',
+                        alignItems: "center",
+                        display: "flex",
+                        flexDirection: "row",
                       }}
                     >
                       <Text color="modalText" size="14" weight="bold">
@@ -651,11 +660,11 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
               style={{
                 borderImage:
                   connectType === ConnectType.EmailSocial
-                    ? 'linear-gradient(#9F8BFF4D, #7053FF4D) 30'
-                    : 'linear-gradient(#10101008, #10101008) 30',
-                borderRadius: '16!important',
-                borderStyle: 'solid',
-                borderWidth: '1.5px',
+                    ? "linear-gradient(#9F8BFF4D, #7053FF4D) 30"
+                    : "linear-gradient(#10101008, #10101008) 30",
+                borderRadius: "16!important",
+                borderStyle: "solid",
+                borderWidth: "1.5px",
                 padding: 16,
               }}
             >
@@ -674,13 +683,13 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
                 {connectType === ConnectType.EmailSocial && (
                   <div
                     style={{
-                      alignItems: 'center',
-                      display: 'flex',
-                      flexDirection: 'row',
-                      justifyContent: 'center',
+                      alignItems: "center",
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "center",
                     }}
                   >
-                    {socialLogins.map(socialLogin => {
+                    {socialLogins.map((socialLogin) => {
                       return (
                         <Box
                           cursor="pointer"
@@ -707,11 +716,11 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
               style={{
                 borderImage:
                   connectType === ConnectType.ConnectWallet
-                    ? 'linear-gradient(#9F8BFF4D, #7053FF4D) 30'
-                    : 'linear-gradient(#10101008, #10101008) 30',
-                borderRadius: '16px',
-                borderStyle: 'solid',
-                borderWidth: '1.5px',
+                    ? "linear-gradient(#9F8BFF4D, #7053FF4D) 30"
+                    : "linear-gradient(#10101008, #10101008) 30",
+                borderRadius: "16px",
+                borderStyle: "solid",
+                borderWidth: "1.5px",
                 padding: 16,
               }}
             >
@@ -736,7 +745,7 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
                             .filter(
                               (_blank, index) => index < numberOfWalletsShown
                             )
-                            .map(wallet => {
+                            .map((wallet) => {
                               return (
                                 <ModalSelection
                                   currentlySelected={
