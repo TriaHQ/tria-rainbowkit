@@ -1,5 +1,5 @@
 import axios from "axios";
-
+import { KeyringController } from "@tria-sdk/web";
 import React, {
   Fragment,
   useContext,
@@ -18,7 +18,9 @@ import { Box } from "../Box/Box";
 import BorderedBox from "../BorderedBox/BorderedBox";
 import { CloseButton } from "../CloseButton/CloseButton";
 import { ConnectModalIntro } from "../ConnectModal/ConnectModalIntro";
-import EnterTriaPassword from "../EnterTriaPassword/EnterTriaPassword";
+import EnterTriaPassword, {
+  PasswordScreenType,
+} from "../EnterTriaPassword/EnterTriaPassword";
 import LoginInput from "../LoginInput/LoginInput";
 import { ModalSelection } from "../ModalSelection/ModalSelection";
 import {
@@ -27,7 +29,7 @@ import {
 } from "../RainbowKitProvider/ModalSizeContext";
 import TagView from "../TagView/TagView";
 import { Text } from "../Text/Text";
-import WelcomeView from "../Welcome/Welcome";
+import WelcomeView, { SocialLoginTypes } from "../Welcome/Welcome";
 
 import {
   ConnectDetail,
@@ -60,6 +62,7 @@ export enum SocialLoginStep {
   NotStarted = "NotStarted",
   TriaNameCreation = "TriaNameCreation",
   ExtraLayerSecurity = "ExtraLayerSecurity",
+  EnterPassword = "EnterPassword",
 }
 
 enum ContinueWithTriaStep {
@@ -94,7 +97,7 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
 
   const socialLogins = useSocialLoginConnectors();
 
-  const baseUrl = "localhost:8000";
+  const baseUrl = "http://localhost:8000";
 
   const wallets = useWalletConnectors()
     .filter((wallet) => wallet.ready || !!wallet.extensionDownloadUrl)
@@ -108,20 +111,27 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
 
       if (code && scope && !isSocialLoginInProgress) {
         setIsSocialLoginInProgress(true);
-        const {
-          data: { email, firstName, userId },
-        } = await axios.get(
-          `${baseUrl}/api/v1/auth/google/callback?code=${code}&scope=${scope}`
-        );
-        const { data } = await axios.get(
-          `${baseUrl}/api/v1/get-name-recommendation?name=${firstName}`
-        );
-        const parsedFirstName =
-          data?.data?.length > 0 ? data.data[0] : firstName ? firstName : email;
-        console.log(`first name: ${parsedFirstName}`);
-        setUserId(userId);
-        setSocialFirstName(parsedFirstName);
-        setIsSocialLoginInProgress(false);
+        try {
+          const {
+            data: { email, firstName, userId },
+          } = await axios.get(
+            `${baseUrl}/api/v1/auth/google/callback?code=${code}&scope=${scope}`
+          );
+          const { data } = await axios.get(
+            `${baseUrl}/api/v1/get-name-recommendation?name=${firstName}`
+          );
+          const parsedFirstName =
+            data?.data?.length > 0
+              ? data.data[0]
+              : firstName
+              ? firstName
+              : email;
+          setUserId(userId);
+          setSocialFirstName(parsedFirstName);
+          setIsSocialLoginInProgress(false);
+        } catch (err) {
+          console.log(err);
+        }
       }
     }
     submitData();
@@ -256,17 +266,34 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
     setConnectionError(false);
   }, [walletStep, selectedWallet]);
 
+  const createAccount = async (id, password) => {
+    const keyringController = new KeyringController({
+      baseUrl,
+    });
+    try {
+      const res = await keyringController.socialogin({
+        password: password,
+        platform: SocialLoginTypes.Google,
+        userId: id,
+        isPasswordLess: false,
+      });
+      onClose();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const BorderedContainer = useCallback(
     ({ children, isSelected }: any) => {
-      console.log(`isSelected: ${isSelected}`);
       return (
         <div
           style={{
             borderImage: "linear-gradient(#9F8BFF4D, #7053FF4D) 30",
-            borderRadius: "16!important",
+            borderRadius: "16px",
             borderStyle: "solid",
             borderWidth: "1.5px",
             display: "flex",
+            overflow: "hidden",
             padding: 16,
           }}
         >
@@ -345,6 +372,7 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
     </div>
   );
 
+  const imageSize = 96;
   const logo = async () => (await import("./Opensea.png")).default;
   const triaLogo = async () =>
     (await import("../../wallets/walletConnectors/triaWallet/triaWallet.png"))
@@ -361,19 +389,20 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
     >
       <div
         style={{
-          borderRadius: "16",
+          borderRadius: "48px",
           background: "red",
           borderStyle: "solid",
           borderWidth: "0px",
+          overflow: "hidden",
           zIndex: 2,
         }}
       >
         {" "}
-        <AsyncImage height={95} src={triaLogo} width={95} />{" "}
+        <AsyncImage height={imageSize} src={triaLogo} width={imageSize} />{" "}
       </div>
       <div style={{ marginRight: -120, position: "absolute" }}>
         {" "}
-        <AsyncImage height={95} src={logo} width={95} />{" "}
+        <AsyncImage height={imageSize} src={logo} width={imageSize} />{" "}
       </div>
     </div>
   );
@@ -404,6 +433,7 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
               display: "flex",
               flex: 0.5,
               flexDirection: "row",
+              alignItems: "flex-end",
               padding: 16,
             }}
           >
@@ -431,9 +461,29 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
         <WelcomeView
           logo={triaAndOpenSeaLogoIntersection}
           username={socialFirstName}
+          enterPasswordCallback={() =>
+            setSocialLoginStep(SocialLoginStep.EnterPassword)
+          }
+          onClose={onClose}
         />
       );
       break;
+    case SocialLoginStep.EnterPassword:
+      socialLoginContent = (
+        <div style={{ display: "flex", flex: 1 }}>
+          <EnterTriaPassword
+            ctaClicked={(password) => {
+              createAccount(userId, password);
+            }}
+            ctaTitle="Sign up"
+            logo={triaAndOpenSeaLogoIntersection}
+            primaryPlaceholder="Password"
+            screenType={PasswordScreenType.EnterAndConfirmPassword}
+            secondaryPlaceholder="Confirm password"
+            title="Creating your Tria account"
+          />
+        </div>
+      );
     default:
       break;
   }
@@ -518,7 +568,7 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
         <div style={{ display: "flex", flex: 1 }}>
           <EnterTriaPassword
             logo={triaAndOpenSeaLogoIntersection}
-            triaName={triaName}
+            primaryText={triaName}
           />
         </div>
       </div>
@@ -527,7 +577,8 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
 
   if (
     socialLoginStep === SocialLoginStep.TriaNameCreation ||
-    socialLoginStep === SocialLoginStep.ExtraLayerSecurity
+    socialLoginStep === SocialLoginStep.ExtraLayerSecurity ||
+    socialLoginStep === SocialLoginStep.EnterPassword
   ) {
     return (
       <div
@@ -550,7 +601,11 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
   };
 
   const socialLoginClicked = async () => {
-    await window.open(`${baseUrl}/api/v1/auth/oauth/google`, "_self");
+    try {
+      await window.open(`${baseUrl}/api/v1/auth/oauth/google`, "_self");
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (

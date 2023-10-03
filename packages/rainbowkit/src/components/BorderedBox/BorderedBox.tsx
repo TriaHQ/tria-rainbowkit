@@ -7,9 +7,10 @@ const BorderedBox = ({ children }: any) => {
       cursor="pointer"
       style={{
         borderImage: "linear-gradient(#9F8BFF4D, #7053FF4D) 30",
-        borderRadius: "16!important",
+        borderRadius: "16px",
         borderStyle: "solid",
         borderWidth: "1.5px",
+        overflow: "hidden",
         padding: 16,
       }}
     >

@@ -9,13 +9,19 @@ enum WelcomeStep {
   EnhancedSecurity = "EnhancedSecurity",
 }
 
-enum SocialLoginTypes {
+export enum SocialLoginTypes {
   Google = "google",
   X = "X",
   Discord = "Discord",
 }
 
-const WelcomeView = ({ logo = null, username, id }) => {
+const WelcomeView = ({
+  logo = null,
+  username,
+  id,
+  enterPasswordCallback = (f) => f,
+  onClose = (f) => f,
+}) => {
   const [welcomeStep, setWelcomeStep] = useState<WelcomeStep>(
     WelcomeStep.ContinueToDAppORSetupWallet
   );
@@ -59,31 +65,21 @@ const WelcomeView = ({ logo = null, username, id }) => {
 
   const baseUrl = "http://localhost:8000";
 
-  async function createAccount(password) {
-    const keyringController = new KeyringController({
-      baseUrl,
-    });
-
-    const res = await keyringController.socialogin({
-      password: password,
-      platform: SocialLoginTypes.Google,
-      userId: id,
-      isPasswordLess: false,
-    });
-  }
-
   async function createAccountWithoutPassword() {
     const keyringController = new KeyringController({
       baseUrl,
     });
-
-    const res = await keyringController.socialogin({
-      password: null,
-      platform: SocialLoginTypes.Google,
-      userId: id,
-      isPasswordLess: true,
-    });
-    console.log(`response: ${JSON.stringify(res)}`);
+    try {
+      const res = await keyringController.socialogin({
+        password: null,
+        platform: SocialLoginTypes.Google,
+        userId: id,
+        isPasswordLess: true,
+      });
+      onClose();
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   return (
@@ -194,7 +190,10 @@ const WelcomeView = ({ logo = null, username, id }) => {
             {" "}
             Elevate your wallet protection with a strong password!{" "}
           </Text>
-          <PrimaryButton title="Add a passkey" />
+          <PrimaryButton
+            title="Add a passkey"
+            clickAction={enterPasswordCallback}
+          />
           <SecondaryButton
             title="Skip for now"
             clickAction={createAccountWithoutPassword}
