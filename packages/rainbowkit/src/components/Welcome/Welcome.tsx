@@ -9,6 +9,12 @@ enum WelcomeStep {
   EnhancedSecurity = "EnhancedSecurity",
 }
 
+enum SocialLoginTypes {
+  Google = "google",
+  X = "X",
+  Discord = "Discord",
+}
+
 const WelcomeView = ({ logo = null, username, id }) => {
   const [welcomeStep, setWelcomeStep] = useState<WelcomeStep>(
     WelcomeStep.ContinueToDAppORSetupWallet
@@ -60,7 +66,7 @@ const WelcomeView = ({ logo = null, username, id }) => {
 
     const res = await keyringController.socialogin({
       password: password,
-      platform: "google",
+      platform: SocialLoginTypes.Google,
       userId: id,
       isPasswordLess: false,
     });
@@ -73,7 +79,7 @@ const WelcomeView = ({ logo = null, username, id }) => {
 
     const res = await keyringController.socialogin({
       password: null,
-      platform: "google",
+      platform: SocialLoginTypes.Google,
       userId: id,
       isPasswordLess: true,
     });

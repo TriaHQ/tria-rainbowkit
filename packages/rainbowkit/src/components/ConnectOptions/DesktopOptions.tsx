@@ -1,6 +1,12 @@
 import axios from "axios";
 
-import React, { Fragment, useContext, useEffect, useState } from "react";
+import React, {
+  Fragment,
+  useContext,
+  useEffect,
+  useState,
+  useCallback,
+} from "react";
 import { useSocialLoginConnectors } from "../../socialLogins/socialLoginConnectors";
 import { isSafari } from "../../utils/browsers";
 import {
@@ -9,6 +15,7 @@ import {
 } from "../../wallets/useWalletConnectors";
 import { AsyncImage } from "../AsyncImage/AsyncImage";
 import { Box } from "../Box/Box";
+import BorderedBox from "../BorderedBox/BorderedBox";
 import { CloseButton } from "../CloseButton/CloseButton";
 import { ConnectModalIntro } from "../ConnectModal/ConnectModalIntro";
 import EnterTriaPassword from "../EnterTriaPassword/EnterTriaPassword";
@@ -87,6 +94,8 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
 
   const socialLogins = useSocialLoginConnectors();
 
+  const baseUrl = "localhost:8000";
+
   const wallets = useWalletConnectors()
     .filter((wallet) => wallet.ready || !!wallet.extensionDownloadUrl)
     .sort((a, b) => a.groupIndex - b.groupIndex);
@@ -102,10 +111,10 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
         const {
           data: { email, firstName, userId },
         } = await axios.get(
-          `http://localhost:8000/api/v1/auth/google/callback?code=${code}&scope=${scope}`
+          `${baseUrl}/api/v1/auth/google/callback?code=${code}&scope=${scope}`
         );
         const { data } = await axios.get(
-          `http://localhost:8000/api/v1/get-name-recommendation?name=${firstName}`
+          `${baseUrl}/api/v1/get-name-recommendation?name=${firstName}`
         );
         const parsedFirstName =
           data?.data?.length > 0 ? data.data[0] : firstName ? firstName : email;
@@ -117,21 +126,6 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
     }
     submitData();
   }, [isSocialLoginInProgress]);
-
-  // const checkUsername = useCallback(async (username: string) => {
-  //   try {
-  //     const response = await authController.checkUsername(username);
-
-  //     if (response.success && !response.isExist) {
-  //       return Promise.resolve(false);
-  //     }
-
-  //     return Promise.resolve(true);
-  //   } catch (error) {
-  //     console.log(error);
-  //     return Promise.reject(true);
-  //   }
-  // }, []);
 
   useEffect(() => {
     if (socialFirstName.length !== 0) {
@@ -262,6 +256,27 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
     setConnectionError(false);
   }, [walletStep, selectedWallet]);
 
+  const BorderedContainer = useCallback(
+    ({ children, isSelected }: any) => {
+      console.log(`isSelected: ${isSelected}`);
+      return (
+        <div
+          style={{
+            borderImage: "linear-gradient(#9F8BFF4D, #7053FF4D) 30",
+            borderRadius: "16!important",
+            borderStyle: "solid",
+            borderWidth: "1.5px",
+            display: "flex",
+            padding: 16,
+          }}
+        >
+          {children}
+        </div>
+      );
+    },
+    [connectType]
+  );
+
   const searchWallet = (
     <div
       style={{
@@ -346,7 +361,8 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
     >
       <div
         style={{
-          borderRadius: "16!important",
+          borderRadius: "16",
+          background: "red",
           borderStyle: "solid",
           borderWidth: "0px",
           zIndex: 2,
@@ -391,19 +407,7 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
               padding: 16,
             }}
           >
-            <Box
-              cursor="pointer"
-              onClick={() => setConnectType(ConnectType.EmailSocial)}
-              style={{
-                alignSelf: "flex-end",
-                borderImage: "linear-gradient(#9F8BFF4D, #7053FF4D) 30",
-                borderRadius: "16!important",
-                borderStyle: "solid",
-                borderWidth: "1.5px",
-                flex: 1,
-                padding: 16,
-              }}
-            >
+            <BorderedBox>
               <Text> Create your tria name </Text>
               <Text>
                 {" "}
@@ -417,7 +421,7 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
                 ctaTitle="Next"
                 value={socialFirstName}
               />
-            </Box>
+            </BorderedBox>
           </div>
         </div>
       );
@@ -546,10 +550,7 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
   };
 
   const socialLoginClicked = async () => {
-    await window.open(
-      "http://localhost:8000/api/v1/auth/oauth/google",
-      "_self"
-    );
+    await window.open(`${baseUrl}/api/v1/auth/oauth/google`, "_self");
   };
 
   return (
@@ -589,25 +590,13 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
 
         {!searchingOtherWallet && selectedOptionId == null && (
           <div>
-            <div
-              style={{
-                borderImage:
-                  connectType === ConnectType.Tria
-                    ? "linear-gradient(#9F8BFF4D, #7053FF4D) 30"
-                    : "linear-gradient(#10101008, #10101008) 30",
-                borderRadius: "16px",
-                borderStyle: "solid",
-                borderWidth: "1.5px",
-                display: "flex",
-                padding: 16,
-              }}
-            >
+            <BorderedContainer isSelected={connectType === ConnectType.Tria}>
               <Box
                 cursor="pointer"
                 display="flex"
                 flexDirection="column"
                 onClick={() => setConnectType(ConnectType.Tria)}
-                style={{ width: 780 }}
+                style={{ flex: 1 }}
               >
                 <div display="flex">
                   <TagView
@@ -640,23 +629,15 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
                   </div>
                 )}
               </Box>
-            </div>
+            </BorderedContainer>
 
-            <div
-              style={{
-                borderImage:
-                  connectType === ConnectType.EmailSocial
-                    ? "linear-gradient(#9F8BFF4D, #7053FF4D) 30"
-                    : "linear-gradient(#10101008, #10101008) 30",
-                borderRadius: "16!important",
-                borderStyle: "solid",
-                borderWidth: "1.5px",
-                padding: 16,
-              }}
+            <BorderedContainer
+              isSelected={connectType === ConnectType.EmailSocial}
             >
               <Box
                 cursor="pointer"
                 onClick={() => setConnectType(ConnectType.EmailSocial)}
+                style={{ flex: 1 }}
               >
                 <Text color="modalText" size="18">
                   Email and Social Logins
@@ -696,23 +677,15 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
                   </div>
                 )}
               </Box>
-            </div>
+            </BorderedContainer>
 
-            <div
-              style={{
-                borderImage:
-                  connectType === ConnectType.ConnectWallet
-                    ? "linear-gradient(#9F8BFF4D, #7053FF4D) 30"
-                    : "linear-gradient(#10101008, #10101008) 30",
-                borderRadius: "16px",
-                borderStyle: "solid",
-                borderWidth: "1.5px",
-                padding: 16,
-              }}
+            <BorderedContainer
+              isSelected={connectType === ConnectType.ConnectWallet}
             >
               <Box
                 cursor="pointer"
                 onClick={() => setConnectType(ConnectType.ConnectWallet)}
+                style={{ flex: 1 }}
               >
                 <Text color="modalText" size="18">
                   Connect a Wallet
@@ -757,7 +730,7 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
                   </Box>
                 )}
               </Box>
-            </div>
+            </BorderedContainer>
           </div>
         )}
         {!searchingOtherWallet && selectedOptionId && (
