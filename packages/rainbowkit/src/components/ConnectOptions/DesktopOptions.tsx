@@ -1,5 +1,6 @@
 import axios from "axios";
 import { KeyringController } from "@tria-sdk/web";
+import { AuthController } from "@tria-sdk/core";
 import React, {
   Fragment,
   useContext,
@@ -30,6 +31,7 @@ import {
 import TagView from "../TagView/TagView";
 import { Text } from "../Text/Text";
 import WelcomeView, { SocialLoginTypes } from "../Welcome/Welcome";
+import EnterTriaName from "../EnterTriaName/EnterTriaName";
 
 import {
   ConnectDetail,
@@ -70,6 +72,12 @@ enum ContinueWithTriaStep {
   EnterPassword = "EnterPassword",
 }
 
+enum GetStartedWithTriaStep {
+  NotStarted = "NotStarted",
+  CreateTriaName = "CreateTriaName",
+  SetupPassword = "SetupPassword",
+}
+
 export function DesktopOptions({ onClose }: { onClose: () => void }) {
   const safari = isSafari();
   const [selectedOptionId, setSelectedOptionId] = useState<
@@ -90,6 +98,8 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
   );
   const [continueWithTriaStep, setContinueWithTriaStep] =
     useState<ContinueWithTriaStep>(ContinueWithTriaStep.EnterUserName);
+  const [getStartedWithTriaStep, setGetStartedWithTriaStep] =
+    useState<GetStartedWithTriaStep>(GetStartedWithTriaStep.NotStarted);
   const [triaName, setTriaName] = useState("");
   const [isSocialLoginInProgress, setIsSocialLoginInProgress] = useState(false);
   const [socialFirstName, setSocialFirstName] = useState("");
@@ -260,6 +270,7 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
 
   let walletContent = null;
   let socialLoginContent = null;
+  let getStartedWithTriaContent = null;
 
   // biome-ignore lint/nursery/useExhaustiveDependencies: TODO
   useEffect(() => {
@@ -267,6 +278,8 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
   }, [walletStep, selectedWallet]);
 
   const createAccount = async (id, password) => {
+    console.log(`creating account with password: ${password}`);
+
     const keyringController = new KeyringController({
       baseUrl,
     });
@@ -282,6 +295,24 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
       console.log(err);
     }
   };
+
+  const popupSize = { width: 400, height: 600 };
+
+  const PopupContainer = useCallback(({ children }) => {
+    return (
+      <div
+        style={{
+          display: "flex",
+          flex: 1,
+          height: popupSize.height,
+          margin: 10,
+          width: popupSize.width,
+        }}
+      >
+        {children}
+      </div>
+    );
+  }, []);
 
   const BorderedContainer = useCallback(
     ({ children, isSelected }: any) => {
@@ -390,7 +421,6 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
       <div
         style={{
           borderRadius: "48px",
-          background: "red",
           borderStyle: "solid",
           borderWidth: "0px",
           overflow: "hidden",
@@ -406,6 +436,21 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
       </div>
     </div>
   );
+
+  switch (getStartedWithTriaStep) {
+    case GetStartedWithTriaStep.CreateTriaName:
+      getStartedWithTriaContent = (
+        <EnterTriaName
+          enterTriaNameBodyText="Your @tria is like Gmail, for Web3. Pay, receive and log-in to apps on any device, and blockchain."
+          enterTriaNameClickAction={() => console.log("tria name next clicked")}
+          logo={triaAndOpenSeaLogoIntersection}
+        />
+      );
+      break;
+    case GetStartedWithTriaStep.SetupPassword:
+      getStartedWithTriaContent = null;
+      break;
+  }
 
   switch (socialLoginStep) {
     case SocialLoginStep.NotStarted:
@@ -554,24 +599,32 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
     setSelectedOptionId(undefined);
   };
 
+  if (getStartedWithTriaStep !== GetStartedWithTriaStep.NotStarted) {
+    return (
+      <PopupContainer>
+        <div style={{ display: "flex", flex: 1 }}>
+          <EnterTriaName
+            enterTriaNameBodyText="Your @tria is like Gmail, for Web3. Pay, receive and log-in to apps on any device, and blockchain."
+            enterTriaNameClickAction={() =>
+              console.log("tria name next clicked")
+            }
+            logo={triaAndOpenSeaLogoIntersection}
+          />
+        </div>
+      </PopupContainer>
+    );
+  }
+
   if (continueWithTriaStep === ContinueWithTriaStep.EnterPassword) {
     return (
-      <div
-        style={{
-          display: "flex",
-          flex: 1,
-          height: 600,
-          margin: 10,
-          width: 400,
-        }}
-      >
+      <PopupContainer>
         <div style={{ display: "flex", flex: 1 }}>
           <EnterTriaPassword
             logo={triaAndOpenSeaLogoIntersection}
             primaryText={triaName}
           />
         </div>
-      </div>
+      </PopupContainer>
     );
   }
 
@@ -581,23 +634,19 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
     socialLoginStep === SocialLoginStep.EnterPassword
   ) {
     return (
-      <div
-        style={{
-          display: "flex",
-          flex: 1,
-          height: 600,
-          margin: 10,
-          width: 400,
-        }}
-      >
+      <PopupContainer>
         <div style={{ display: "flex", flex: 1 }}>{socialLoginContent}</div>
-      </div>
+      </PopupContainer>
     );
   }
 
   const triaNameEntered = (name) => {
     setTriaName(name);
     setContinueWithTriaStep(ContinueWithTriaStep.EnterPassword);
+  };
+
+  const getStartedWithTriaClicked = () => {
+    setGetStartedWithTriaStep(GetStartedWithTriaStep.CreateTriaName);
   };
 
   const socialLoginClicked = async () => {
@@ -609,7 +658,7 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
   };
 
   return (
-    <div style={{ flex: 1, height: 600, margin: 10, width: 400 }}>
+    <PopupContainer>
       <div style={{ display: "flex", flex: 1, flexDirection: "column" }}>
         {selectedOptionId && !searchingOtherWallet && (
           <div style={{ display: "flex", justifyContent: "flex-start" }}>
@@ -667,20 +716,22 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
                       ctaClicked={triaNameEntered}
                       placeholder="@tria name"
                     />
-                    <div
+                    <Box
+                      onClick={() => getStartedWithTriaClicked()}
                       style={{
                         alignItems: "center",
                         display: "flex",
                         flexDirection: "row",
+                        gap: "10px",
                       }}
                     >
                       <Text color="modalText" size="14" weight="bold">
-                        Get started \t
+                        Get started
                       </Text>
                       <Text color="modalText" size="14">
                         with Tria
                       </Text>
-                    </div>
+                    </Box>
                   </div>
                 )}
               </Box>
@@ -803,6 +854,6 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
         )}
         {searchingOtherWallet && <Box>{searchWallet}</Box>}
       </div>
-    </div>
+    </PopupContainer>
   );
 }
