@@ -504,12 +504,13 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
     case SocialLoginStep.ExtraLayerSecurity:
       socialLoginContent = (
         <WelcomeView
-          logo={triaAndOpenSeaLogoIntersection}
-          username={socialFirstName}
           enterPasswordCallback={() =>
             setSocialLoginStep(SocialLoginStep.EnterPassword)
           }
+          id={userId}
+          logo={triaAndOpenSeaLogoIntersection}
           onClose={onClose}
+          username={socialFirstName}
         />
       );
       break;
