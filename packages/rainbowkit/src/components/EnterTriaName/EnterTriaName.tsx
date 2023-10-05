@@ -3,14 +3,10 @@ import BorderedBox from "../BorderedBox/BorderedBox";
 import LoginInput from "../LoginInput/LoginInput";
 import { Text } from "../Text/Text";
 
-const EnterTriaName = (
-  enterTriaNameBodyText = "",
-  enterTriaNameClickAction = (f) => f,
-  enterTriaNameCTATitle = "Next",
-  enterTriaNamePrimaryText = "Create your tria name",
+const EnterTriaNameComponent = (
+  clickAction = (f) => f,
   logo = null,
-  title = "Creating your Tria account",
-  triaNameValue = ""
+  value = ""
 ) => {
   return (
     <div
@@ -23,7 +19,10 @@ const EnterTriaName = (
     >
       <div style={{ display: "flex", flex: 0.5, flexDirection: "column" }}>
         {logo}
-        <Text style={{ alignSelf: "center", marginTop: 24 }}>{title}</Text>
+        <Text style={{ alignSelf: "center", marginTop: 24 }}>
+          {" "}
+          Creating your Tria account{" "}
+        </Text>
       </div>
       <div
         style={{
@@ -35,16 +34,22 @@ const EnterTriaName = (
         }}
       >
         <BorderedBox>
-          <Text> {enterTriaNamePrimaryText} </Text>
-          <Text>{enterTriaNameBodyText}</Text>
+          <Text> Create your tria name </Text>
+          <Text>
+            Your @tria is like Gmail, for Web3. Pay, receive and log-in to apps
+            on any device, and blockchain.
+          </Text>
           <LoginInput
-            ctaClicked={enterTriaNameClickAction}
-            ctaTitle={enterTriaNameCTATitle}
-            value={triaNameValue}
+            ctaClicked={(input) => {
+              //perform password validations here
+              clickAction(input);
+            }}
+            ctaTitle="Next"
+            value={value}
           />
         </BorderedBox>
       </div>
     </div>
   );
 };
-export default EnterTriaName;
+export default EnterTriaNameComponent;

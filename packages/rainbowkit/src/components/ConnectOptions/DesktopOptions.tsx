@@ -1,6 +1,5 @@
 import axios from "axios";
 import { KeyringController } from "@tria-sdk/web";
-import { AuthController } from "@tria-sdk/core";
 import React, {
   Fragment,
   useContext,
@@ -31,7 +30,7 @@ import {
 import TagView from "../TagView/TagView";
 import { Text } from "../Text/Text";
 import WelcomeView, { SocialLoginTypes } from "../Welcome/Welcome";
-import EnterTriaName from "../EnterTriaName/EnterTriaName";
+import EnterTriaNameComponent from "../EnterTriaName/EnterTriaName";
 
 import {
   ConnectDetail,
@@ -123,21 +122,27 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
         setIsSocialLoginInProgress(true);
         try {
           const {
-            data: { email, firstName, userId },
+            data: { email, firstName, userId, isAccountExist },
           } = await axios.get(
             `${baseUrl}/api/v1/auth/google/callback?code=${code}&scope=${scope}`
           );
-          const { data } = await axios.get(
-            `${baseUrl}/api/v1/get-name-recommendation?name=${firstName}`
-          );
-          const parsedFirstName =
-            data?.data?.length > 0
-              ? data.data[0]
-              : firstName
-              ? firstName
-              : email;
           setUserId(userId);
-          setSocialFirstName(parsedFirstName);
+
+          if (isAccountExist === true) {
+            //sign in flow
+          } else {
+            //sign up flow
+            const { data } = await axios.get(
+              `${baseUrl}/api/v1/get-name-recommendation?name=${firstName}`
+            );
+            const parsedFirstName =
+              data?.data?.length > 0
+                ? data.data[0]
+                : firstName
+                ? firstName
+                : email;
+            setSocialFirstName(parsedFirstName);
+          }
           setIsSocialLoginInProgress(false);
         } catch (err) {
           console.log(err);
@@ -277,9 +282,17 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
     setConnectionError(false);
   }, [walletStep, selectedWallet]);
 
-  const createAccount = async (id, password) => {
-    console.log(`creating account with password: ${password}`);
+  // const signInAccount = async (triaName, password) => {
+  //   const keyringController = new KeyringController({ baseUrl });
+  //   try {
+  //     const res = await keyringController.createAccount({ triaName, password });
+  //     console.log(`response from signIn: ${JSON.stringify(res)}`);
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
 
+  const createAccount = async (id, password) => {
     const keyringController = new KeyringController({
       baseUrl,
     });
@@ -291,6 +304,18 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
         isPasswordLess: false,
       });
       onClose();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const createAccountUsingTria = async (triaName, password) => {
+    const keyringController = new KeyringController({ baseUrl });
+    try {
+      const res = await keyringController.createAccount({ triaName, password });
+      if (res.success) {
+        onClose();
+      }
     } catch (err) {
       console.log(err);
     }
@@ -440,15 +465,68 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
   switch (getStartedWithTriaStep) {
     case GetStartedWithTriaStep.CreateTriaName:
       getStartedWithTriaContent = (
-        <EnterTriaName
-          enterTriaNameBodyText="Your @tria is like Gmail, for Web3. Pay, receive and log-in to apps on any device, and blockchain."
-          enterTriaNameClickAction={() => console.log("tria name next clicked")}
-          logo={triaAndOpenSeaLogoIntersection}
-        />
+        <div
+          style={{
+            display: "flex",
+            flex: 1,
+            flexDirection: "column",
+            justifyContent: "space-between",
+          }}
+        >
+          <div style={{ display: "flex", flex: 0.5, flexDirection: "column" }}>
+            {triaAndOpenSeaLogoIntersection}
+            <Text style={{ alignSelf: "center", marginTop: 24 }}>
+              {" "}
+              Creating your Tria account{" "}
+            </Text>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              flex: 0.5,
+              flexDirection: "row",
+              alignItems: "flex-end",
+              padding: 16,
+            }}
+          >
+            <BorderedBox>
+              <Text> Create your tria name </Text>
+              <Text>
+                Your @tria is like Gmail, for Web3. Pay, receive and log-in to
+                apps on any device, and blockchain.
+              </Text>
+              <LoginInput
+                ctaClicked={(input) => {
+                  //perform password validations here
+                  console.log(`input: ${input}`);
+                  setGetStartedWithTriaStep(
+                    GetStartedWithTriaStep.SetupPassword
+                  );
+                }}
+                ctaTitle="Next"
+                value={socialFirstName}
+              />
+            </BorderedBox>
+          </div>
+        </div>
       );
       break;
     case GetStartedWithTriaStep.SetupPassword:
-      getStartedWithTriaContent = null;
+      getStartedWithTriaContent = (
+        <div style={{ display: "flex", flex: 1 }}>
+          <EnterTriaPassword
+            ctaClicked={(password) => {
+              createAccountUsingTria(triaName, password);
+            }}
+            ctaTitle="Sign up"
+            logo={triaAndOpenSeaLogoIntersection}
+            primaryPlaceholder="Password"
+            screenType={PasswordScreenType.EnterAndConfirmPassword}
+            secondaryPlaceholder="Confirm password"
+            title="Creating your Tria account"
+          />
+        </div>
+      );
       break;
   }
 
@@ -604,13 +682,7 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
     return (
       <PopupContainer>
         <div style={{ display: "flex", flex: 1 }}>
-          <EnterTriaName
-            enterTriaNameBodyText="Your @tria is like Gmail, for Web3. Pay, receive and log-in to apps on any device, and blockchain."
-            enterTriaNameClickAction={() =>
-              console.log("tria name next clicked")
-            }
-            logo={triaAndOpenSeaLogoIntersection}
-          />
+          {getStartedWithTriaContent}
         </div>
       </PopupContainer>
     );
@@ -619,12 +691,10 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
   if (continueWithTriaStep === ContinueWithTriaStep.EnterPassword) {
     return (
       <PopupContainer>
-        <div style={{ display: "flex", flex: 1 }}>
-          <EnterTriaPassword
-            logo={triaAndOpenSeaLogoIntersection}
-            primaryText={triaName}
-          />
-        </div>
+        <EnterTriaPassword
+          logo={triaAndOpenSeaLogoIntersection}
+          primaryText={triaName}
+        />
       </PopupContainer>
     );
   }
