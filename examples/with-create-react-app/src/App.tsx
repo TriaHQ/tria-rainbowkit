@@ -1,14 +1,11 @@
-import { ConnectButton } from "@rainbow-me/rainbowkit";
+// import { ConnectButton } from "@rainbow-me/rainbowkit";
+import Home from "./pages/Home";
+import './index.css';
 const App = () => {
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "flex-end",
-        padding: 12,
-      }}
-    >
-      <ConnectButton />
+    <div>
+      {/* <ConnectButton /> */}
+      <Home/>
     </div>
   );
 };
