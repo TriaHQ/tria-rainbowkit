@@ -2,16 +2,11 @@ import { KeyringController } from "@tria-sdk/web";
 import React, { useState } from "react";
 import { Box } from "../Box/Box";
 import { Text } from "../Text/Text";
+import { SocialLoginTypes } from "../../socialLogins/socialLoginConnectors";
 
 enum WelcomeStep {
   ContinueToDAppORSetupWallet = "ContinueToDAppORSetupWallet",
   EnhancedSecurity = "EnhancedSecurity",
-}
-
-export enum SocialLoginTypes {
-  Google = "google",
-  X = "X",
-  Discord = "Discord",
 }
 
 const WelcomeView = ({

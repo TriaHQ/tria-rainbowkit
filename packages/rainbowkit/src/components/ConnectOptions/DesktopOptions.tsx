@@ -7,7 +7,10 @@ import React, {
   useState,
   useCallback,
 } from "react";
-import { useSocialLoginConnectors } from "../../socialLogins/socialLoginConnectors";
+import {
+  useSocialLoginConnectors,
+  SocialLoginTypes,
+} from "../../socialLogins/socialLoginConnectors";
 import { isSafari } from "../../utils/browsers";
 import {
   WalletConnector,
@@ -29,8 +32,12 @@ import {
 } from "../RainbowKitProvider/ModalSizeContext";
 import TagView from "../TagView/TagView";
 import { Text } from "../Text/Text";
-import WelcomeView, { SocialLoginTypes } from "../Welcome/Welcome";
+import WelcomeView from "../Welcome/Welcome";
 import EnterTriaNameComponent from "../EnterTriaName/EnterTriaName";
+import HomeBackgroundVector from "../SVG/HomeBackgroundVector";
+import TriaVector from "../SVG/TriaVector";
+import GoogleIcon from "../SVG/GoogleIcon";
+import XIcon from "../SVG/XIcon";
 
 import {
   ConnectDetail,
@@ -277,33 +284,42 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
   let socialLoginContent = null;
   let getStartedWithTriaContent = null;
 
-  // biome-ignore lint/nursery/useExhaustiveDependencies: TODO
   useEffect(() => {
     setConnectionError(false);
   }, [walletStep, selectedWallet]);
 
-  // const signInAccount = async (triaName, password) => {
-  //   const keyringController = new KeyringController({ baseUrl });
-  //   try {
-  //     const res = await keyringController.createAccount({ triaName, password });
-  //     console.log(`response from signIn: ${JSON.stringify(res)}`);
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
+  const signInUsingTria = async (triaName, password) => {
+    const keyringController = new KeyringController({
+      baseUrl,
+    });
+    const userId = null;
+    try {
+      const res = await keyringController.getVault({
+        triaName,
+        password,
+        userId,
+      });
+      console.log(`signin res: ${JSON.stringify(res)}`);
+      onClose();
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
-  const createAccount = async (id, password) => {
+  const createAccountUsingSocialLogin = async (name) => {
     const keyringController = new KeyringController({
       baseUrl,
     });
     try {
       const res = await keyringController.socialogin({
-        password: password,
+        triaName: name,
         platform: SocialLoginTypes.Google,
-        userId: id,
-        isPasswordLess: false,
+        userId,
+        isPasswordLess: true,
       });
-      onClose();
+      if (res.success) {
+        onClose();
+      }
     } catch (err) {
       console.log(err);
     }
@@ -312,7 +328,10 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
   const createAccountUsingTria = async (triaName, password) => {
     const keyringController = new KeyringController({ baseUrl });
     try {
-      const res = await keyringController.createAccount({ triaName, password });
+      const res = await keyringController.createAccount({
+        triaName: "abhijeet201",
+        password,
+      });
       if (res.success) {
         onClose();
       }
@@ -334,23 +353,29 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
           width: popupSize.width,
         }}
       >
+        <div style={{ position: "absolute", marginLeft: -10, marginTop: -10 }}>
+          {" "}
+          <HomeBackgroundVector />
+        </div>
         {children}
       </div>
     );
   }, []);
 
   const BorderedContainer = useCallback(
-    ({ children, isSelected }: any) => {
+    ({ children, isSelected = true }: any) => {
       return (
         <div
           style={{
-            borderImage: "linear-gradient(#9F8BFF4D, #7053FF4D) 30",
             borderRadius: "16px",
             borderStyle: "solid",
             borderWidth: "1.5px",
             display: "flex",
             overflow: "hidden",
-            padding: 16,
+            padding: "16px",
+            border: isSelected
+              ? "1.50px rgba(158.82, 139.32, 255, 0.30) solid"
+              : "1.50px rgba(16, 16, 16, 0.03) solid",
           }}
         >
           {children}
@@ -440,20 +465,27 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
         display: "flex",
         flexDirection: "row",
         justifyContent: "center",
-        marginTop: 24,
+        marginTop: 28,
+        marginRight: 36,
       }}
     >
       <div
         style={{
-          borderRadius: "48px",
+          borderRadius: "58px",
           borderStyle: "solid",
           borderWidth: "0px",
           overflow: "hidden",
+          marginTop: 10,
+          marginLeft: 10,
           zIndex: 2,
         }}
       >
         {" "}
-        <AsyncImage height={imageSize} src={triaLogo} width={imageSize} />{" "}
+        <AsyncImage
+          height={imageSize + 20}
+          src={triaLogo}
+          width={imageSize + 20}
+        />{" "}
       </div>
       <div style={{ marginRight: -120, position: "absolute" }}>
         {" "}
@@ -461,6 +493,11 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
       </div>
     </div>
   );
+
+  const triaNameEntered = (name) => {
+    setTriaName(name);
+    setContinueWithTriaStep(ContinueWithTriaStep.EnterPassword);
+  };
 
   switch (getStartedWithTriaStep) {
     case GetStartedWithTriaStep.CreateTriaName:
@@ -568,9 +605,11 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
                 to Web3 applications, or to get on every blockchain network.{" "}
               </Text>
               <LoginInput
-                ctaClicked={() =>
-                  setSocialLoginStep(SocialLoginStep.ExtraLayerSecurity)
-                }
+                ctaClicked={(name) => {
+                  console.log(`name from callback: ${name}`);
+                  setTriaName(name);
+                  createAccountUsingSocialLogin(name);
+                }}
                 ctaTitle="Next"
                 value={socialFirstName}
               />
@@ -597,7 +636,7 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
         <div style={{ display: "flex", flex: 1 }}>
           <EnterTriaPassword
             ctaClicked={(password) => {
-              createAccount(userId, password);
+              // createAccountUsingSocialLogin(userId, password);
             }}
             ctaTitle="Sign up"
             logo={triaAndOpenSeaLogoIntersection}
@@ -692,6 +731,9 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
     return (
       <PopupContainer>
         <EnterTriaPassword
+          ctaClicked={(password) => {
+            signInUsingTria(triaName, password);
+          }}
           logo={triaAndOpenSeaLogoIntersection}
           primaryText={triaName}
         />
@@ -711,11 +753,6 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
     );
   }
 
-  const triaNameEntered = (name) => {
-    setTriaName(name);
-    setContinueWithTriaStep(ContinueWithTriaStep.EnterPassword);
-  };
-
   const getStartedWithTriaClicked = () => {
     setGetStartedWithTriaStep(GetStartedWithTriaStep.CreateTriaName);
   };
@@ -730,7 +767,14 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
 
   return (
     <PopupContainer>
-      <div style={{ display: "flex", flex: 1, flexDirection: "column" }}>
+      <div
+        style={{
+          display: "flex",
+          flex: 1,
+          flexDirection: "column",
+          justifyContent: "space-around",
+        }}
+      >
         {selectedOptionId && !searchingOtherWallet && (
           <div style={{ display: "flex", justifyContent: "flex-start" }}>
             <Box marginRight="16">
@@ -748,9 +792,9 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
           style={{
             alignItems: "center",
             display: "flex",
-            flex: 1,
+            flex: 0.75,
             flexDirection: "column",
-            justifyContent: "center",
+            justifyContent: "flex-start",
           }}
         >
           <div style={{ marginTop: 24 }}>
@@ -842,12 +886,19 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
                             socialLoginClicked(socialLogin);
                           }}
                         >
-                          <AsyncImage
-                            borderRadius="full"
-                            height={40}
-                            src={socialLogin.iconUrl}
-                            width={40}
-                          />
+                          {socialLogin.type === SocialLoginTypes.Google && (
+                            <GoogleIcon />
+                          )}
+                          {socialLogin.type === SocialLoginTypes.X && <XIcon />}
+                          {socialLogin.type !== SocialLoginTypes.Google &&
+                            socialLogin.type !== SocialLoginTypes.X && (
+                              <AsyncImage
+                                borderRadius="full"
+                                height={40}
+                                src={socialLogin.iconUrl}
+                                width={40}
+                              />
+                            )}
                         </Box>
                       );
                     })}

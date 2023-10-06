@@ -1,29 +1,35 @@
-import React from 'react';
-import { Text } from '../Text/Text';
+import React from "react";
+import { Text } from "../Text/Text";
 
-const TagView = ({ backgroundColor, title, titleColor }) => {
+const TagView = ({
+  actionText = "Continue with Tria",
+  backgroundColor,
+  title,
+  titleColor,
+  width = "100px",
+}) => {
   return (
     <div
-      style={{ alignItems: 'center', display: 'flex', flexDirection: 'row' }}
+      style={{ alignItems: "center", display: "flex", flexDirection: "row" }}
     >
       <Text color="modalText" size="18" style={{ width: 160 }}>
-        Continue with Tria
+        {actionText}
       </Text>
 
       <div
         display="flex"
         style={{
           background: backgroundColor,
-          borderRadius: '22px',
-          width: '100px',
+          borderRadius: "22px",
+          width: { width },
         }}
       >
         <Text
           size="12"
-          style={{ color: titleColor, marginLeft: 12, width: '100px' }}
+          style={{ color: titleColor, marginLeft: 12, width: { width } }}
         >
-          {' '}
-          {title}{' '}
+          {" "}
+          {title}{" "}
         </Text>
       </div>
     </div>
