@@ -11,6 +11,10 @@ import {
   useSocialLoginConnectors,
   SocialLoginTypes,
 } from "../../socialLogins/socialLoginConnectors";
+import {
+  useOnboardingConnectOptions,
+  ConnectOptionsType,
+} from "../OnboardingConnectOptions/OnboardingConnectOptions";
 import { isSafari } from "../../utils/browsers";
 import {
   WalletConnector,
@@ -113,6 +117,7 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
   const [userId, setUserId] = useState("");
 
   const socialLogins = useSocialLoginConnectors();
+  const onboardingConnectOptions = useOnboardingConnectOptions();
 
   const baseUrl = "http://localhost:8000";
 
@@ -576,29 +581,6 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
     );
   }, []);
 
-  // const BorderedContainer = useCallback(
-  //   ({ children, isSelected = true }: any) => {
-  //     return (
-  //       <Box
-  //         style={{
-  //           borderRadius: "16px",
-  //           borderStyle: "solid",
-  //           borderWidth: "1.5px",
-  //           display: "flex",
-  //           overflow: "hidden",
-  //           padding: "16px",
-  //           border: isSelected
-  //             ? "1.50px rgba(158.82, 139.32, 255, 0.30) solid"
-  //             : "1.50px rgba(16, 16, 16, 0.03) solid",
-  //         }}
-  //       >
-  //         {children}
-  //       </Box>
-  //     );
-  //   },
-  //   [connectType]
-  // );
-
   const searchWallet = (
     <BorderedContainer>
       <Text>Connect a Wallet</Text>
@@ -962,9 +944,20 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
               justifyContent: "flex-end",
             }}
           >
-            {loginViaTriaSection}
-            {loginViaSocialSection}
-            {loginViaExternalWalletSection}
+            {onboardingConnectOptions.map((connectOption) => {
+              switch (connectOption) {
+                case ConnectOptionsType.Tria:
+                  return <Box> {loginViaTriaSection} </Box>;
+                  break;
+                case ConnectOptionsType.Social:
+                  return <Box> {loginViaSocialSection} </Box>;
+                  break;
+                case ConnectOptionsType.ExternalWallets:
+                  return <Box> {loginViaExternalWalletSection} </Box>;
+                default:
+                  break;
+              }
+            })}
           </div>
         )}
         {!searchingOtherWallet && selectedOptionId && (
