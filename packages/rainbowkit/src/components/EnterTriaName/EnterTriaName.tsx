@@ -1,5 +1,5 @@
 import React from "react";
-import BorderedBox from "../BorderedBox/BorderedBox";
+import { BorderedContainer } from "../BorderedContainer/BorderedContainer";
 import LoginInput from "../LoginInput/LoginInput";
 import { Text } from "../Text/Text";
 
@@ -33,7 +33,7 @@ const EnterTriaNameComponent = (
           padding: 16,
         }}
       >
-        <BorderedBox>
+        <BorderedContainer>
           <Text> Create your tria name </Text>
           <Text>
             Your @tria is like Gmail, for Web3. Pay, receive and log-in to apps
@@ -47,7 +47,7 @@ const EnterTriaNameComponent = (
             ctaTitle="Next"
             value={value}
           />
-        </BorderedBox>
+        </BorderedContainer>
       </div>
     </div>
   );

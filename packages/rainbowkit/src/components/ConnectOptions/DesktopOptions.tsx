@@ -18,7 +18,6 @@ import {
 } from "../../wallets/useWalletConnectors";
 import { AsyncImage } from "../AsyncImage/AsyncImage";
 import { Box } from "../Box/Box";
-import BorderedBox from "../BorderedBox/BorderedBox";
 import { CloseButton } from "../CloseButton/CloseButton";
 import { ConnectModalIntro } from "../ConnectModal/ConnectModalIntro";
 import EnterTriaPassword, {
@@ -30,6 +29,7 @@ import {
   ModalSizeContext,
   ModalSizeOptions,
 } from "../RainbowKitProvider/ModalSizeContext";
+import { touchableStyles } from "../../css/touchableStyles";
 import TagView from "../TagView/TagView";
 import { Text } from "../Text/Text";
 import WelcomeView from "../Welcome/Welcome";
@@ -38,6 +38,7 @@ import HomeBackgroundVector from "../SVG/HomeBackgroundVector";
 import TriaVector from "../SVG/TriaVector";
 import GoogleIcon from "../SVG/GoogleIcon";
 import XIcon from "../SVG/XIcon";
+import { BorderedContainer } from "../BorderedContainer/BorderedContainer";
 
 import {
   ConnectDetail,
@@ -280,9 +281,117 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
     WalletStep.None
   );
 
+  const imageSize = 96;
+  const logo = async () => (await import("./Opensea.png")).default;
+  const triaLogo = async () =>
+    (await import("../../wallets/walletConnectors/triaWallet/triaWallet.png"))
+      .default;
+  const triaAndOpenSeaLogoIntersection = (
+    <div
+      style={{
+        alignItems: "center",
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "center",
+        marginTop: 28,
+        marginRight: 36,
+      }}
+    >
+      <div
+        style={{
+          borderRadius: "58px",
+          borderStyle: "solid",
+          borderWidth: "0px",
+          overflow: "hidden",
+          marginTop: 10,
+          marginLeft: 10,
+          zIndex: 2,
+        }}
+      >
+        {" "}
+        <AsyncImage
+          height={imageSize + 20}
+          src={triaLogo}
+          width={imageSize + 20}
+        />{" "}
+      </div>
+      <div style={{ marginRight: -120, position: "absolute" }}>
+        {" "}
+        <AsyncImage height={imageSize} src={logo} width={imageSize} />{" "}
+      </div>
+    </div>
+  );
+
   let walletContent = null;
   let socialLoginContent = null;
   let getStartedWithTriaContent = null;
+  const connectLogo = (
+    <div
+      style={{
+        alignItems: "center",
+        display: "flex",
+        flex: 0.75,
+        flexDirection: "column",
+        justifyContent: "flex-start",
+      }}
+    >
+      <div style={{ marginTop: 24 }}>
+        <AsyncImage height={95} src={logo} width={95} />
+      </div>
+      <div style={{ marginBottom: 24, marginTop: 24 }}>
+        <Text color="modalText" size="14">
+          Connect with Opensea
+        </Text>
+      </div>
+    </div>
+  );
+
+  const triaNameEntered = (name) => {
+    setTriaName(name);
+    setContinueWithTriaStep(ContinueWithTriaStep.EnterPassword);
+  };
+
+  const loginViaTriaSection = (
+    <BorderedContainer isSelected={connectType === ConnectType.Tria}>
+      <Box
+        cursor="pointer"
+        display="flex"
+        flexDirection="column"
+        onClick={() => setConnectType(ConnectType.Tria)}
+        style={{ flex: 1 }}
+      >
+        <div display="flex">
+          <TagView
+            backgroundColor="rgba(112, 83, 255, 0.12)"
+            title="decentralized"
+            titleColor="rgba(112, 83, 255, 0.9)"
+          />
+        </div>
+
+        {connectType === ConnectType.Tria && (
+          <div>
+            <LoginInput ctaClicked={triaNameEntered} placeholder="@tria name" />
+            <Box
+              onClick={() => getStartedWithTriaClicked()}
+              style={{
+                alignItems: "center",
+                display: "flex",
+                flexDirection: "row",
+                gap: "10px",
+              }}
+            >
+              <Text color="modalText" size="14" weight="bold">
+                Get started
+              </Text>
+              <Text color="modalText" size="14">
+                with Tria
+              </Text>
+            </Box>
+          </div>
+        )}
+      </Box>
+    </BorderedContainer>
+  );
 
   useEffect(() => {
     setConnectionError(false);
@@ -362,41 +471,31 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
     );
   }, []);
 
-  const BorderedContainer = useCallback(
-    ({ children, isSelected = true }: any) => {
-      return (
-        <div
-          style={{
-            borderRadius: "16px",
-            borderStyle: "solid",
-            borderWidth: "1.5px",
-            display: "flex",
-            overflow: "hidden",
-            padding: "16px",
-            border: isSelected
-              ? "1.50px rgba(158.82, 139.32, 255, 0.30) solid"
-              : "1.50px rgba(16, 16, 16, 0.03) solid",
-          }}
-        >
-          {children}
-        </div>
-      );
-    },
-    [connectType]
-  );
+  // const BorderedContainer = useCallback(
+  //   ({ children, isSelected = true }: any) => {
+  //     return (
+  //       <Box
+  //         style={{
+  //           borderRadius: "16px",
+  //           borderStyle: "solid",
+  //           borderWidth: "1.5px",
+  //           display: "flex",
+  //           overflow: "hidden",
+  //           padding: "16px",
+  //           border: isSelected
+  //             ? "1.50px rgba(158.82, 139.32, 255, 0.30) solid"
+  //             : "1.50px rgba(16, 16, 16, 0.03) solid",
+  //         }}
+  //       >
+  //         {children}
+  //       </Box>
+  //     );
+  //   },
+  //   [connectType]
+  // );
 
   const searchWallet = (
-    <div
-      style={{
-        borderImage: "linear-gradient(#9F8BFF4D, #7053FF4D) 30",
-        borderRadius: "16px",
-        borderStyle: "solid",
-        borderWidth: "1.5px",
-        display: "flex",
-        flexDirection: "column",
-        padding: 16,
-      }}
-    >
+   <BorderedContainer>
       <Text>Connect a Wallet</Text>
       <input
         placeholder="Search wallet"
@@ -450,54 +549,8 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
           </Fragment>
         )}
       </Box>
-    </div>
+    </BorderedContainer>
   );
-
-  const imageSize = 96;
-  const logo = async () => (await import("./Opensea.png")).default;
-  const triaLogo = async () =>
-    (await import("../../wallets/walletConnectors/triaWallet/triaWallet.png"))
-      .default;
-  const triaAndOpenSeaLogoIntersection = (
-    <div
-      style={{
-        alignItems: "center",
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "center",
-        marginTop: 28,
-        marginRight: 36,
-      }}
-    >
-      <div
-        style={{
-          borderRadius: "58px",
-          borderStyle: "solid",
-          borderWidth: "0px",
-          overflow: "hidden",
-          marginTop: 10,
-          marginLeft: 10,
-          zIndex: 2,
-        }}
-      >
-        {" "}
-        <AsyncImage
-          height={imageSize + 20}
-          src={triaLogo}
-          width={imageSize + 20}
-        />{" "}
-      </div>
-      <div style={{ marginRight: -120, position: "absolute" }}>
-        {" "}
-        <AsyncImage height={imageSize} src={logo} width={imageSize} />{" "}
-      </div>
-    </div>
-  );
-
-  const triaNameEntered = (name) => {
-    setTriaName(name);
-    setContinueWithTriaStep(ContinueWithTriaStep.EnterPassword);
-  };
 
   switch (getStartedWithTriaStep) {
     case GetStartedWithTriaStep.CreateTriaName:
@@ -526,7 +579,7 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
               padding: 16,
             }}
           >
-            <BorderedBox>
+            <BorderedContainer>
               <Text> Create your tria name </Text>
               <Text>
                 Your @tria is like Gmail, for Web3. Pay, receive and log-in to
@@ -543,7 +596,7 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
                 ctaTitle="Next"
                 value={socialFirstName}
               />
-            </BorderedBox>
+            </BorderedContainer>
           </div>
         </div>
       );
@@ -597,7 +650,7 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
               padding: 16,
             }}
           >
-            <BorderedBox>
+            <BorderedContainer>
               <Text> Create your tria name </Text>
               <Text>
                 {" "}
@@ -613,7 +666,7 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
                 ctaTitle="Next"
                 value={socialFirstName}
               />
-            </BorderedBox>
+            </BorderedContainer>
           </div>
         </div>
       );
@@ -787,70 +840,10 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
             <CloseButton onClose={onClose} />
           </Box>
         </div>
-
-        <div
-          style={{
-            alignItems: "center",
-            display: "flex",
-            flex: 0.75,
-            flexDirection: "column",
-            justifyContent: "flex-start",
-          }}
-        >
-          <div style={{ marginTop: 24 }}>
-            <AsyncImage height={95} src={logo} width={95} />
-          </div>
-          <div style={{ marginBottom: 24, marginTop: 24 }}>
-            <Text color="modalText" size="14">
-              Connect with Opensea
-            </Text>
-          </div>
-        </div>
-
+        {connectLogo}
         {!searchingOtherWallet && selectedOptionId == null && (
           <div>
-            <BorderedContainer isSelected={connectType === ConnectType.Tria}>
-              <Box
-                cursor="pointer"
-                display="flex"
-                flexDirection="column"
-                onClick={() => setConnectType(ConnectType.Tria)}
-                style={{ flex: 1 }}
-              >
-                <div display="flex">
-                  <TagView
-                    backgroundColor="rgba(112, 83, 255, 0.12)"
-                    title="decentralized"
-                    titleColor="rgba(112, 83, 255, 0.9)"
-                  />
-                </div>
-
-                {connectType === ConnectType.Tria && (
-                  <div>
-                    <LoginInput
-                      ctaClicked={triaNameEntered}
-                      placeholder="@tria name"
-                    />
-                    <Box
-                      onClick={() => getStartedWithTriaClicked()}
-                      style={{
-                        alignItems: "center",
-                        display: "flex",
-                        flexDirection: "row",
-                        gap: "10px",
-                      }}
-                    >
-                      <Text color="modalText" size="14" weight="bold">
-                        Get started
-                      </Text>
-                      <Text color="modalText" size="14">
-                        with Tria
-                      </Text>
-                    </Box>
-                  </div>
-                )}
-              </Box>
-            </BorderedContainer>
+            {loginViaTriaSection}
 
             <BorderedContainer
               isSelected={connectType === ConnectType.EmailSocial}

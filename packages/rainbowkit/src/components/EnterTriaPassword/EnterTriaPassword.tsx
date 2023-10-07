@@ -1,6 +1,6 @@
 import React from "react";
 import { Box } from "../Box/Box";
-import BorderedBox from "../BorderedBox/BorderedBox";
+import { BorderedContainer } from "../BorderedContainer/BorderedContainer";
 import LoginInput from "../LoginInput/LoginInput";
 import { Text } from "../Text/Text";
 
@@ -47,16 +47,7 @@ const EnterTriaPassword = ({
         </Text>
       </div>
 
-      <Box
-        cursor="pointer"
-        style={{
-          borderImage: "linear-gradient(#9F8BFF4D, #7053FF4D) 30",
-          borderRadius: "16!important",
-          borderStyle: "solid",
-          borderWidth: "1.5px",
-          padding: 16,
-        }}
-      >
+    <BorderedContainer>
         <Text> {title} </Text>
         <LoginInput
           isCTAButton={false}
@@ -71,7 +62,7 @@ const EnterTriaPassword = ({
           ctaTitle={ctaTitle}
           placeholder={secondaryPlaceholder}
         />
-      </Box>
+      </BorderedContainer>
     </div>
   );
 };
