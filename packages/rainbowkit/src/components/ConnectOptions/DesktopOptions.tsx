@@ -393,6 +393,110 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
     </BorderedContainer>
   );
 
+  const loginViaSocialSection = (
+    <BorderedContainer isSelected={connectType === ConnectType.EmailSocial}>
+      <Box
+        cursor="pointer"
+        onClick={() => setConnectType(ConnectType.EmailSocial)}
+        style={{ flex: 1 }}
+      >
+        <Text color="modalText" size="18">
+          Email and Social Logins
+        </Text>
+        {connectType === ConnectType.EmailSocial && (
+          <div>
+            <LoginInput placeholder="your@email.com" />
+          </div>
+        )}
+        {connectType === ConnectType.EmailSocial && (
+          <div
+            style={{
+              alignItems: "center",
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "center",
+            }}
+          >
+            {socialLogins.map((socialLogin) => {
+              return (
+                <Box
+                  cursor="pointer"
+                  key={socialLogin.id}
+                  onClick={() => {
+                    socialLoginClicked(socialLogin);
+                  }}
+                >
+                  {socialLogin.type === SocialLoginTypes.Google && (
+                    <GoogleIcon />
+                  )}
+                  {socialLogin.type === SocialLoginTypes.X && <XIcon />}
+                  {socialLogin.type !== SocialLoginTypes.Google &&
+                    socialLogin.type !== SocialLoginTypes.X && (
+                      <AsyncImage
+                        borderRadius="full"
+                        height={40}
+                        src={socialLogin.iconUrl}
+                        width={40}
+                      />
+                    )}
+                </Box>
+              );
+            })}
+          </div>
+        )}
+      </Box>
+    </BorderedContainer>
+  );
+
+  const loginViaExternalWalletSection = (
+    <BorderedContainer isSelected={connectType === ConnectType.ConnectWallet}>
+      <Box
+        cursor="pointer"
+        onClick={() => setConnectType(ConnectType.ConnectWallet)}
+        style={{ flex: 1 }}
+      >
+        <Text color="modalText" size="18">
+          Connect a Wallet
+        </Text>
+        {connectType === ConnectType.ConnectWallet && (
+          <Box className={ScrollClassName} paddingBottom="18">
+            {wallets.length > 0 && (
+              <Fragment key={0}>
+                <Box
+                  display="flex"
+                  flexDirection="column"
+                  gap="4"
+                  style={{ marginLeft: -6, marginTop: 20 }}
+                >
+                  {wallets
+                    .filter((_blank, index) => index < numberOfWalletsShown)
+                    .map((wallet) => {
+                      return (
+                        <ModalSelection
+                          currentlySelected={wallet.id === selectedOptionId}
+                          iconBackground={wallet.iconBackground}
+                          iconUrl={wallet.iconUrl}
+                          key={wallet.id}
+                          name={wallet.name}
+                          onClick={() => selectWallet(wallet)}
+                          ready={wallet.ready}
+                          recent={wallet.recent}
+                          testId={`wallet-option-${wallet.id}`}
+                        />
+                      );
+                    })}
+                </Box>
+                <Box onClick={() => setIsSearchingOtherWallet(true)}>
+                  <Text> Explore other wallets </Text>
+                </Box>
+              </Fragment>
+            )}
+          </Box>
+        )}
+      </Box>
+    </BorderedContainer>
+  );
+
   useEffect(() => {
     setConnectionError(false);
   }, [walletStep, selectedWallet]);
@@ -495,7 +599,7 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
   // );
 
   const searchWallet = (
-   <BorderedContainer>
+    <BorderedContainer>
       <Text>Connect a Wallet</Text>
       <input
         placeholder="Search wallet"
@@ -844,114 +948,8 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
         {!searchingOtherWallet && selectedOptionId == null && (
           <div>
             {loginViaTriaSection}
-
-            <BorderedContainer
-              isSelected={connectType === ConnectType.EmailSocial}
-            >
-              <Box
-                cursor="pointer"
-                onClick={() => setConnectType(ConnectType.EmailSocial)}
-                style={{ flex: 1 }}
-              >
-                <Text color="modalText" size="18">
-                  Email and Social Logins
-                </Text>
-                {connectType === ConnectType.EmailSocial && (
-                  <div>
-                    <LoginInput placeholder="your@email.com" />
-                  </div>
-                )}
-                {connectType === ConnectType.EmailSocial && (
-                  <div
-                    style={{
-                      alignItems: "center",
-                      display: "flex",
-                      flexDirection: "row",
-                      justifyContent: "center",
-                    }}
-                  >
-                    {socialLogins.map((socialLogin) => {
-                      return (
-                        <Box
-                          cursor="pointer"
-                          key={socialLogin.id}
-                          onClick={() => {
-                            socialLoginClicked(socialLogin);
-                          }}
-                        >
-                          {socialLogin.type === SocialLoginTypes.Google && (
-                            <GoogleIcon />
-                          )}
-                          {socialLogin.type === SocialLoginTypes.X && <XIcon />}
-                          {socialLogin.type !== SocialLoginTypes.Google &&
-                            socialLogin.type !== SocialLoginTypes.X && (
-                              <AsyncImage
-                                borderRadius="full"
-                                height={40}
-                                src={socialLogin.iconUrl}
-                                width={40}
-                              />
-                            )}
-                        </Box>
-                      );
-                    })}
-                  </div>
-                )}
-              </Box>
-            </BorderedContainer>
-
-            <BorderedContainer
-              isSelected={connectType === ConnectType.ConnectWallet}
-            >
-              <Box
-                cursor="pointer"
-                onClick={() => setConnectType(ConnectType.ConnectWallet)}
-                style={{ flex: 1 }}
-              >
-                <Text color="modalText" size="18">
-                  Connect a Wallet
-                </Text>
-                {connectType === ConnectType.ConnectWallet && (
-                  <Box className={ScrollClassName} paddingBottom="18">
-                    {wallets.length > 0 && (
-                      <Fragment key={0}>
-                        <Box
-                          display="flex"
-                          flexDirection="column"
-                          gap="4"
-                          style={{ marginLeft: -6, marginTop: 20 }}
-                        >
-                          {wallets
-                            .filter(
-                              (_blank, index) => index < numberOfWalletsShown
-                            )
-                            .map((wallet) => {
-                              return (
-                                <ModalSelection
-                                  currentlySelected={
-                                    wallet.id === selectedOptionId
-                                  }
-                                  iconBackground={wallet.iconBackground}
-                                  iconUrl={wallet.iconUrl}
-                                  key={wallet.id}
-                                  name={wallet.name}
-                                  onClick={() => selectWallet(wallet)}
-                                  ready={wallet.ready}
-                                  recent={wallet.recent}
-                                  testId={`wallet-option-${wallet.id}`}
-                                />
-                              );
-                            })}
-                        </Box>
-                        <Box onClick={() => setIsSearchingOtherWallet(true)}>
-                          <Text> Explore other wallets </Text>
-                        </Box>
-                      </Fragment>
-                    )}
-                  </Box>
-                )}
-              </Box>
-            </BorderedContainer>
+            {loginViaSocialSection}
+            {loginViaExternalWalletSection}
           </div>
         )}
         {!searchingOtherWallet && selectedOptionId && (
