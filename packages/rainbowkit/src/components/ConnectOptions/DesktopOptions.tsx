@@ -333,6 +333,7 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
         flex: 0.75,
         flexDirection: "column",
         justifyContent: "flex-start",
+        marginTop: -10,
       }}
     >
       <div style={{ marginTop: 24 }}>
@@ -929,24 +930,38 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
           display: "flex",
           flex: 1,
           flexDirection: "column",
-          justifyContent: "space-around",
         }}
       >
-        {selectedOptionId && !searchingOtherWallet && (
-          <div style={{ display: "flex", justifyContent: "flex-start" }}>
+        <div
+          style={{
+            height: popupSize.height * 0.3,
+            marginTop: -10,
+          }}
+        >
+          {selectedOptionId && !searchingOtherWallet && (
+            <div style={{ display: "flex", justifyContent: "flex-start" }}>
+              <Box marginRight="16">
+                <CloseButton onClose={backPress} />
+              </Box>
+            </div>
+          )}
+          <div style={{ display: "flex", justifyContent: "flex-end" }}>
             <Box marginRight="16">
-              <CloseButton onClose={backPress} />
+              <CloseButton onClose={onClose} />
             </Box>
           </div>
-        )}
-        <div style={{ display: "flex", justifyContent: "flex-end" }}>
-          <Box marginRight="16">
-            <CloseButton onClose={onClose} />
-          </Box>
+          {connectLogo}
         </div>
-        {connectLogo}
         {!searchingOtherWallet && selectedOptionId == null && (
-          <div>
+          <div
+            style={{
+              display: "flex",
+              flex: 1,
+              flexDirection: "column",
+              gap: "16px",
+              justifyContent: "flex-end",
+            }}
+          >
             {loginViaTriaSection}
             {loginViaSocialSection}
             {loginViaExternalWalletSection}
