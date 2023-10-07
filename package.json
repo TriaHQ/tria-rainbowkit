@@ -34,7 +34,7 @@
     "release:test": "pnpm release:build && pnpm --filter example dev",
     "ci:example": "pnpm --filter @rainbow-me/rainbowkit* prepare && pnpm --filter example build",
     "ci:site": "pnpm --filter @rainbow-me/rainbowkit* prepare && pnpm --filter site build",
-    "react": "cd examples/with-create-react-app && npm run reset"
+    "react": "cd examples/with-create-react-app && npm run react"
   },
   "repository": {
     "type": "git",
