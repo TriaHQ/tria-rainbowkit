@@ -17,7 +17,15 @@ const TagView = ({
         gap: "12px",
       }}
     >
-      <Text color="modalText" size="18">
+      <Text
+        color="modalText"
+        size="18"
+        style={{
+          color: "rgba(50, 50, 50, 1.0)",
+          fontSize: 18,
+          fontWeight: 500,
+        }}
+      >
         {actionText}
       </Text>
 
@@ -29,7 +37,16 @@ const TagView = ({
           width,
         }}
       >
-        <Text size="12" style={{ color: titleColor, marginLeft: 12, width }}>
+        <Text
+          size="12"
+          style={{
+            color: titleColor,
+            marginLeft: 12,
+            width,
+            fontSize: 12,
+            fontWeight: 500,
+          }}
+        >
           {" "}
           {title}{" "}
         </Text>

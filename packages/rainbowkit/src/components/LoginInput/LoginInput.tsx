@@ -45,6 +45,8 @@ const LoginInput = ({
             color: "white",
             height: "40px",
             width: "99px",
+            fontSize: 16,
+            fontWeight: 600,
           }}
           type="button"
         >

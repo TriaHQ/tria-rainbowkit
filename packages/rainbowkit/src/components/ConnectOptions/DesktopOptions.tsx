@@ -1,6 +1,7 @@
 import axios from "axios";
 import { KeyringController } from "@tria-sdk/web";
 import AnimateHeight from "react-animate-height";
+import "../../css/index.css";
 import React, {
   Fragment,
   useContext,
@@ -345,7 +346,6 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
       style={{
         alignItems: "center",
         display: "flex",
-        flex: 0.75,
         flexDirection: "column",
         justifyContent: "flex-start",
         marginTop: -10,
@@ -354,8 +354,24 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
       <div style={{ marginTop: 24 }}>
         <AsyncImage height={95} src={logo} width={95} />
       </div>
-      <div style={{ marginBottom: 24, marginTop: 24 }}>
-        <Text color="modalText" size="14">
+      <div
+        style={{
+          marginBottom: 24,
+          marginTop: 24,
+          color: "rgba(16, 16, 16, 0.8)",
+          fontSize: 18,
+          fontWeight: 500,
+        }}
+      >
+        <Text
+          color="modalText"
+          size="14"
+          style={{
+            color: "rgba(16, 16, 16, 1.0)",
+            fontSize: 18,
+            fontWeight: 500,
+          }}
+        >
           Connect with Opensea
         </Text>
       </div>
@@ -367,8 +383,8 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
     setContinueWithTriaStep(ContinueWithTriaStep.EnterPassword);
   };
 
-  const animationTiming = 200;
-  const loginOptionFixedHeight = 40;
+  const animationTiming = 300;
+  const loginOptionFixedHeight = 26;
 
   const loginViaTriaSection = (
     <BorderedContainer isSelected={connectType === ConnectType.Tria}>
@@ -409,11 +425,16 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
                   gap: "10px",
                 }}
               >
-                <Text color="modalText" size="14" weight="bold">
-                  Get started
-                </Text>
-                <Text color="modalText" size="14">
-                  with Tria
+                <Text
+                  size="14"
+                  weight="bold"
+                  style={{
+                    color: "rgba(50, 50, 50, 1.0)",
+                    fontSize: 14,
+                    fontWeight: 400,
+                  }}
+                >
+                  Get started with Tria
                 </Text>
               </Box>
             </div>
@@ -506,7 +527,15 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
           onClick={() => setConnectType(ConnectType.ConnectWallet)}
           style={{ flex: 1 }}
         >
-          <Text color="modalText" size="18">
+          <Text
+            color="modalText"
+            size="18"
+            style={{
+              color: "rgba(50, 50, 50, 1.0)",
+              fontSize: 18,
+              fontWeight: 500,
+            }}
+          >
             Connect a Wallet
           </Text>
           {connectType === ConnectType.ConnectWallet && (
@@ -605,7 +634,7 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
     }
   };
 
-  const popupSize = { width: 400, height: 600 };
+  const popupSize = { width: 400, height: 660 };
 
   const PopupContainer = useCallback(({ children }) => {
     return (
@@ -617,6 +646,7 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
           height: popupSize.height,
           margin: 10,
           width: popupSize.width,
+          fontFamily: "Montserrat",
         }}
       >
         <div style={{ position: "absolute", marginLeft: -10, marginTop: -10 }}>
@@ -626,13 +656,10 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
         {children}
         <div
           style={{
-            marginTop: 24,
-            marginBottom: 16,
-            marginLeft: 6,
-            marginRight: 32,
+            marginTop: 10,
           }}
         >
-          <PoweredByTriaVector />
+          <PoweredByTriaVector style={{ widht: 30, height: 30 }} />
         </div>
       </div>
     );
@@ -724,8 +751,23 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
             }}
           >
             <BorderedContainer>
-              <Text> Create your tria name </Text>
-              <Text>
+              <Text
+                style={{
+                  color: "rgba(51, 51, 51, 1.0)",
+                  fontSize: 18,
+                  fontWeight: 500,
+                }}
+              >
+                {" "}
+                Create your tria name{" "}
+              </Text>
+              <Text
+                style={{
+                  color: "rgba(128, 128, 128, 1.0)",
+                  fontSize: 14,
+                  fontWeight: 400,
+                }}
+              >
                 Your @tria is like Gmail, for Web3. Pay, receive and log-in to
                 apps on any device, and blockchain.
               </Text>
