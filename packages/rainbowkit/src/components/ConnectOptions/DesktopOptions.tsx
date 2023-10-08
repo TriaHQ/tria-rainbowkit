@@ -39,6 +39,7 @@ import { touchableStyles } from "../../css/touchableStyles";
 import TagView from "../TagView/TagView";
 import { Text } from "../Text/Text";
 import WelcomeView from "../Welcome/Welcome";
+import WelcomeToTria from "../WelcomeToTria/WelcomeToTria";
 import EnterTriaNameComponent from "../EnterTriaName/EnterTriaName";
 import HomeBackgroundVector from "../SVG/HomeBackgroundVector";
 import TriaVector from "../SVG/TriaVector";
@@ -99,6 +100,8 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
     string | undefined
   >();
   const [searchingOtherWallet, setIsSearchingOtherWallet] =
+    useState<bool>(false);
+  const [isWelcomeToTriaScreenBeingShown, setIsWelcomeToTriaScreenBeingShown] =
     useState<bool>(false);
 
   const [selectedWallet, setSelectedWallet] = useState<WalletConnector>();
@@ -592,6 +595,7 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
         userId,
       });
       console.log(`signin res: ${JSON.stringify(res)}`);
+      setContinueWithTriaStep(ContinueWithTriaStep.EnterUserName);
       onClose();
     } catch (err) {
       console.log(err);
@@ -621,11 +625,13 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
     const keyringController = new KeyringController({ baseUrl });
     try {
       const res = await keyringController.createAccount({
-        triaName: "abhijeet201",
+        triaName,
         password,
       });
       if (res.success) {
-        onClose();
+        setContinueWithTriaStep(ContinueWithTriaStep.EnterUserName);
+        setSocialLoginStep(SocialLoginStep.NotStarted);
+        setIsWelcomeToTriaScreenBeingShown(true);
       }
     } catch (err) {
       console.log(err);
@@ -633,8 +639,9 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
   };
 
   const isBackButtonHidden = () =>
-    ((connectType === ConnectType.Tria &&
-      continueWithTriaStep === ContinueWithTriaStep.EnterUserName) ||
+    (isWelcomeToTriaScreenBeingShown ||
+      (connectType === ConnectType.Tria &&
+        continueWithTriaStep === ContinueWithTriaStep.EnterUserName) ||
       (connectType === ConnectType.EmailSocial &&
         socialLoginStep === SocialLoginStep.NotStarted) ||
       (connectType === ConnectType.ConnectWallet &&
@@ -763,6 +770,7 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
       socialLoginStep,
       searchingOtherWallet,
       getStartedWithTriaStep,
+      isWelcomeToTriaScreenBeingShown,
     ]
   );
 
@@ -876,6 +884,7 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
                 ctaClicked={(input) => {
                   //perform password validations here
                   console.log(`input: ${input}`);
+                  setTriaName(input);
                   setGetStartedWithTriaStep(
                     GetStartedWithTriaStep.SetupPassword
                   );
@@ -1056,6 +1065,21 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
   const backPress = () => {
     setSelectedOptionId(undefined);
   };
+
+  if (isWelcomeToTriaScreenBeingShown) {
+    return (
+      <PopupContainer>
+        <WelcomeToTria
+          continueClicked={() => {
+            setIsWelcomeToTriaScreenBeingShown(false);
+            onClose();
+          }}
+          logo={triaAndOpenSeaLogoIntersection}
+          username={triaName}
+        />
+      </PopupContainer>
+    );
+  }
 
   if (getStartedWithTriaStep !== GetStartedWithTriaStep.NotStarted) {
     return (

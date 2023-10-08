@@ -1,6 +1,8 @@
 import { KeyringController } from "@tria-sdk/web";
 import React, { useState } from "react";
 import { Box } from "../Box/Box";
+import PrimaryButton from "../PrimaryButton/PrimaryButton";
+import SecondaryButton from "../SecondaryButton/SecondaryButton";
 import { Text } from "../Text/Text";
 import { SocialLoginTypes } from "../../socialLogins/socialLoginConnectors";
 
@@ -19,43 +21,6 @@ const WelcomeView = ({
   const [welcomeStep, setWelcomeStep] = useState<WelcomeStep>(
     WelcomeStep.ContinueToDAppORSetupWallet
   );
-
-  const PrimaryButton = ({ clickAction = (f) => f, title = "" }) => {
-    return (
-      <div style={{ margin: 6 }}>
-        <Box onClick={clickAction}>
-          <div
-            style={{
-              background:
-                "linear-gradient(111.34deg, #9F8BFF 0%, #7053FF 100%)",
-              borderRadius: "16px",
-              borderStyle: "solid",
-              borderWidth: "0px",
-              padding: 8,
-            }}
-          >
-            <Text textAlign="center" color="connectButtonText">
-              {" "}
-              {title}{" "}
-            </Text>
-          </div>
-        </Box>
-      </div>
-    );
-  };
-
-  const SecondaryButton = ({ clickAction = (f) => f, title = "" }) => {
-    return (
-      <div style={{ margin: 6 }}>
-        <Box onClick={clickAction}>
-          <Text textAlign="center" titleColor="white">
-            {" "}
-            {title}{" "}
-          </Text>
-        </Box>
-      </div>
-    );
-  };
 
   const baseUrl = "http://localhost:8000";
 
