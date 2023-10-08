@@ -46,6 +46,7 @@ import GoogleIcon from "../SVG/GoogleIcon";
 import XIcon from "../SVG/XIcon";
 import PoweredByTriaVector from "../SVG/PoweredByTriaVector";
 import { BorderedContainer } from "../BorderedContainer/BorderedContainer";
+import { BackButton } from "../BackButton/BackButton";
 
 import {
   ConnectDetail,
@@ -295,13 +296,10 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
     (await import("../../wallets/walletConnectors/triaWallet/triaWallet.png"))
       .default;
 
-  const AnimatedBorderedContainer = ({ children }) => {
-    return (
-      <AnimateHeight duration={500} height={"auto"}>
-        {children}
-      </AnimateHeight>
-    );
-  };
+  const animationTiming = 300;
+  const animationDelay = 100;
+  const loginOptionFixedHeight = 26;
+
   const triaAndOpenSeaLogoIntersection = (
     <div
       style={{
@@ -383,13 +381,11 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
     setContinueWithTriaStep(ContinueWithTriaStep.EnterPassword);
   };
 
-  const animationTiming = 300;
-  const loginOptionFixedHeight = 26;
-
   const loginViaTriaSection = (
     <BorderedContainer isSelected={connectType === ConnectType.Tria}>
       <AnimateHeight
         duration={animationTiming}
+        delay={animationDelay}
         height={
           connectType === ConnectType.Tria ? "auto" : loginOptionFixedHeight
         }
@@ -448,6 +444,7 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
     <BorderedContainer isSelected={connectType === ConnectType.EmailSocial}>
       <AnimateHeight
         duration={animationTiming}
+        delay={animationDelay}
         height={
           connectType === ConnectType.EmailSocial
             ? "auto"
@@ -516,6 +513,7 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
     <BorderedContainer isSelected={connectType === ConnectType.ConnectWallet}>
       <AnimateHeight
         duration={animationTiming}
+        delay={animationDelay}
         height={
           connectType === ConnectType.ConnectWallet
             ? "auto"
@@ -634,36 +632,139 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
     }
   };
 
+  const isBackButtonHidden = () =>
+    ((connectType === ConnectType.Tria &&
+      continueWithTriaStep === ContinueWithTriaStep.EnterUserName) ||
+      (connectType === ConnectType.EmailSocial &&
+        socialLoginStep === SocialLoginStep.NotStarted) ||
+      (connectType === ConnectType.ConnectWallet &&
+        searchingOtherWallet === false)) &&
+    getStartedWithTriaStep === GetStartedWithTriaStep.NotStarted;
+
+  const backButtonClicked = () => {
+    if (getStartedWithTriaStep !== GetStartedWithTriaStep.NotStarted) {
+      switch (getStartedWithTriaStep) {
+        case GetStartedWithTriaStep.SetupPassword:
+          setGetStartedWithTriaStep(GetStartedWithTriaStep.CreateTriaName);
+          break;
+        case GetStartedWithTriaStep.CreateTriaName:
+          setGetStartedWithTriaStep(GetStartedWithTriaStep.NotStarted);
+        default:
+          break;
+      }
+    } else {
+      switch (connectType) {
+        case ConnectType.Tria:
+          {
+            switch (continueWithTriaStep) {
+              case ContinueWithTriaStep.EnterPassword:
+                setContinueWithTriaStep(ContinueWithTriaStep.EnterUserName);
+                break;
+
+              default:
+                break;
+            }
+          }
+          break;
+
+        case ConnectType.EmailSocial:
+          {
+            switch (socialLoginStep) {
+              case SocialLoginStep.EnterPassword:
+                setSocialLoginStep(SocialLoginStep.ExtraLayerSecurity);
+                break;
+              case SocialLoginStep.ExtraLayerSecurity:
+                setSocialLoginStep(SocialLoginStep.TriaNameCreation);
+                break;
+              case SocialLoginStep.TriaNameCreation:
+                setSocialLoginStep(SocialLoginStep.NotStarted);
+              default:
+                break;
+            }
+          }
+          break;
+
+        case ConnectType.ConnectWallet:
+          {
+            setIsSearchingOtherWallet(!searchingOtherWallet);
+          }
+          break;
+
+        default:
+          break;
+      }
+    }
+  };
+
   const popupSize = { width: 400, height: 660 };
 
-  const PopupContainer = useCallback(({ children }) => {
-    return (
-      <div
-        style={{
-          display: "flex",
-          flex: 1,
-          flexDirection: "column",
-          height: popupSize.height,
-          margin: 10,
-          width: popupSize.width,
-          fontFamily: "Montserrat",
-        }}
-      >
-        <div style={{ position: "absolute", marginLeft: -10, marginTop: -10 }}>
-          {" "}
-          <HomeBackgroundVector />
-        </div>
-        {children}
+  const PopupContainer = useCallback(
+    ({ children }) => {
+      return (
         <div
           style={{
-            marginTop: 10,
+            display: "flex",
+            flex: 1,
+            flexDirection: "column",
+            height: popupSize.height,
+            margin: 10,
+            width: popupSize.width,
+            fontFamily: "Montserrat",
           }}
         >
-          <PoweredByTriaVector style={{ widht: 30, height: 30 }} />
+          <div
+            style={{ position: "absolute", marginLeft: -10, marginTop: -10 }}
+          >
+            {" "}
+            <HomeBackgroundVector />
+          </div>
+          {!isBackButtonHidden() && (
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+              }}
+            >
+              <Box marginRight="16" style={{ marginTop: 24, marginLeft: 24 }}>
+                <BackButton onClick={backButtonClicked} />
+              </Box>
+              <Box marginRight="16" style={{ marginTop: 24, marginLeft: 24 }}>
+                <CloseButton onClose={onClose} />
+              </Box>
+            </div>
+          )}
+          {isBackButtonHidden() && (
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row-reverse",
+              }}
+            >
+              <Box marginRight="16" style={{ marginTop: 24, marginLeft: 24 }}>
+                <CloseButton onClose={onClose} />
+              </Box>
+            </div>
+          )}
+
+          {children}
+          <div
+            style={{
+              marginTop: 10,
+            }}
+          >
+            <PoweredByTriaVector style={{ widht: 30, height: 30 }} />
+          </div>
         </div>
-      </div>
-    );
-  }, []);
+      );
+    },
+    [
+      continueWithTriaStep,
+      socialLoginStep,
+      searchingOtherWallet,
+      getStartedWithTriaStep,
+    ]
+  );
 
   const searchWallet = (
     <BorderedContainer>
@@ -1020,17 +1121,11 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
           }}
         >
           {selectedOptionId && !searchingOtherWallet && (
-            <div style={{ display: "flex", justifyContent: "flex-start" }}>
-              <Box marginRight="16">
-                <CloseButton onClose={backPress} />
-              </Box>
-            </div>
+            <div
+              style={{ display: "flex", justifyContent: "flex-start" }}
+            ></div>
           )}
-          <div style={{ display: "flex", justifyContent: "flex-end" }}>
-            <Box marginRight="16">
-              <CloseButton onClose={onClose} />
-            </Box>
-          </div>
+          <div style={{ display: "flex", justifyContent: "flex-end" }}></div>
           {connectLogo}
         </div>
         {!searchingOtherWallet && selectedOptionId == null && (

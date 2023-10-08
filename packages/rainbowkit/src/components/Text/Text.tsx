@@ -1,5 +1,4 @@
 import React from "react";
-import styled from "styled-components";
 import { Box, BoxProps } from "../Box/Box";
 
 export type TextProps = {
@@ -30,20 +29,6 @@ export type TextProps = {
   display?: BoxProps["display"];
 };
 
-// const StyledText = styled.small`
-//   font-family: "Roboto", sans-serif;
-//   font-size: 18px;
-// `;
-
-// const MosterratText = styled.p<{ $size: number }>`
-//   /* Adapt the colors based on primary prop */
-//   font-size: ${size};
-//   margin: 1em;
-//   padding: 0.25em 1em;
-//   border: 2px solid #bf4f74;
-//   border-radius: 3px;
-// `;
-
 export const Text = React.forwardRef(
   (
     {
@@ -62,10 +47,6 @@ export const Text = React.forwardRef(
     }: TextProps,
     ref: React.Ref<HTMLElement>
   ) => {
-    // return <div> {children} </div>;
-
-    // return <StyledText>{children}</StyledText>;
-
     return (
       <Box
         as={as}
