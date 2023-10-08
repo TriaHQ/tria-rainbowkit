@@ -1,5 +1,6 @@
 import axios from "axios";
 import { KeyringController } from "@tria-sdk/web";
+import AnimateHeight from "react-animate-height";
 import React, {
   Fragment,
   useContext,
@@ -292,6 +293,14 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
   const triaLogo = async () =>
     (await import("../../wallets/walletConnectors/triaWallet/triaWallet.png"))
       .default;
+
+  const AnimatedBorderedContainer = ({ children }) => {
+    return (
+      <AnimateHeight duration={500} height={"auto"}>
+        {children}
+      </AnimateHeight>
+    );
+  };
   const triaAndOpenSeaLogoIntersection = (
     <div
       style={{
@@ -358,154 +367,185 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
     setContinueWithTriaStep(ContinueWithTriaStep.EnterPassword);
   };
 
+  const animationTiming = 200;
+  const loginOptionFixedHeight = 40;
+
   const loginViaTriaSection = (
     <BorderedContainer isSelected={connectType === ConnectType.Tria}>
-      <Box
-        cursor="pointer"
-        display="flex"
-        flexDirection="column"
-        onClick={() => setConnectType(ConnectType.Tria)}
-        style={{ flex: 1 }}
+      <AnimateHeight
+        duration={animationTiming}
+        height={
+          connectType === ConnectType.Tria ? "auto" : loginOptionFixedHeight
+        }
       >
-        <div display="flex">
-          <TagView
-            backgroundColor="rgba(112, 83, 255, 0.12)"
-            title="private"
-            titleColor="rgba(112, 83, 255, 0.9)"
-            width={64}
-          />
-        </div>
-
-        {connectType === ConnectType.Tria && (
-          <div>
-            <LoginInput ctaClicked={triaNameEntered} placeholder="@tria name" />
-            <Box
-              onClick={() => getStartedWithTriaClicked()}
-              style={{
-                alignItems: "center",
-                display: "flex",
-                flexDirection: "row",
-                gap: "10px",
-              }}
-            >
-              <Text color="modalText" size="14" weight="bold">
-                Get started
-              </Text>
-              <Text color="modalText" size="14">
-                with Tria
-              </Text>
-            </Box>
+        <Box
+          cursor="pointer"
+          display="flex"
+          flexDirection="column"
+          onClick={() => setConnectType(ConnectType.Tria)}
+          style={{ flex: 1 }}
+        >
+          <div display="flex">
+            <TagView
+              backgroundColor="rgba(112, 83, 255, 0.12)"
+              title="private"
+              titleColor="rgba(112, 83, 255, 0.9)"
+              width={64}
+            />
           </div>
-        )}
-      </Box>
+
+          {connectType === ConnectType.Tria && (
+            <div>
+              <LoginInput
+                ctaClicked={triaNameEntered}
+                placeholder="@tria name"
+              />
+              <Box
+                onClick={() => getStartedWithTriaClicked()}
+                style={{
+                  alignItems: "center",
+                  display: "flex",
+                  flexDirection: "row",
+                  gap: "10px",
+                }}
+              >
+                <Text color="modalText" size="14" weight="bold">
+                  Get started
+                </Text>
+                <Text color="modalText" size="14">
+                  with Tria
+                </Text>
+              </Box>
+            </div>
+          )}
+        </Box>
+      </AnimateHeight>
     </BorderedContainer>
   );
 
   const loginViaSocialSection = (
     <BorderedContainer isSelected={connectType === ConnectType.EmailSocial}>
-      <Box
-        cursor="pointer"
-        onClick={() => setConnectType(ConnectType.EmailSocial)}
-        style={{ flex: 1 }}
+      <AnimateHeight
+        duration={animationTiming}
+        height={
+          connectType === ConnectType.EmailSocial
+            ? "auto"
+            : loginOptionFixedHeight
+        }
       >
-        <TagView
-          actionText="Email & Social"
-          backgroundColor="rgba(241, 84, 169, 0.12)"
-          title="fast"
-          titleColor="rgba(241, 84, 169, 0.9)"
-          width={48}
-        />
-        {connectType === ConnectType.EmailSocial && (
-          <div>
-            <LoginInput placeholder="your@email.com" />
-          </div>
-        )}
-        {connectType === ConnectType.EmailSocial && (
-          <div
-            style={{
-              alignItems: "center",
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "center",
-            }}
-          >
-            {socialLogins.map((socialLogin) => {
-              return (
-                <Box
-                  cursor="pointer"
-                  key={socialLogin.id}
-                  onClick={() => {
-                    socialLoginClicked(socialLogin);
-                  }}
-                >
-                  {socialLogin.type === SocialLoginTypes.Google && (
-                    <GoogleIcon />
-                  )}
-                  {socialLogin.type === SocialLoginTypes.X && <XIcon />}
-                  {socialLogin.type !== SocialLoginTypes.Google &&
-                    socialLogin.type !== SocialLoginTypes.X && (
-                      <AsyncImage
-                        borderRadius="full"
-                        height={40}
-                        src={socialLogin.iconUrl}
-                        width={40}
-                      />
+        <Box
+          cursor="pointer"
+          onClick={() => setConnectType(ConnectType.EmailSocial)}
+          style={{ flex: 1 }}
+        >
+          <TagView
+            actionText="Email & Social"
+            backgroundColor="rgba(241, 84, 169, 0.12)"
+            title="fast"
+            titleColor="rgba(241, 84, 169, 0.9)"
+            width={48}
+          />
+          {connectType === ConnectType.EmailSocial && (
+            <div>
+              <LoginInput placeholder="your@email.com" />
+            </div>
+          )}
+          {connectType === ConnectType.EmailSocial && (
+            <div
+              style={{
+                alignItems: "center",
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+              }}
+            >
+              {socialLogins.map((socialLogin) => {
+                return (
+                  <Box
+                    cursor="pointer"
+                    key={socialLogin.id}
+                    onClick={() => {
+                      socialLoginClicked(socialLogin);
+                    }}
+                  >
+                    {socialLogin.type === SocialLoginTypes.Google && (
+                      <GoogleIcon />
                     )}
-                </Box>
-              );
-            })}
-          </div>
-        )}
-      </Box>
+                    {socialLogin.type === SocialLoginTypes.X && <XIcon />}
+                    {socialLogin.type !== SocialLoginTypes.Google &&
+                      socialLogin.type !== SocialLoginTypes.X && (
+                        <AsyncImage
+                          borderRadius="full"
+                          height={40}
+                          src={socialLogin.iconUrl}
+                          width={40}
+                        />
+                      )}
+                  </Box>
+                );
+              })}
+            </div>
+          )}
+        </Box>
+      </AnimateHeight>
     </BorderedContainer>
   );
 
   const loginViaExternalWalletSection = (
     <BorderedContainer isSelected={connectType === ConnectType.ConnectWallet}>
-      <Box
-        cursor="pointer"
-        onClick={() => setConnectType(ConnectType.ConnectWallet)}
-        style={{ flex: 1 }}
+      <AnimateHeight
+        duration={animationTiming}
+        height={
+          connectType === ConnectType.ConnectWallet
+            ? "auto"
+            : loginOptionFixedHeight
+        }
       >
-        <Text color="modalText" size="18">
-          Connect a Wallet
-        </Text>
-        {connectType === ConnectType.ConnectWallet && (
-          <Box className={ScrollClassName} paddingBottom="18">
-            {wallets.length > 0 && (
-              <Fragment key={0}>
-                <Box
-                  display="flex"
-                  flexDirection="column"
-                  gap="4"
-                  style={{ marginLeft: -6, marginTop: 20 }}
-                >
-                  {wallets
-                    .filter((_blank, index) => index < numberOfWalletsShown)
-                    .map((wallet) => {
-                      return (
-                        <ModalSelection
-                          currentlySelected={wallet.id === selectedOptionId}
-                          iconBackground={wallet.iconBackground}
-                          iconUrl={wallet.iconUrl}
-                          key={wallet.id}
-                          name={wallet.name}
-                          onClick={() => selectWallet(wallet)}
-                          ready={wallet.ready}
-                          recent={wallet.recent}
-                          testId={`wallet-option-${wallet.id}`}
-                        />
-                      );
-                    })}
-                </Box>
-                <Box onClick={() => setIsSearchingOtherWallet(true)}>
-                  <Text> Explore other wallets </Text>
-                </Box>
-              </Fragment>
-            )}
-          </Box>
-        )}
-      </Box>
+        <Box
+          cursor="pointer"
+          onClick={() => setConnectType(ConnectType.ConnectWallet)}
+          style={{ flex: 1 }}
+        >
+          <Text color="modalText" size="18">
+            Connect a Wallet
+          </Text>
+          {connectType === ConnectType.ConnectWallet && (
+            <Box className={ScrollClassName} paddingBottom="18">
+              {wallets.length > 0 && (
+                <Fragment key={0}>
+                  <Box
+                    display="flex"
+                    flexDirection="column"
+                    gap="4"
+                    style={{ marginLeft: -6, marginTop: 20 }}
+                  >
+                    {wallets
+                      .filter((_blank, index) => index < numberOfWalletsShown)
+                      .map((wallet) => {
+                        return (
+                          <ModalSelection
+                            currentlySelected={wallet.id === selectedOptionId}
+                            iconBackground={wallet.iconBackground}
+                            iconUrl={wallet.iconUrl}
+                            key={wallet.id}
+                            name={wallet.name}
+                            onClick={() => selectWallet(wallet)}
+                            ready={wallet.ready}
+                            recent={wallet.recent}
+                            testId={`wallet-option-${wallet.id}`}
+                          />
+                        );
+                      })}
+                  </Box>
+                  <Box onClick={() => setIsSearchingOtherWallet(true)}>
+                    <Text> Explore other wallets </Text>
+                  </Box>
+                </Fragment>
+              )}
+            </Box>
+          )}
+        </Box>
+      </AnimateHeight>
     </BorderedContainer>
   );
 
@@ -958,7 +998,8 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
               flex: 1,
               flexDirection: "column",
               gap: "16px",
-              justifyContent: "flex-end",
+              justifyContent: "flex-start",
+              marginTop: 16,
             }}
           >
             {onboardingConnectOptions.map((connectOption) => {
