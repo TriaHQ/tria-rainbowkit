@@ -6,13 +6,18 @@ const TagView = ({
   backgroundColor,
   title,
   titleColor,
-  width = "100px",
+  width = 100,
 }) => {
   return (
     <div
-      style={{ alignItems: "center", display: "flex", flexDirection: "row" }}
+      style={{
+        alignItems: "center",
+        display: "flex",
+        flexDirection: "row",
+        gap: "12px",
+      }}
     >
-      <Text color="modalText" size="18" style={{ width: 160 }}>
+      <Text color="modalText" size="18">
         {actionText}
       </Text>
 
@@ -21,13 +26,10 @@ const TagView = ({
         style={{
           background: backgroundColor,
           borderRadius: "22px",
-          width: { width },
+          width,
         }}
       >
-        <Text
-          size="12"
-          style={{ color: titleColor, marginLeft: 12, width: { width } }}
-        >
+        <Text size="12" style={{ color: titleColor, marginLeft: 12, width }}>
           {" "}
           {title}{" "}
         </Text>

@@ -42,6 +42,7 @@ import HomeBackgroundVector from "../SVG/HomeBackgroundVector";
 import TriaVector from "../SVG/TriaVector";
 import GoogleIcon from "../SVG/GoogleIcon";
 import XIcon from "../SVG/XIcon";
+import PoweredByTriaVector from "../SVG/PoweredByTriaVector";
 import { BorderedContainer } from "../BorderedContainer/BorderedContainer";
 
 import {
@@ -369,8 +370,9 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
         <div display="flex">
           <TagView
             backgroundColor="rgba(112, 83, 255, 0.12)"
-            title="decentralized"
+            title="private"
             titleColor="rgba(112, 83, 255, 0.9)"
+            width={64}
           />
         </div>
 
@@ -406,9 +408,13 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
         onClick={() => setConnectType(ConnectType.EmailSocial)}
         style={{ flex: 1 }}
       >
-        <Text color="modalText" size="18">
-          Email and Social Logins
-        </Text>
+        <TagView
+          actionText="Email & Social"
+          backgroundColor="rgba(241, 84, 169, 0.12)"
+          title="fast"
+          titleColor="rgba(241, 84, 169, 0.9)"
+          width={48}
+        />
         {connectType === ConnectType.EmailSocial && (
           <div>
             <LoginInput placeholder="your@email.com" />
@@ -567,6 +573,7 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
         style={{
           display: "flex",
           flex: 1,
+          flexDirection: "column",
           height: popupSize.height,
           margin: 10,
           width: popupSize.width,
@@ -577,6 +584,16 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
           <HomeBackgroundVector />
         </div>
         {children}
+        <div
+          style={{
+            marginTop: 24,
+            marginBottom: 16,
+            marginLeft: 6,
+            marginRight: 32,
+          }}
+        >
+          <PoweredByTriaVector />
+        </div>
       </div>
     );
   }, []);
