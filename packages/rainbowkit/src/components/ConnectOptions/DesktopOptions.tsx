@@ -455,7 +455,6 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
         }
       >
         <Box
-          cursor="pointer"
           onClick={() => setConnectType(ConnectType.EmailSocial)}
           style={{ flex: 1 }}
         >
@@ -480,13 +479,16 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
                 justifyContent: "center",
               }}
             >
-              {socialLogins.map((socialLogin) => {
+              {socialLogins.map((socialLogin, index) => {
                 return (
                   <Box
                     cursor="pointer"
                     key={socialLogin.id}
                     onClick={() => {
-                      socialLoginClicked(socialLogin);
+                      console.log(
+                        `index: ${index} social login: ${socialLogins[index].type}`
+                      );
+                      socialLoginClicked(index);
                     }}
                   >
                     {socialLogin.type === SocialLoginTypes.Google && (
@@ -1121,9 +1123,16 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
     setGetStartedWithTriaStep(GetStartedWithTriaStep.CreateTriaName);
   };
 
-  const socialLoginClicked = async () => {
+  const socialLoginClicked = async (socialLoginIndex) => {
+    const socialNetwork =
+      socialLogins[socialLoginIndex].type === SocialLoginTypes.Instagram
+        ? "instagram"
+        : "google";
     try {
-      await window.open(`${baseUrl}/api/v1/auth/oauth/google`, "_self");
+      await window.open(
+        `${baseUrl}/api/v1/auth/oauth/${socialNetwork}`,
+        "_self"
+      );
     } catch (err) {
       console.log(err);
     }
