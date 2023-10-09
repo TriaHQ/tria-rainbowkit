@@ -2,11 +2,13 @@ import React from "react";
 
 function TransactionDetails() {
   return (
-    <div className="w-[448px] h-[730px] p-4 flex-col justify-center items-center gap-3 inline-flex font-Montserrat]">
+    <div className="w-[448px] p-4 flex-col justify-center items-center gap-3 inline-flex font-Montserrat]">
       <div className="w-[416px] grow shrink basis-0 flex-col justify-start items-center flex">
         <div className="self-stretch h-[72px] px-5 py-3 rounded-[21px] justify-center items-center gap-2 inline-flex">
           <div className="w-[18px] h-[18px] relative">
-            <div className="w-[18px] h-[18px] left-0 top-0 absolute"></div>
+            <div className="w-[18px] h-[18px] left-0 top-0 absolute">
+                <img src="/icons/arrow-left.svg" alt="" />
+            </div>
           </div>
           <div className="grow shrink basis-0 h-9 justify-center items-center gap-4 flex">
             <div className="px-3 py-2 bg-white rounded-[48px] border-2 border-zinc-100 justify-center items-center gap-2 flex">
@@ -19,7 +21,9 @@ function TransactionDetails() {
             </div>
           </div>
           <div className="w-[18px] h-[18px] relative">
-            <div className="w-[18px] h-[18px] left-0 top-0 absolute"></div>
+            <div className="w-[18px] h-[18px] left-0 top-0 absolute">
+                <img src="/icons/more-circle.svg" alt="" />
+            </div>
           </div>
         </div>
         <div className="self-stretch grow shrink basis-0 px-5 py-3 rounded-[21px] flex-col justify-start items-center gap-5 flex">
@@ -27,7 +31,9 @@ function TransactionDetails() {
             <div className="self-stretch justify-between items-center inline-flex">
               <div className="w-[70px] self-stretch justify-start items-center gap-2 flex">
                 <div className="w-[18px] h-[18px] relative">
-                  <div className="w-[18px] h-[18px] left-0 top-0 absolute"></div>
+                  <div className="w-[18px] h-[18px] left-0 top-0 absolute">
+                    <img src="/icons/arrow-down.svg" alt="" />
+                  </div>
                 </div>
                 <div className="text-center text-zinc-600 text-base font-semibold  leading-tight">
                   From
@@ -38,15 +44,17 @@ function TransactionDetails() {
                   0x44s2....348J
                 </div>
                 <div className="w-[18px] h-[18px] relative">
-                  <div className="w-[18px] h-[18px] left-0 top-0 absolute"></div>
+                  <div className="w-[18px] h-[18px] left-0 top-0 absolute">
+                    <img src="/icons/copy-transaction.svg" alt="" />
+                  </div>
                 </div>
               </div>
             </div>
             <div className="self-stretch justify-between items-center inline-flex">
               <div className="w-[46px] self-stretch justify-start items-center gap-2 flex">
-                <div className="w-[18px] h-[18px] relative">
+              <div className="w-[18px] h-[18px] relative">
                   <div className="w-[18px] h-[18px] left-0 top-0 absolute">
-                    <div className="w-[4.25px] h-[4.25px] left-[6.88px] top-[5.76px] absolute"></div>
+                    <img src="/icons/send-sqaure-2.svg" alt="" />
                   </div>
                 </div>
                 <div className="text-center text-zinc-600 text-base font-semibold  leading-tight">
@@ -64,7 +72,9 @@ function TransactionDetails() {
                 </div>
 
                 <div className="w-[18px] h-[18px] relative">
-                  <div className="w-[18px] h-[18px] left-0 top-0 absolute"></div>
+                  <div className="w-[18px] h-[18px] left-0 top-0 absolute">
+                  <img src="/icons/copy-transaction.svg" alt="" />
+                  </div>
                 </div>
               </div>
             </div>
@@ -76,7 +86,9 @@ function TransactionDetails() {
             <div className="self-stretch justify-between items-center inline-flex">
               <div className="w-[135px] self-stretch justify-start items-center gap-2 flex">
                 <div className="w-[18px] h-[18px] relative">
-                  <div className="w-[18px] h-[18px] left-0 top-0 absolute"></div>
+                  <div className="w-[18px] h-[18px] left-0 top-0 absolute">
+                    <img src="/icons/clock.svg" alt="" />
+                  </div>
                 </div>
                 <div className="text-center text-zinc-600 text-base font-semibold  leading-tight">
                   Confirmed at
@@ -91,7 +103,9 @@ function TransactionDetails() {
             <div className="self-stretch justify-between items-center inline-flex">
               <div className="w-[72px] self-stretch justify-start items-center gap-2 flex">
                 <div className="w-[18px] h-[18px] relative">
-                  <div className="w-[18px] h-[18px] left-0 top-0 absolute"></div>
+                  <div className="w-[18px] h-[18px] left-0 top-0 absolute">
+                    <img src="/icons/dollar-circle.svg" alt="" />
+                  </div>
                 </div>
                 <div className="text-center text-zinc-600 text-base font-semibold  leading-tight">
                   Value
@@ -105,8 +119,10 @@ function TransactionDetails() {
             </div>
             <div className="self-stretch justify-between items-center inline-flex">
               <div className="w-[76px] self-stretch justify-start items-center gap-2 flex">
-                <div className="w-[18px] h-[18px] relative">
-                  <div className="w-[18px] h-[18px] left-0 top-0 absolute"></div>
+              <div className="w-[18px] h-[18px] relative">
+                  <div className="w-[18px] h-[18px] left-0 top-0 absolute">
+                    <img src="/icons/dollar-circle.svg" alt="" />
+                  </div>
                 </div>
                 <div className="text-center text-zinc-600 text-base font-semibold  leading-tight">
                   Token
@@ -124,7 +140,9 @@ function TransactionDetails() {
             <div className="self-stretch justify-between items-center inline-flex">
               <div className="w-[98px] self-stretch justify-start items-center gap-2 flex">
                 <div className="w-[18px] h-[18px] relative">
-                  <div className="w-[18px] h-[18px] left-0 top-0 absolute"></div>
+                  <div className="w-[18px] h-[18px] left-0 top-0 absolute">
+                    <img src="/icons/share.svg" alt="" />
+                  </div>
                 </div>
                 <div className="text-center text-zinc-600 text-base font-semibold  leading-tight">
                   Network
@@ -147,7 +165,9 @@ function TransactionDetails() {
             <div className="self-stretch justify-between items-center inline-flex">
               <div className="w-[87px] self-stretch justify-start items-center gap-2 flex">
                 <div className="w-[18px] h-[18px] relative">
-                  <div className="w-[18px] h-[18px] left-0 top-0 absolute"></div>
+                  <div className="w-[18px] h-[18px] left-0 top-0 absolute">
+                    <img src="/icons/hashtag.svg" alt="" />
+                  </div>
                 </div>
                 <div className="text-center text-zinc-600 text-base font-semibold  leading-tight">
                   TxHash
@@ -158,17 +178,17 @@ function TransactionDetails() {
                   0xe12fb3b4a99983...
                 </div>
                 <div className="w-[18px] h-[18px] relative">
-                  <div className="w-[18px] h-[18px] left-0 top-0 absolute"></div>
+                  <div className="w-[18px] h-[18px] left-0 top-0 absolute">
+                  <img src="/icons/copy-transaction.svg" alt="" />
+                  </div>
                 </div>
               </div>
             </div>
             <div className="self-stretch justify-between items-center inline-flex">
               <div className="w-[73px] self-stretch justify-start items-center gap-2 flex">
-                <div className="w-[18px] h-[18px] relative">
+              <div className="w-[18px] h-[18px] relative">
                   <div className="w-[18px] h-[18px] left-0 top-0 absolute">
-                    <div className="w-[8.65px] h-[9.01px] left-[4.68px] top-[4.50px] absolute">
-                      <div className="w-[7.92px] h-[6.38px] left-[0.35px] top-[2.45px] absolute"></div>
-                    </div>
+                    <img src="/icons/3d-square.svg" alt="" />
                   </div>
                 </div>
                 <div className="text-center text-zinc-600 text-base font-semibold  leading-tight">
@@ -187,7 +207,9 @@ function TransactionDetails() {
             <div className="self-stretch justify-between items-center inline-flex">
               <div className="w-[132px] self-stretch justify-start items-center gap-2 flex">
                 <div className="w-[18px] h-[18px] relative">
-                  <div className="w-[18px] h-[18px] left-0 top-0 absolute"></div>
+                  <div className="w-[18px] h-[18px] left-0 top-0 absolute">
+                    <img src="/icons/gas-station.svg" alt="" />
+                  </div>
                 </div>
                 <div className="text-center text-zinc-600 text-base font-semibold  leading-tight">
                   Network Fee
@@ -201,9 +223,9 @@ function TransactionDetails() {
             </div>
             <div className="self-stretch justify-between items-center inline-flex">
               <div className="w-[101px] self-stretch justify-start items-center gap-2 flex">
-                <div className="w-[18px] h-[18px] relative">
+              <div className="w-[18px] h-[18px] relative">
                   <div className="w-[18px] h-[18px] left-0 top-0 absolute">
-                    <div className="w-[15.44px] h-[12.71px] left-[1.28px] top-[2.64px] absolute"></div>
+                    <img src="/icons/moneys.svg" alt="" />
                   </div>
                 </div>
                 <div className="text-center text-zinc-600 text-base font-semibold  leading-tight">
@@ -218,9 +240,9 @@ function TransactionDetails() {
             </div>
             <div className="self-stretch justify-between items-center inline-flex">
               <div className="w-[139px] self-stretch justify-start items-center gap-2 flex">
-                <div className="w-[18px] h-[18px] relative">
+              <div className="w-[18px] h-[18px] relative">
                   <div className="w-[18px] h-[18px] left-0 top-0 absolute">
-                    <div className="w-[15.44px] h-[12.71px] left-[1.28px] top-[2.64px] absolute"></div>
+                    <img src="/icons/moneys.svg" alt="" />
                   </div>
                 </div>
                 <div className="text-center text-zinc-600 text-base font-semibold  leading-tight">
@@ -235,9 +257,9 @@ function TransactionDetails() {
             </div>
             <div className="self-stretch justify-between items-center inline-flex">
               <div className="w-[104px] self-stretch justify-start items-center gap-2 flex">
-                <div className="w-[18px] h-[18px] relative">
+              <div className="w-[18px] h-[18px] relative">
                   <div className="w-[18px] h-[18px] left-0 top-0 absolute">
-                    <div className="w-[15.44px] h-[12.71px] left-[1.28px] top-[2.64px] absolute"></div>
+                    <img src="/icons/moneys.svg" alt="" />
                   </div>
                 </div>
                 <div className="text-center text-zinc-600 text-base font-semibold  leading-tight">
@@ -253,7 +275,9 @@ function TransactionDetails() {
             <div className="self-stretch justify-between items-center inline-flex">
               <div className="w-20 self-stretch justify-start items-center gap-2 flex">
                 <div className="w-[18px] h-[18px] relative">
-                  <div className="w-[18px] h-[18px] left-0 top-0 absolute"></div>
+                  <div className="w-[18px] h-[18px] left-0 top-0 absolute">
+                    <img src="/icons/hashtag.svg" alt="" />
+                  </div>
                 </div>
                 <div className="text-center text-zinc-600 text-base font-semibold  leading-tight">
                   Nonce

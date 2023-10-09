@@ -3,6 +3,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import reportWebVitals from "./reportWebVitals";
 import "./index.css";
+import { BrowserRouter} from "react-router-dom";
 
 // import "@rainbow-me/rainbowkit/styles.css";
 // import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
@@ -52,7 +53,9 @@ const root = ReactDOM.createRoot(
 root.render(
   // <WagmiConfig config={wagmiConfig}>
   //   <RainbowKitProvider chains={chains}>
-      <App />
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>
   //   </RainbowKitProvider>
   // </WagmiConfig>
 );

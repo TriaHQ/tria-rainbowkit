@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 const DisplayCost =()=>{
   const navigate = useNavigate();
     return(
-        <div className="self-stretch h-[179px] bg-white rounded-2xl border-2 border-violet-400 border-opacity-30 flex-col justify-center items-center gap-3 flex font-montserrat">
+        <div className="self-stretch h-[179px] mb  bg-white rounded-2xl border-2 border-violet-400 border-opacity-30 flex-col justify-center items-center gap-3 flex font-montserrat">
         <div className="self-stretch h-[179px] px-5 py-4 rounded-2xl flex-col justify-center items-start gap-4 flex">
           <div className="self-stretch h-[67px] py-3 flex-col justify-center items-start gap-2 flex">
             <div className="self-stretch h-[43px] flex-col justify-center items-start gap-1 flex">

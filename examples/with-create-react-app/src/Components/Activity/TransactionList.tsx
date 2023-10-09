@@ -69,7 +69,7 @@ const TransactionList = () => {
   return (
     <>
       <div className="w-[416px] grow shrink basis-0 flex-col justify-start items-center font-Montserrat flex">
-        <div className="self-stretch h-[622px] flex-col justify-center items-center gap-2 flex">
+        <div className="self-stretch h-[622px]  flex-col justify-center items-center gap-2 flex">
           <div className="self-stretch h-[67px] px-5 py-3 rounded-2xl flex-col justify-center items-center gap-2 flex">
             <div className="self-stretch justify-start items-center gap-4 inline-flex">
               <div className="grow shrink basis-0 h-6 justify-start items-center gap-2 flex">
