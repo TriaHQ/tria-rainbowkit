@@ -13,5 +13,10 @@ body {
 }
 
 body {
+  /* height: 100%; */
   zoom: 0.8;
 }
+
+/* *{
+font-size: 10px;
+} */

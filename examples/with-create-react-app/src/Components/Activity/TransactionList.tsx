@@ -47,20 +47,12 @@ const jsonData: TransactionData[] = [
     Quantity: "2 MATIC",
   },
   {
-    Date: "2023-10-06",
+    Date: "2023-10-05",
     Image: "https://via.placeholder.com/40x40",
-    Currency: "BITCOIN",
-    Status: "Sent to 0x845c....89cJ",
-    Price: "$1402.74",
-    Quantity: "0.05 BTC",
-  },
-  {
-    Date: "2023-10-07",
-    Image: "https://via.placeholder.com/40x40",
-    Currency: "BITCOIN",
-    Status: "Sent to nike@tria",
-    Price: "$1402.74",
-    Quantity: "0.05 BTC",
+    Currency: "MATIC",
+    Status: "Failed transaction",
+    Price: "$1.09",
+    Quantity: "2 MATIC",
   },
 ];
 
@@ -69,10 +61,10 @@ const TransactionList = () => {
   return (
     <>
       <div className="w-[416px] grow shrink basis-0 flex-col justify-start items-center font-Montserrat flex">
-        <div className="self-stretch h-[622px]  flex-col justify-center items-center gap-2 flex">
-          <div className="self-stretch h-[67px] px-5 py-3 rounded-2xl flex-col justify-center items-center gap-2 flex">
+        <div className="self-stretch h-[567px]  flex-col justify-center items-center gap-2 flex">
+          <div className="self-stretch h-[67px] px-5 rounded-2xl flex-col justify-center items-center gap-2 flex">
             <div className="self-stretch justify-start items-center gap-4 inline-flex">
-              <div className="grow shrink basis-0 h-6 justify-start items-center gap-2 flex">
+              <div className="grow shrink basis-0 h-10 justify-start items-center gap-2 flex">
                 <div className="text-center text-xl font-semibold  leading-normal">
                   Activities
                 </div>
@@ -82,7 +74,7 @@ const TransactionList = () => {
           </div>
           {jsonData.map((transaction, index) => (
             <div className="self-stretch h-[97px] flex-col font-semibold justify-center items-center gap-2 flex cursor-pointer"
-            onClick={() => navigate("/activity/transactionDetails")}>
+              onClick={() => navigate("/activity/transactionDetails")}>
               <div className="self-stretch px-3 justify-start items-center gap-4 inline-flex">
                 <div className="grow shrink basis-0 h-3 justify-start items-center gap-2 flex">
                   <div className="text-center text-stone-950 text-opacity-40 text-[10px] font-bold  uppercase leading-3 tracking-tight">

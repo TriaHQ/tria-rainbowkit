@@ -2,15 +2,15 @@ import React from "react";
 
 function TransactionDetails() {
   return (
-    <div className="w-[448px] p-4 flex-col justify-center items-center gap-3 inline-flex font-Montserrat]">
-      <div className="w-[416px] grow shrink basis-0 flex-col justify-start items-center flex">
-        <div className="self-stretch h-[72px] px-5 py-3 rounded-[21px] justify-center items-center gap-2 inline-flex">
+    <div className="w-[455px] h-auto p-4 flex-col justify-center items-center gap-3 inline-flex font-Montserrat]">
+      <div className="w-[420px] grow shrink basis-0 flex-col justify-start items-center flex">
+        <div className="self-stretch h-[75px] px-5  rounded-[21px] justify-center items-center gap-2 inline-flex">
           <div className="w-[18px] h-[18px] relative">
             <div className="w-[18px] h-[18px] left-0 top-0 absolute">
-                <img src="/icons/arrow-left.svg" alt="" />
+              <img src="/icons/arrow-left.svg" alt="" />
             </div>
           </div>
-          <div className="grow shrink basis-0 h-9 justify-center items-center gap-4 flex">
+          <div className="grow shrink basis-0 h-6 justify-center items-center gap-4 flex">
             <div className="px-3 py-2 bg-white rounded-[48px] border-2 border-zinc-100 justify-center items-center gap-2 flex">
               <div className="w-5 h-5 relative bg-violet-600 rounded-[20px] border border-white backdrop-blur-[2.50px]">
                 <div className="w-[15px] h-[15px] left-[2.57px] top-[2.70px] absolute" />
@@ -22,7 +22,7 @@ function TransactionDetails() {
           </div>
           <div className="w-[18px] h-[18px] relative">
             <div className="w-[18px] h-[18px] left-0 top-0 absolute">
-                <img src="/icons/more-circle.svg" alt="" />
+              <img src="/icons/more-circle.svg" alt="" />
             </div>
           </div>
         </div>
@@ -52,7 +52,7 @@ function TransactionDetails() {
             </div>
             <div className="self-stretch justify-between items-center inline-flex">
               <div className="w-[46px] self-stretch justify-start items-center gap-2 flex">
-              <div className="w-[18px] h-[18px] relative">
+                <div className="w-[18px] h-[18px] relative">
                   <div className="w-[18px] h-[18px] left-0 top-0 absolute">
                     <img src="/icons/send-sqaure-2.svg" alt="" />
                   </div>
@@ -73,7 +73,7 @@ function TransactionDetails() {
 
                 <div className="w-[18px] h-[18px] relative">
                   <div className="w-[18px] h-[18px] left-0 top-0 absolute">
-                  <img src="/icons/copy-transaction.svg" alt="" />
+                    <img src="/icons/copy-transaction.svg" alt="" />
                   </div>
                 </div>
               </div>
@@ -119,7 +119,7 @@ function TransactionDetails() {
             </div>
             <div className="self-stretch justify-between items-center inline-flex">
               <div className="w-[76px] self-stretch justify-start items-center gap-2 flex">
-              <div className="w-[18px] h-[18px] relative">
+                <div className="w-[18px] h-[18px] relative">
                   <div className="w-[18px] h-[18px] left-0 top-0 absolute">
                     <img src="/icons/dollar-circle.svg" alt="" />
                   </div>
@@ -179,14 +179,14 @@ function TransactionDetails() {
                 </div>
                 <div className="w-[18px] h-[18px] relative">
                   <div className="w-[18px] h-[18px] left-0 top-0 absolute">
-                  <img src="/icons/copy-transaction.svg" alt="" />
+                    <img src="/icons/copy-transaction.svg" alt="" />
                   </div>
                 </div>
               </div>
             </div>
             <div className="self-stretch justify-between items-center inline-flex">
               <div className="w-[73px] self-stretch justify-start items-center gap-2 flex">
-              <div className="w-[18px] h-[18px] relative">
+                <div className="w-[18px] h-[18px] relative">
                   <div className="w-[18px] h-[18px] left-0 top-0 absolute">
                     <img src="/icons/3d-square.svg" alt="" />
                   </div>
@@ -223,7 +223,7 @@ function TransactionDetails() {
             </div>
             <div className="self-stretch justify-between items-center inline-flex">
               <div className="w-[101px] self-stretch justify-start items-center gap-2 flex">
-              <div className="w-[18px] h-[18px] relative">
+                <div className="w-[18px] h-[18px] relative">
                   <div className="w-[18px] h-[18px] left-0 top-0 absolute">
                     <img src="/icons/moneys.svg" alt="" />
                   </div>
@@ -240,7 +240,7 @@ function TransactionDetails() {
             </div>
             <div className="self-stretch justify-between items-center inline-flex">
               <div className="w-[139px] self-stretch justify-start items-center gap-2 flex">
-              <div className="w-[18px] h-[18px] relative">
+                <div className="w-[18px] h-[18px] relative">
                   <div className="w-[18px] h-[18px] left-0 top-0 absolute">
                     <img src="/icons/moneys.svg" alt="" />
                   </div>
@@ -257,7 +257,7 @@ function TransactionDetails() {
             </div>
             <div className="self-stretch justify-between items-center inline-flex">
               <div className="w-[104px] self-stretch justify-start items-center gap-2 flex">
-              <div className="w-[18px] h-[18px] relative">
+                <div className="w-[18px] h-[18px] relative">
                   <div className="w-[18px] h-[18px] left-0 top-0 absolute">
                     <img src="/icons/moneys.svg" alt="" />
                   </div>

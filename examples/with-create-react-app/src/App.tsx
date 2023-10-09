@@ -9,12 +9,13 @@ import "./index.css";
 const App = () => {
   return (
     <>
-      <div className="flex items-center justify-center bg-black p-6">
-        <div className="w-[448px] h-[840px] p-4 flex-col justify-center items-center gap-3 inline-flex bg-white rounded-xl font-montserrat">
-          <div className="w-[416px] grow shrink basis-0 flex-col justify-start items-center flex">
+      <div className="flex items-center justify-center bg-black py-16 ">
+        <div className="w-[430px] h-90vh p-4 flex-col justify-center items-center gap-3 inline-flex bg-white rounded-xl font-montserrat">
+          <div className="w-[416px] flex-col justify-start items-center flex">
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/home" element={<Home />} />
+              <Route path="/nfts" element={<Home />} />
               <Route path="/home/buycrypto" element={<BuyCrypto />} />
               <Route
                 path="/activity/TransactionList"
@@ -26,7 +27,7 @@ const App = () => {
               />
             </Routes>
           </div>
-        <Footer />
+          <Footer />
         </div>
       </div>
     </>

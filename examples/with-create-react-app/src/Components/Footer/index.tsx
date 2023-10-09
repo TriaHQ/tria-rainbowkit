@@ -5,7 +5,7 @@ interface IconData {
   name: string;
   iconSrc: string;
   text: string;
-  route:string;
+  route: string;
 }
 
 const iconData: IconData[] = [
@@ -13,19 +13,19 @@ const iconData: IconData[] = [
     name: "home",
     iconSrc: "/icons/home.svg",
     text: "home",
-    route:"/home"
+    route: "/home"
   },
   {
     name: "colorfilter",
     iconSrc: "/icons/colorfilter.png",
-    text: "color",
-    route:"/color"
+    text: "nfts",
+    route: "/nfts"
   },
   {
     name: "arrangesquare",
-    iconSrc: "/icons/arrange-square-2.png",
+    iconSrc: "/icons/clock.svg",
     text: "activity",
-    route:"/activity/TransactionList"
+    route: "/activity/TransactionList"
   },
 ];
 
@@ -35,7 +35,7 @@ const Footer: React.FC = () => {
 
 
   const handleIconClick = (icon: IconData) => {
-    setSelectedIcon(icon.name === selectedIcon ? null : icon.name);
+    setSelectedIcon(icon.name);
     navigate(icon.route);
   };
 
@@ -50,15 +50,17 @@ const Footer: React.FC = () => {
           {iconData.map((item) => (
             <div
               key={item.name}
-              className="px-3 py-2 bg-zinc-800 rounded-[25px] flex justify-center items-center cursor-pointer "
+              className={`px-3 py-2  rounded-[25px] flex justify-center items-center cursor-pointer ${item.name == selectedIcon?"bg-black":"bg-slate-50 "}`}
               onClick={() => handleIconClick(item)}
             >
               <div className="flex-col justify-center items-center gap-1.5 inline-flex">
-                <div className="w-6 h-6 relative"></div>
+                <div className="w-6 h-6 relative">
+                <img className="w-6 h-6" src={item.iconSrc} />
+                </div>
               </div>
-              <img className="w-6 h-6" src={item.iconSrc} />
+             
               <div
-                className="text-center pl-2 text-white text-m font-semibold font-montserrat leading-[16.80px] mt-2"
+                className="text-center pl-2 text-white text-m font-semibold font-montserrat leading-[10px] "
                 style={{ display: isTextVisible(item.name) }}
               >
                 {item.text}
