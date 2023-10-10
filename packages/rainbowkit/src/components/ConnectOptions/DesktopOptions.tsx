@@ -166,8 +166,8 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
               data?.data?.length > 0
                 ? data.data[0]
                 : firstName
-                ? firstName
-                : email;
+                  ? firstName
+                  : email;
             setSocialFirstName(parsedFirstName);
           }
           setIsSocialLoginInProgress(false);
@@ -185,6 +185,10 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
       // checkUsername(socialFirstName);
     }
   }, [socialFirstName]);
+
+  useEffect(() => {
+    console.log({ globalData })
+  }, [globalData])
 
   useEffect(() => {
     if (eventType)
@@ -620,9 +624,12 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
       parentUrl: "http://localhost:3001", // get your own base url
     });
     setIframeController(iframeController);
-    const { iframeUrl, eventType } = iframeController.triaLogin(
-      triaName,
-      password
+    const { iframeUrl, eventType } = iframeController.getVault(
+      {
+        triaName,
+        password,
+        userId,
+      }
     );
     setEventType(eventType);
 
@@ -649,39 +656,75 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
   };
 
   const createAccountUsingSocialLogin = async (name) => {
-    const keyringController = new KeyringController({
-      baseUrl,
+    // const keyringController = new KeyringController({
+    //   baseUrl,
+    // });
+    // try {
+    //   const res = await keyringController.socialogin({
+    //     triaName: name,
+    //     platform: SocialLoginTypes.Google,
+    //     userId,
+    //     isPasswordLess: true,
+    //   });
+    //   if (res.success) {
+    //     onClose();
+    //   }
+    // } catch (err) {
+    //   console.log(err);
+    // }
+
+    const iframeController = new IframeController({
+      walletUrl: "https://tria-wallet.web.app", // wallet.tria.so
+      parentUrl: "http://localhost:3001", // get your own base url
     });
-    try {
-      const res = await keyringController.socialogin({
+    setIframeController(iframeController);
+    const { iframeUrl, eventType } = iframeController.socialogin(
+      {
         triaName: name,
         platform: SocialLoginTypes.Google,
         userId,
         isPasswordLess: true,
-      });
-      if (res.success) {
-        onClose();
       }
-    } catch (err) {
-      console.log(err);
-    }
+    );
+    setEventType(eventType);
+
+    console.log(
+      `invisible iframe url: ${iframeUrl} and event type: ${eventType}`
+    );
+    setLoginIframeUrl(iframeUrl);
   };
 
-  const createAccountUsingTria = async (triaName, password) => {
-    const keyringController = new KeyringController({ baseUrl });
-    try {
-      const res = await keyringController.createAccount({
+  const createAccountUsingTria = async (triaName: string, password: string) => {
+    // const keyringController = new KeyringController({ baseUrl });
+    // try {
+    //   const res = await keyringController.createAccount({
+    //     triaName,
+    //     password,
+    //   });
+    //   if (res.success) {
+    //     setContinueWithTriaStep(ContinueWithTriaStep.EnterUserName);
+    //     setSocialLoginStep(SocialLoginStep.NotStarted);
+    //     setIsWelcomeToTriaScreenBeingShown(true);
+    //   }
+    // } catch (err) {
+    //   console.log(err);
+    // }
+    const iframeController = new IframeController({
+      walletUrl: "https://tria-wallet.web.app", // wallet.tria.so
+      parentUrl: "http://localhost:3001", // get your own base url
+    });
+    const { iframeUrl, eventType } = iframeController.createAccount(
+      {
         triaName,
-        password,
-      });
-      if (res.success) {
-        setContinueWithTriaStep(ContinueWithTriaStep.EnterUserName);
-        setSocialLoginStep(SocialLoginStep.NotStarted);
-        setIsWelcomeToTriaScreenBeingShown(true);
+        password
       }
-    } catch (err) {
-      console.log(err);
-    }
+    );
+    setEventType(eventType);
+
+    console.log(
+      `invisible iframe url: ${iframeUrl} and event type: ${eventType}`
+    );
+    setLoginIframeUrl(iframeUrl);
   };
 
   const isBackButtonHidden = () =>
