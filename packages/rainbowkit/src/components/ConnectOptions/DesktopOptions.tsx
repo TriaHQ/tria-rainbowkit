@@ -101,9 +101,9 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
     string | undefined
   >();
   const [searchingOtherWallet, setIsSearchingOtherWallet] =
-    useState<bool>(false);
+    useState<boolean>(false);
   const [isWelcomeToTriaScreenBeingShown, setIsWelcomeToTriaScreenBeingShown] =
-    useState<bool>(false);
+    useState<boolean>(false);
 
   const [selectedWallet, setSelectedWallet] = useState<WalletConnector>();
   const [qrCodeUri, setQrCodeUri] = useState<string>();
@@ -134,8 +134,8 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
     .sort((a, b) => a.groupIndex - b.groupIndex);
 
   const [loginIframeUrl, setLoginIframeUrl] = useState("");
-  const [iframeController, setIframeController] = useState();
-  const [eventType, setEventType] = useState();
+  const [iframeController, setIframeController] = useState(null);
+  const [eventType, setEventType] = useState("");
   const iglobalData = new Map();
   const [globalData, setGlobalData] = useState(iglobalData);
 
@@ -166,8 +166,8 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
               data?.data?.length > 0
                 ? data.data[0]
                 : firstName
-                  ? firstName
-                  : email;
+                ? firstName
+                : email;
             setSocialFirstName(parsedFirstName);
           }
           setIsSocialLoginInProgress(false);
@@ -187,29 +187,31 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
   }, [socialFirstName]);
 
   useEffect(() => {
-    console.log({ globalData })
-  }, [globalData])
+    console.log({ globalData });
+  }, [globalData]);
 
   useEffect(() => {
-    if (eventType)
-      window.addEventListener("message", (event) => {
-        console.log({ eventType });
-        // data response type mentioned below in postMessage response structure
-        const data = iframeController?.handleMessageFromIframe(
-          event,
-          eventType
-        );
-        const tempMap = new Map();
-        tempMap.set(`${eventType}`, data);
-        console.log({ tempMap });
-        const newMap = new Map([...globalData, ...tempMap]);
-        setGlobalData(newMap);
-      });
+    if (iframeController !== null) {
+      if (eventType)
+        window.addEventListener("message", (event) => {
+          console.log({ eventType });
+          // data response type mentioned below in postMessage response structure
+          const data = iframeController?.handleMessageFromIframe(
+            event,
+            eventType
+          );
+          const tempMap = new Map();
+          tempMap.set(`${eventType}`, data);
+          console.log({ tempMap });
+          const newMap = new Map([...globalData, ...tempMap]);
+          setGlobalData(newMap);
+        });
 
-    return () =>
-      window.removeEventListener("message", (event) =>
-        iframeController?.handleMessageFromIframe(event, eventType)
-      );
+      return () =>
+        window.removeEventListener("message", (event) =>
+          iframeController?.handleMessageFromIframe(event, eventType)
+        );
+    }
   }, [loginIframeUrl, iframeController, eventType]);
 
   const numberOfWalletsShown = 3;
@@ -428,12 +430,11 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
       >
         <Box
           cursor="pointer"
-          display="flex"
           flexDirection="column"
           onClick={() => setConnectType(ConnectType.Tria)}
           style={{ flex: 1 }}
         >
-          <div display="flex">
+          <div>
             <TagView
               backgroundColor="rgba(112, 83, 255, 0.12)"
               title="private"
@@ -458,6 +459,7 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
                 }}
               >
                 <Text
+                  color="accentColor"
                   size="14"
                   weight="bold"
                   style={{
@@ -603,7 +605,7 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
                       })}
                   </Box>
                   <Box onClick={() => setIsSearchingOtherWallet(true)}>
-                    <Text> Explore other wallets </Text>
+                    <Text color="accentColor"> Explore other wallets </Text>
                   </Box>
                 </Fragment>
               )}
@@ -623,20 +625,20 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
       walletUrl: "https://tria-wallet.web.app", // wallet.tria.so
       parentUrl: "http://localhost:3001", // get your own base url
     });
-    setIframeController(iframeController);
-    const { iframeUrl, eventType } = iframeController.getVault(
-      {
+    if (iframeController !== null) {
+      setIframeController(iframeController);
+      const { iframeUrl, eventType } = iframeController.getVault({
         triaName,
         password,
         userId,
-      }
-    );
-    setEventType(eventType);
+      });
+      setEventType(eventType);
 
-    console.log(
-      `invisible iframe url: ${iframeUrl} and event type: ${eventType}`
-    );
-    setLoginIframeUrl(iframeUrl);
+      console.log(
+        `invisible iframe url: ${iframeUrl} and event type: ${eventType}`
+      );
+      setLoginIframeUrl(iframeUrl);
+    }
     // const keyringController = new KeyringController({
     //   baseUrl,
     // });
@@ -677,21 +679,22 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
       walletUrl: "https://tria-wallet.web.app", // wallet.tria.so
       parentUrl: "http://localhost:3001", // get your own base url
     });
-    setIframeController(iframeController);
-    const { iframeUrl, eventType } = iframeController.socialogin(
-      {
+    if (iframeController !== null) {
+      setIframeController(iframeController);
+      const { iframeUrl, eventType } = iframeController.socialogin({
         triaName: name,
         platform: SocialLoginTypes.Google,
+        password: null,
         userId,
         isPasswordLess: true,
-      }
-    );
-    setEventType(eventType);
+      });
+      setEventType(eventType);
 
-    console.log(
-      `invisible iframe url: ${iframeUrl} and event type: ${eventType}`
-    );
-    setLoginIframeUrl(iframeUrl);
+      console.log(
+        `invisible iframe url: ${iframeUrl} and event type: ${eventType}`
+      );
+      setLoginIframeUrl(iframeUrl);
+    }
   };
 
   const createAccountUsingTria = async (triaName: string, password: string) => {
@@ -713,12 +716,10 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
       walletUrl: "https://tria-wallet.web.app", // wallet.tria.so
       parentUrl: "http://localhost:3001", // get your own base url
     });
-    const { iframeUrl, eventType } = iframeController.createAccount(
-      {
-        triaName,
-        password
-      }
-    );
+    const { iframeUrl, eventType } = iframeController.createAccount({
+      triaName,
+      password,
+    });
     setEventType(eventType);
 
     console.log(
@@ -854,7 +855,7 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
               marginTop: 10,
             }}
           >
-            <PoweredByTriaVector style={{ widht: 30, height: 30 }} />
+            <PoweredByTriaVector />
           </div>
         </div>
       );
@@ -870,7 +871,7 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
 
   const searchWallet = (
     <BorderedContainer>
-      <Text>Connect a Wallet</Text>
+      <Text color="accentColor">Connect a Wallet</Text>
       <input
         placeholder="Search wallet"
         style={{
@@ -918,7 +919,7 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
                 setIsSearchingOtherWallet(true);
               }}
             >
-              <Text> Dont have a wallet? </Text>
+              <Text color="accentColor"> Dont have a wallet? </Text>
             </Box>
           </Fragment>
         )}
@@ -939,7 +940,10 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
         >
           <div style={{ display: "flex", flex: 0.5, flexDirection: "column" }}>
             {triaAndOpenSeaLogoIntersection}
-            <Text style={{ alignSelf: "center", marginTop: 24 }}>
+            <Text
+              color="accentColor"
+              style={{ alignSelf: "center", marginTop: 24 }}
+            >
               {" "}
               Creating your Tria account{" "}
             </Text>
@@ -955,6 +959,7 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
           >
             <BorderedContainer>
               <Text
+                color="accentColor"
                 style={{
                   color: "rgba(51, 51, 51, 1.0)",
                   fontSize: 18,
@@ -965,6 +970,7 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
                 Create your tria name{" "}
               </Text>
               <Text
+                color="accentColor"
                 style={{
                   color: "rgba(128, 128, 128, 1.0)",
                   fontSize: 14,
@@ -1026,7 +1032,10 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
         >
           <div style={{ display: "flex", flex: 0.5, flexDirection: "column" }}>
             {triaAndOpenSeaLogoIntersection}
-            <Text style={{ alignSelf: "center", marginTop: 24 }}>
+            <Text
+              color="accentColor"
+              style={{ alignSelf: "center", marginTop: 24 }}
+            >
               {" "}
               Creating your Tria account{" "}
             </Text>
@@ -1041,8 +1050,8 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
             }}
           >
             <BorderedContainer>
-              <Text> Create your tria name </Text>
-              <Text>
+              <Text color="accentColor"> Create your tria name </Text>
+              <Text color="accentColor">
                 {" "}
                 Your @tria name is your shareable identity to get paid, log-in
                 to Web3 applications, or to get on every blockchain network.{" "}

@@ -19,7 +19,10 @@ const EnterTriaNameComponent = (
     >
       <div style={{ display: "flex", flex: 0.5, flexDirection: "column" }}>
         {logo}
-        <Text style={{ alignSelf: "center", marginTop: 24 }}>
+        <Text
+          color="accentColor"
+          style={{ alignSelf: "center", marginTop: 24 }}
+        >
           {" "}
           Creating your Tria account{" "}
         </Text>
@@ -34,8 +37,8 @@ const EnterTriaNameComponent = (
         }}
       >
         <BorderedContainer>
-          <Text> Create your tria name </Text>
-          <Text>
+          <Text color="accentColor"> Create your tria name </Text>
+          <Text color="accentColor">
             Your @tria is like Gmail, for Web3. Pay, receive and log-in to apps
             on any device, and blockchain.
           </Text>

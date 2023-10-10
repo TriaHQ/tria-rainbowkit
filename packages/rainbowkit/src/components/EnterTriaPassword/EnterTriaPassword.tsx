@@ -37,6 +37,7 @@ const EnterTriaPassword = ({
       >
         {logo}
         <Text
+          color="accentColor"
           style={{
             alignSelf: "center",
             marginTop: 24,
@@ -47,8 +48,8 @@ const EnterTriaPassword = ({
         </Text>
       </div>
 
-    <BorderedContainer>
-        <Text> {title} </Text>
+      <BorderedContainer>
+        <Text color="accentColor"> {title} </Text>
         <LoginInput
           isCTAButton={false}
           placeholder={primaryPlaceholder}

@@ -1,13 +1,14 @@
-export interface SocialLogin {
-  id: string;
-  iconUrl: string;
-}
-
 export enum SocialLoginTypes {
   Google = "google",
   Instagram = "instagram",
   X = "X",
   Discord = "Discord",
+}
+
+export interface SocialLogin {
+  id: string;
+  iconUrl: string;
+  type: SocialLoginTypes;
 }
 
 export function useSocialLoginConnectors() {

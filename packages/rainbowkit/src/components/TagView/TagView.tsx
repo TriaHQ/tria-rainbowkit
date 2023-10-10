@@ -30,7 +30,6 @@ const TagView = ({
       </Text>
 
       <div
-        display="flex"
         style={{
           background: backgroundColor,
           borderRadius: "22px",
@@ -38,6 +37,7 @@ const TagView = ({
         }}
       >
         <Text
+          color="accentColor"
           size="12"
           style={{
             color: titleColor,

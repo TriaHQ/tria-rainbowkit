@@ -6,7 +6,7 @@ const SecondaryButton = ({ clickAction = (f) => f, title = "" }) => {
   return (
     <div style={{ margin: 6 }}>
       <Box onClick={clickAction}>
-        <Text textAlign="center" titleColor="white">
+        <Text textAlign="center" color="accentColor">
           {" "}
           {title}{" "}
         </Text>

@@ -16,7 +16,7 @@ const WelcomeView = ({
   username,
   id,
   enterPasswordCallback = (f) => f,
-  onClose = (f) => f,
+  onClose,
 }) => {
   const [welcomeStep, setWelcomeStep] = useState<WelcomeStep>(
     WelcomeStep.ContinueToDAppORSetupWallet
@@ -34,6 +34,7 @@ const WelcomeView = ({
         platform: SocialLoginTypes.Google,
         userId: id,
         isPasswordLess: true,
+        triaName: null,
       });
       onClose();
     } catch (err) {
@@ -51,7 +52,10 @@ const WelcomeView = ({
     >
       <div style={{ display: "flex", flex: 0.5, flexDirection: "column" }}>
         {logo}
-        <Text style={{ alignSelf: "center", marginTop: 24 }}>
+        <Text
+          color="accentColor"
+          style={{ alignSelf: "center", marginTop: 24 }}
+        >
           {" "}
           Welcome to Tria{" "}
         </Text>
@@ -79,8 +83,8 @@ const WelcomeView = ({
               padding: 16,
             }}
           >
-            <Text> Continue to Opensea!</Text>
-            <Text>
+            <Text color="accentColor"> Continue to Opensea!</Text>
+            <Text color="accentColor">
               Your @tria wallet is created and can be used on any device and
               blockchain.
             </Text>
@@ -105,7 +109,7 @@ const WelcomeView = ({
               padding: 16,
             }}
           >
-            <Text> Continue to dApp </Text>
+            <Text color="accentColor"> Continue to dApp </Text>
           </Box>
         )}
         {welcomeStep === WelcomeStep.EnhancedSecurity && (
@@ -120,7 +124,7 @@ const WelcomeView = ({
               padding: 16,
             }}
           >
-            <Text> Enhanced Security </Text>
+            <Text color="accentColor"> Enhanced Security </Text>
             <Text color="modalTextDim">
               {" "}
               Elevate your wallet protection with a strong password!{" "}
@@ -147,7 +151,7 @@ const WelcomeView = ({
               padding: 16,
             }}
           >
-            <Text> Enhanced Security </Text>
+            <Text color="accentColor"> Enhanced Security </Text>
           </Box>
         )}
       </div>
