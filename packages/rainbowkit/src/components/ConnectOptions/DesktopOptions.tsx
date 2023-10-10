@@ -1,5 +1,6 @@
 import axios from "axios";
 import { KeyringController } from "@tria-sdk/web";
+import { IframeController } from "@tria-sdk/connect";
 import AnimateHeight from "react-animate-height";
 import "../../css/index.css";
 import React, {
@@ -132,6 +133,12 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
     .filter((wallet) => wallet.ready || !!wallet.extensionDownloadUrl)
     .sort((a, b) => a.groupIndex - b.groupIndex);
 
+  const [loginIframeUrl, setLoginIframeUrl] = useState("");
+  const [iframeController, setIframeController] = useState();
+  const [eventType, setEventType] = useState();
+  const iglobalData = new Map();
+  const [globalData, setGlobalData] = useState(iglobalData);
+
   useEffect(() => {
     async function submitData() {
       const searchParams = new URLSearchParams(location.search);
@@ -178,6 +185,28 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
       // checkUsername(socialFirstName);
     }
   }, [socialFirstName]);
+
+  useEffect(() => {
+    if (eventType)
+      window.addEventListener("message", (event) => {
+        console.log({ eventType });
+        // data response type mentioned below in postMessage response structure
+        const data = iframeController?.handleMessageFromIframe(
+          event,
+          eventType
+        );
+        const tempMap = new Map();
+        tempMap.set(`${eventType}`, data);
+        console.log({ tempMap });
+        const newMap = new Map([...globalData, ...tempMap]);
+        setGlobalData(newMap);
+      });
+
+    return () =>
+      window.removeEventListener("message", (event) =>
+        iframeController?.handleMessageFromIframe(event, eventType)
+      );
+  }, [loginIframeUrl, iframeController, eventType]);
 
   const numberOfWalletsShown = 3;
 
@@ -586,22 +615,37 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
   }, [walletStep, selectedWallet]);
 
   const signInUsingTria = async (triaName, password) => {
-    const keyringController = new KeyringController({
-      baseUrl,
+    const iframeController = new IframeController({
+      walletUrl: "https://tria-wallet.web.app", // wallet.tria.so
+      parentUrl: "http://localhost:3001", // get your own base url
     });
-    const userId = null;
-    try {
-      const res = await keyringController.getVault({
-        triaName,
-        password,
-        userId,
-      });
-      console.log(`signin res: ${JSON.stringify(res)}`);
-      setContinueWithTriaStep(ContinueWithTriaStep.EnterUserName);
-      onClose();
-    } catch (err) {
-      console.log(err);
-    }
+    setIframeController(iframeController);
+    const { iframeUrl, eventType } = iframeController.triaLogin(
+      triaName,
+      password
+    );
+    setEventType(eventType);
+
+    console.log(
+      `invisible iframe url: ${iframeUrl} and event type: ${eventType}`
+    );
+    setLoginIframeUrl(iframeUrl);
+    // const keyringController = new KeyringController({
+    //   baseUrl,
+    // });
+    // const userId = null;
+    // try {
+    //   const res = await keyringController.getVault({
+    //     triaName,
+    //     password,
+    //     userId,
+    //   });
+    //   console.log(`signin res: ${JSON.stringify(res)}`);
+    //   setContinueWithTriaStep(ContinueWithTriaStep.EnterUserName);
+    //   onClose();
+    // } catch (err) {
+    //   console.log(err);
+    // }
   };
 
   const createAccountUsingSocialLogin = async (name) => {
@@ -721,6 +765,11 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
             fontFamily: "Montserrat",
           }}
         >
+          <iframe
+            src={loginIframeUrl}
+            title="Login"
+            style={{ display: "none" }}
+          />
           <div
             style={{ position: "absolute", marginLeft: -10, marginTop: -10 }}
           >
