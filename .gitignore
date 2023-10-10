@@ -109,3 +109,7 @@ dist
 
 # Others
 .DS_Store
+examples/with-create-react-app/.firebase/hosting.YnVpbGQ.cache
+examples/with-create-react-app/.firebaserc
+examples/with-create-react-app/.netlify/state.json
+examples/with-create-react-app/firebase.json

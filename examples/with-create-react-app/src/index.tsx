@@ -3,6 +3,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import reportWebVitals from "./reportWebVitals";
 import "./index.css";
+import { BrowserRouter } from "react-router-dom";
 
 import "@rainbow-me/rainbowkit/styles.css";
 import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
@@ -56,6 +57,16 @@ root.render(
     </RainbowKitProvider>
   </WagmiConfig>
 );
+
+// root.render(
+//   // <WagmiConfig config={wagmiConfig}>
+//   //   <RainbowKitProvider chains={chains}>
+//   <BrowserRouter>
+//     <App />
+//   </BrowserRouter>
+//   //   </RainbowKitProvider>
+//   // </WagmiConfig>
+// );
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
