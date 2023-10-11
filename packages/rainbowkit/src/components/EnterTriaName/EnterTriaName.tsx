@@ -54,6 +54,7 @@ const EnterTriaNameComponent = (
               clickAction(input);
             }}
             ctaTitle="Next"
+            placeholder="tria name"
             value={value}
           />
         </BorderedContainer>

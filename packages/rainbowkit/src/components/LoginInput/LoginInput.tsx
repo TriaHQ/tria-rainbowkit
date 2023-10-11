@@ -62,6 +62,7 @@ const LoginInput = ({
             width: "99px",
             fontSize: 16,
             fontWeight: 600,
+            fontFamily: "Montserrat",
           }}
           type="button"
         >

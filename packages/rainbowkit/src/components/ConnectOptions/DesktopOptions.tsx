@@ -112,6 +112,8 @@ export function DesktopOptions({
   >();
   const [searchingOtherWallet, setIsSearchingOtherWallet] =
     useState<boolean>(false);
+  const [isWalletDetailsOpened, setIsWalletDetailsOpened] =
+    useState<boolean>(false);
   const [isWelcomeToTriaScreenBeingShown, setIsWelcomeToTriaScreenBeingShown] =
     useState<boolean>(false);
 
@@ -451,7 +453,6 @@ export function DesktopOptions({
   const triaIntroText = (
     <div
       style={{
-        width: 360,
         height: 34,
         marginTop: 8,
         mixBlendMode: "difference",
@@ -718,7 +719,11 @@ export function DesktopOptions({
                             iconUrl={wallet.iconUrl}
                             key={wallet.id}
                             name={wallet.name}
-                            onClick={() => selectWallet(wallet)}
+                            onClick={() => {
+                              console.log("check");
+                              selectWallet(wallet);
+                              setIsWalletDetailsOpened(true);
+                            }}
                             ready={wallet.ready}
                             recent={wallet.recent}
                             testId={`wallet-option-${wallet.id}`}
@@ -843,6 +848,8 @@ export function DesktopOptions({
   };
 
   const isBackButtonHidden = () => {
+    if (isWalletDetailsOpened) return false;
+
     const currentConnectType = getConnectType();
     return (
       (isWelcomeToTriaScreenBeingShown ||
@@ -857,6 +864,10 @@ export function DesktopOptions({
   };
 
   const backButtonClicked = () => {
+    if (isWalletDetailsOpened) {
+      clearSelectedWallet();
+      setIsWalletDetailsOpened(false);
+    }
     const currentConnectType = getConnectType();
     if (getStartedWithTriaStep !== GetStartedWithTriaStep.NotStarted) {
       switch (getStartedWithTriaStep) {
@@ -979,6 +990,7 @@ export function DesktopOptions({
       searchingOtherWallet,
       getStartedWithTriaStep,
       isWelcomeToTriaScreenBeingShown,
+      isWalletDetailsOpened,
     ]
   );
 
@@ -1084,6 +1096,7 @@ export function DesktopOptions({
               </Text>
               {triaIntroText}
               <LoginInput
+                placeholder="tria name"
                 ctaClicked={(input) => {
                   //perform password validations here
                   console.log(`input: ${input}`);
