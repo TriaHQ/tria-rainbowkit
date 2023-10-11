@@ -42,7 +42,6 @@ import TagView from "../TagView/TagView";
 import { Text } from "../Text/Text";
 import WelcomeView from "../Welcome/Welcome";
 import WelcomeToTria from "../WelcomeToTria/WelcomeToTria";
-import EnterTriaNameComponent from "../EnterTriaName/EnterTriaName";
 import HomeBackgroundVector from "../SVG/HomeBackgroundVector";
 import TriaVector from "../SVG/TriaVector";
 import GoogleIcon from "../SVG/GoogleIcon";
@@ -139,6 +138,8 @@ export function DesktopOptions({
   const onboardingConnectOptions = useOnboardingConnectOptions();
 
   const baseUrl = "https://staging.tria.so";
+  const parentUrl = "http://localhost:3000";
+  const walletUrl = "https://tria-wallet.web.app";
 
   const wallets = useWalletConnectors()
     .filter((wallet) => wallet.ready || !!wallet.extensionDownloadUrl)
@@ -175,6 +176,12 @@ export function DesktopOptions({
 
           if (isAccountExist === true) {
             //sign in flow
+            const iframeController = new IframeController({
+              walletUrl,
+              parentUrl,
+            });
+            setIframeController(iframeController);
+            console.log("");
             const { iframeUrl, eventType } = iframeController.getVault({
               triaName: null,
               password,
@@ -182,7 +189,7 @@ export function DesktopOptions({
             });
             setEventType(eventType);
 
-            console.log("inveisible iframe url: ", iframeUrl);
+            console.log("invisible iframe url: ", iframeUrl);
             setLoginIframeUrl(iframeUrl);
             setIframeUrl(iframeUrl);
           } else {
@@ -558,9 +565,6 @@ export function DesktopOptions({
                     cursor="pointer"
                     key={socialLogin.id}
                     onClick={() => {
-                      console.log(
-                        `index: ${index} social login: ${socialLogins[index].type}`
-                      );
                       socialLoginClicked(index);
                     }}
                   >
@@ -646,9 +650,6 @@ export function DesktopOptions({
                         );
                       })}
                   </Box>
-                  <Box onClick={() => setIsSearchingOtherWallet(true)}>
-                    <Text color="accentColor"> Explore other wallets </Text>
-                  </Box>
                 </Fragment>
               )}
             </Box>
@@ -664,8 +665,8 @@ export function DesktopOptions({
 
   const signInUsingTria = async (triaName, password) => {
     const iframeController = new IframeController({
-      walletUrl: "https://tria-wallet.web.app", // wallet.tria.so
-      parentUrl: "http://localhost:3000", // get your own base url
+      walletUrl,
+      parentUrl,
     });
     setIframeController(iframeController);
     const { iframeUrl, eventType } = iframeController.getVault({
@@ -734,9 +735,10 @@ export function DesktopOptions({
     // }
 
     const iframeController = new IframeController({
-      walletUrl: "https://tria-wallet.web.app", // wallet.tria.so
-      parentUrl: "http://localhost:3001", // get your own base url
+      walletUrl, // wallet.tria.so
+      parentUrl, // get your own base url
     });
+    setIframeController(iframeController);
     const { iframeUrl, eventType } = iframeController.socialogin({
       triaName: name,
       platform: "google",
@@ -749,33 +751,12 @@ export function DesktopOptions({
     console.log("inveisible iframe url: ", iframeUrl.trim());
     setLoginIframeUrl(iframeUrl);
     setIframeUrl(iframeUrl);
-
-    // const iframeController = new IframeController({
-    //   walletUrl: "https://tria-wallet.web.app", // wallet.tria.so
-    //   parentUrl: "http://localhost:3001", // get your own base url
-    // });
-    // if (iframeController !== null) {
-    //   setIframeController(iframeController);
-    //   const { iframeUrl, eventType } = iframeController.socialogin({
-    //     triaName: name,
-    //     platform: SocialLoginTypes.Google,
-    //     password: null,
-    //     userId,
-    //     isPasswordLess: true,
-    //   });
-    //   setEventType(eventType);
-
-    //   console.log(
-    //     `invisible iframe url: ${iframeUrl} and event type: ${eventType}`
-    //   );
-    //   setLoginIframeUrl(iframeUrl);
-    // }
   };
 
   const createAccountUsingTria = async (triaName: string, password: string) => {
     const iframeController = new IframeController({
-      walletUrl: "https://tria-wallet.web.app", // wallet.tria.so
-      parentUrl: "http://localhost:3000", // get your own base url
+      walletUrl,
+      parentUrl,
     });
     setIframeController(iframeController);
     const { iframeUrl, eventType } = iframeController.createAccount({
@@ -818,50 +799,56 @@ export function DesktopOptions({
     // setLoginIframeUrl(iframeUrl);
   };
 
-  const isBackButtonHidden = () =>
-    (isWelcomeToTriaScreenBeingShown ||
-      (connectType === ConnectType.Tria &&
-        continueWithTriaStep === ContinueWithTriaStep.EnterUserName) ||
-      (connectType === ConnectType.EmailSocial &&
-        socialLoginStep === SocialLoginStep.NotStarted) ||
-      (connectType === ConnectType.ConnectWallet &&
-        searchingOtherWallet === false)) &&
-    getStartedWithTriaStep === GetStartedWithTriaStep.NotStarted;
+  const getConnectType = () => {
+    if (continueWithTriaStep !== ContinueWithTriaStep.EnterUserName) {
+      return ConnectType.Tria;
+    } else if (socialLoginStep !== SocialLoginStep.NotStarted) {
+      return ConnectType.EmailSocial;
+    } else if (searchingOtherWallet) {
+      return ConnectType.ConnectWallet;
+    } else {
+      return ConnectType.Tria;
+    }
+  };
+
+  const isBackButtonHidden = () => {
+    const currentConnectType = getConnectType();
+    // console.log(
+    //   `getConnectType: ${currentConnectType}, isWelcomeToTriaScreenBeingShown: ${isWelcomeToTriaScreenBeingShown}, connectType: ${connectType}, continueWithTriaStep: ${continueWithTriaStep}, socialLoginStep: ${socialLoginStep}, searchingOtherWallet: ${searchingOtherWallet}, getStartedWithTriaStep: ${getStartedWithTriaStep}`
+    // );
+    return (
+      (isWelcomeToTriaScreenBeingShown ||
+        (currentConnectType === ConnectType.Tria &&
+          continueWithTriaStep === ContinueWithTriaStep.EnterUserName) ||
+        (currentConnectType === ConnectType.EmailSocial &&
+          socialLoginStep === SocialLoginStep.NotStarted) ||
+        (currentConnectType === ConnectType.ConnectWallet &&
+          searchingOtherWallet === false)) &&
+      getStartedWithTriaStep === GetStartedWithTriaStep.NotStarted
+    );
+  };
 
   const backButtonClicked = () => {
-    console.log("1");
-
-    // setSocialLoginStep(SocialLoginStep.NotStarted);
-    // return;
-
-    console.log(`connectType: ${connectType}`);
+    const currentConnectType = getConnectType();
     if (getStartedWithTriaStep !== GetStartedWithTriaStep.NotStarted) {
-      console.log("2");
       switch (getStartedWithTriaStep) {
         case GetStartedWithTriaStep.SetupPassword:
-          console.log("3");
           setGetStartedWithTriaStep(GetStartedWithTriaStep.CreateTriaName);
           break;
         case GetStartedWithTriaStep.CreateTriaName:
-          console.log("4");
           setGetStartedWithTriaStep(GetStartedWithTriaStep.NotStarted);
         default:
-          console.log("12");
           break;
       }
     } else {
-      console.log("5");
-      switch (connectType) {
+      switch (currentConnectType) {
         case ConnectType.Tria:
           {
             switch (continueWithTriaStep) {
               case ContinueWithTriaStep.EnterPassword:
-                console.log("6");
                 setContinueWithTriaStep(ContinueWithTriaStep.EnterUserName);
                 break;
-
               default:
-                console.log("13");
                 break;
             }
           }
@@ -869,21 +856,16 @@ export function DesktopOptions({
 
         case ConnectType.EmailSocial:
           {
-            console.log("7");
             switch (socialLoginStep) {
               case SocialLoginStep.EnterPassword:
-                console.log("8");
                 setSocialLoginStep(SocialLoginStep.ExtraLayerSecurity);
                 break;
               case SocialLoginStep.ExtraLayerSecurity:
-                console.log("9");
                 setSocialLoginStep(SocialLoginStep.TriaNameCreation);
                 break;
               case SocialLoginStep.TriaNameCreation:
-                console.log("10");
                 setSocialLoginStep(SocialLoginStep.NotStarted);
               default:
-                console.log("14");
                 break;
             }
           }
@@ -891,13 +873,11 @@ export function DesktopOptions({
 
         case ConnectType.ConnectWallet:
           {
-            console.log("11");
             setIsSearchingOtherWallet(!searchingOtherWallet);
           }
           break;
 
         default:
-          console.log("15");
           break;
       }
     }

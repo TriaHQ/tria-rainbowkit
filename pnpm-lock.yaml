@@ -451,11 +451,11 @@ importers:
         specifier: ^14.4.3
         version: 14.4.3(@testing-library/dom@9.3.1)
       '@tria-sdk/connect':
-        specifier: ^1.0.6
-        version: 1.0.6
+        specifier: ^1.0.9
+        version: 1.0.9
       '@tria-sdk/web':
-        specifier: ^3.5.13
-        version: 3.5.13(@types/react@18.2.21)(lokijs@1.5.12)(react@18.2.0)(typescript@5.0.4)
+        specifier: ^3.5.16
+        version: 3.5.16(@types/react@18.2.21)(lokijs@1.5.12)(react@18.2.0)(typescript@5.0.4)
       '@types/qrcode':
         specifier: ^1.4.2
         version: 1.4.2
@@ -8760,6 +8760,11 @@ packages:
 
   /@tria-sdk/connect@1.0.6:
     resolution: {integrity: sha512-J9rbIf9I+HCmj2BvNr0CVPZ+BSVj+gfsWcY30EIQWmlA0FCQWLZ/T0iJ/IrfjwnhlSbBmY3kVx3m+vbYUDZjaA==}
+    dev: false
+
+  /@tria-sdk/connect@1.0.9:
+    resolution: {integrity: sha512-OnUwaOfiGZFI0PRN9XzsaPt0wift2pj81r36njVRjQLAMf0BUm5UobTivcP0jzfQv0UKglcxCxrxQ2ZFB8Ch/A==}
+    dev: true
 
   /@tria-sdk/web@3.5.13(@types/react@18.2.21)(lokijs@1.5.12)(react@18.2.0)(typescript@5.0.4):
     resolution: {integrity: sha512-WtrWgAnvd9Y9Xw+fASJyh+5aArxYcO+5CHxj+oEjglXec2w/+vn7hLaBeGHEr4vy/DHdbJWKlh0tX2XrLTbuVA==}
@@ -8789,6 +8794,37 @@ packages:
       - typescript
       - utf-8-validate
       - zod
+    dev: false
+
+  /@tria-sdk/web@3.5.16(@types/react@18.2.21)(lokijs@1.5.12)(react@18.2.0)(typescript@5.0.4):
+    resolution: {integrity: sha512-nIlQr0ncmlyy1pS4MQhJtLVRCULjKHekzrbeAVziQLJxPvonrurRqtRat1il8xxrumVBVxA/sdjGnvCaW3vO9g==}
+    dependencies:
+      '@biconomy/mexa': 2.0.38
+      '@bundlr-network/client': 0.11.17
+      '@metamask/eth-sig-util': 7.0.0
+      '@stablelib/chacha20poly1305': 1.0.1
+      '@wagmi/core': 1.4.2(@types/react@18.2.21)(lokijs@1.5.12)(react@18.2.0)(typescript@5.0.4)(viem@1.12.2)
+      axios: 1.5.1
+      ethers: 5.7.2
+      generate-password: 1.7.0
+      ipfs-http-client: 60.0.1
+      obs-store: 4.0.3
+      sss-tria: 2.0.0
+      viem: 1.12.2(typescript@5.0.4)
+    transitivePeerDependencies:
+      - '@react-native-async-storage/async-storage'
+      - '@types/react'
+      - bufferutil
+      - debug
+      - encoding
+      - immer
+      - lokijs
+      - react
+      - supports-color
+      - typescript
+      - utf-8-validate
+      - zod
+    dev: true
 
   /@trysound/sax@0.2.0:
     resolution: {integrity: sha512-L7z9BgrNEcYyUYtF+HaEfiS5ebkh9jXqbszz7pC0hRBPaatV0XjSD3+eHrpqFemQfgwiFF0QPIarnIihIDn7OA==}
