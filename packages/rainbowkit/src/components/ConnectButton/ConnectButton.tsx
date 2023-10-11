@@ -69,10 +69,6 @@ export function ConnectButton({
         }, []);
 
         useEffect(() => {
-          loggedInStatusChanged(loggedInStatus);
-        }, [loggedInStatus]);
-
-        useEffect(() => {
           const userDisplayName = localStorage.getItem("userDisplayName");
           if (userDisplayName) {
             setUserDisplayName(userDisplayName);
@@ -83,13 +79,27 @@ export function ConnectButton({
             setUserAddress(address);
           }
           console.log(
-            `user name : ${userDisplayName} and address: ${userAddress}`
+            `user name : ${userDisplayName}, wallet status: ${
+              ready && account && connectionStatus === "connected"
+            }, combined status: ${
+              isUserLoggedInAsNonWallet() ||
+              (ready && account && connectionStatus === "connected")
+            } and address: ${userAddress}`
           );
           setLoggedInStatus(
-            isUserLoggedInAsNonWallet ||
+            isUserLoggedInAsNonWallet() ||
+              (ready && account && connectionStatus === "connected")
+          );
+          loggedInStatusChanged(
+            isUserLoggedInAsNonWallet() ||
               (ready && account && connectionStatus === "connected")
           );
         });
+
+        useEffect(() => {
+          console.log(`updating dapp with status: ${loggedInStatus}`);
+          loggedInStatusChanged(loggedInStatus);
+        }, [loggedInStatus]);
 
         const disconnectUser = () => {
           localStorage.removeItem("userDisplayName");
@@ -437,95 +447,6 @@ export function ConnectButton({
                     </Box>
                   </Box>
                 )}
-                {
-                  <Box
-                    alignItems="center"
-                    as="button"
-                    background="connectButtonBackground"
-                    borderRadius="connectButton"
-                    boxShadow="connectButton"
-                    className={touchableStyles({
-                      active: "shrink",
-                      hover: "grow",
-                    })}
-                    color="connectButtonText"
-                    display="flex"
-                    fontFamily="body"
-                    fontWeight="bold"
-                    onClick={openAccountModal}
-                    testId="account-button"
-                    transition="default"
-                    type="button"
-                  >
-                    {account.displayBalance && (
-                      <Box
-                        display={mapResponsiveValue(showBalance, (value) =>
-                          value ? "block" : "none"
-                        )}
-                        padding="8"
-                        paddingLeft="12"
-                      >
-                        {account.displayBalance}
-                      </Box>
-                    )}
-                    <Box
-                      background={
-                        normalizeResponsiveValue(showBalance)[
-                          isMobile() ? "smallScreen" : "largeScreen"
-                        ]
-                          ? "connectButtonInnerBackground"
-                          : "connectButtonBackground"
-                      }
-                      borderColor="connectButtonBackground"
-                      borderRadius="connectButton"
-                      borderStyle="solid"
-                      borderWidth="2"
-                      color="connectButtonText"
-                      fontFamily="body"
-                      fontWeight="bold"
-                      paddingX="8"
-                      paddingY="6"
-                      transition="default"
-                    >
-                      <Box
-                        alignItems="center"
-                        display="flex"
-                        gap="6"
-                        height="24"
-                      >
-                        <Box
-                          display={mapResponsiveValue(accountStatus, (value) =>
-                            value === "full" || value === "avatar"
-                              ? "block"
-                              : "none"
-                          )}
-                        >
-                          <Avatar
-                            address={account.address}
-                            imageUrl={account.ensAvatar}
-                            loading={account.hasPendingTransactions}
-                            size={24}
-                          />
-                        </Box>
-
-                        <Box alignItems="center" display="flex" gap="6">
-                          <Box
-                            display={mapResponsiveValue(
-                              accountStatus,
-                              (value) =>
-                                value === "full" || value === "address"
-                                  ? "block"
-                                  : "none"
-                            )}
-                          >
-                            {account.displayName}
-                          </Box>
-                          <DropdownIcon />
-                        </Box>
-                      </Box>
-                    </Box>
-                  </Box>
-                }
               </>
             ) : (
               <Box

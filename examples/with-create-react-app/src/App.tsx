@@ -15,11 +15,10 @@ const App = () => {
   const [showWalletButton, setShowWalletButton] = useState(false);
 
   useEffect(() => {
-    // const userDisplayName = localStorage.getItem("userDisplayName");
-    // const userAddress = localStorage.getItem("address");
-    // console.log(`user name : ${userDisplayName} and address: ${userAddress}`);
-    // setShowWalletButton(userDisplayName !== null && userAddress !== null);
-  }, []);
+    if (!showWalletButton) {
+      setShowWalletPopup(false);
+    }
+  }, [showWalletPopup]);
 
   const loggedInStatusChanged = (isLoggedIn: boolean) => {
     setShowWalletButton(isLoggedIn);
@@ -93,7 +92,7 @@ const App = () => {
           </div>
         </section>
         <div className="mt-4 mr-2 fixed right-2 top-2">
-          {showWalletPopup && (
+          {showWalletPopup && showWalletButton && (
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/home" element={<Home />} />

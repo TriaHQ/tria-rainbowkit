@@ -21,6 +21,7 @@ const LoginInput = ({
         display: "flex",
         flexDirection: "row",
         paddingX: 12,
+        fontFamily: "Montserrat",
       }}
     >
       <input
