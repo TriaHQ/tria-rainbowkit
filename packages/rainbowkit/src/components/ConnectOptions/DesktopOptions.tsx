@@ -516,7 +516,7 @@ export function DesktopOptions({
             fontWeight: 500,
           }}
         >
-          Connect with Opensea
+          Connect with Acme
         </Text>
       </div>
     </div>

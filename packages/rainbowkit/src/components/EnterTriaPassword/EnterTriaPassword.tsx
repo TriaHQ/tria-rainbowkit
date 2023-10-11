@@ -45,7 +45,7 @@ const EnterTriaPassword = ({
           }}
         >
           {" "}
-          Connect with Opensea{" "}
+          Connect with Acme{" "}
         </Text>
       </div>
 

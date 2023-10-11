@@ -80,7 +80,7 @@ const WelcomeView = ({
               padding: 16,
             }}
           >
-            <Text color="modalText"> Continue to Opensea!</Text>
+            <Text color="modalText"> Continue to Acme!</Text>
             <Text color="modalText">
               Your @tria wallet is created and can be used on any device and
               blockchain.

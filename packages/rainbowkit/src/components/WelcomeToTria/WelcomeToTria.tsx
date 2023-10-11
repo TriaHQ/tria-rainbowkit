@@ -90,7 +90,7 @@ const WelcomeToTria = ({
                 alignItems: "center",
               }}
             >
-              Opensea!
+              Acme!
             </Text>
           </div>
           <Text
