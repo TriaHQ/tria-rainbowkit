@@ -1,12 +1,21 @@
-import React from 'react';
-import { isMobile } from '../../utils/isMobile';
-import { DesktopOptions } from './DesktopOptions';
-import { MobileOptions } from './MobileOptions';
+import React, { useState } from "react";
+import { isMobile } from "../../utils/isMobile";
+import { DesktopOptions } from "./DesktopOptions";
+import { MobileOptions } from "./MobileOptions";
 
 export default function ConnectOptions({ onClose }: { onClose: () => void }) {
-  return isMobile() ? (
-    <MobileOptions onClose={onClose} />
-  ) : (
-    <DesktopOptions onClose={onClose} />
+  const [loginIframeUrl, setLoginIframUrl] = useState("");
+
+  return (
+    <div>
+      <iframe src={loginIframeUrl} title="Login" style={{ display: "none" }} />
+      <DesktopOptions
+        onClose={onClose}
+        isMobile={isMobile()}
+        setIframeUrl={(url) => {
+          setLoginIframUrl(url);
+        }}
+      />
+    </div>
   );
 }

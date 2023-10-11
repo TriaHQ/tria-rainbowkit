@@ -22,7 +22,7 @@ const WelcomeView = ({
     WelcomeStep.ContinueToDAppORSetupWallet
   );
 
-  const baseUrl = "http://localhost:8000";
+  const baseUrl = "https://staging.tria.so/";
 
   async function createAccountWithoutPassword() {
     const keyringController = new KeyringController({

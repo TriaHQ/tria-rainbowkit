@@ -36,5 +36,5 @@ export function useSocialLoginConnectors() {
   //   id: "4",
   //   type: SocialLoginTypes.Discord,
   // };
-  return [google, instagram, twitter];
+  return [google, instagram];
 }

@@ -95,7 +95,15 @@ enum GetStartedWithTriaStep {
   SetupPassword = "SetupPassword",
 }
 
-export function DesktopOptions({ onClose }: { onClose: () => void }) {
+export function DesktopOptions({
+  onClose,
+  isMobile,
+  setIframeUrl,
+}: {
+  onClose: () => void;
+  isMobile: boolean;
+  setIframeUrl: (string) => void;
+}) {
   const safari = isSafari();
   const [selectedOptionId, setSelectedOptionId] = useState<
     string | undefined
@@ -127,7 +135,7 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
   const socialLogins = useSocialLoginConnectors();
   const onboardingConnectOptions = useOnboardingConnectOptions();
 
-  const baseUrl = "http://localhost:8000";
+  const baseUrl = "https://staging.tria.so";
 
   const wallets = useWalletConnectors()
     .filter((wallet) => wallet.ready || !!wallet.extensionDownloadUrl)
@@ -145,18 +153,35 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
       const code = searchParams.get("code");
       const scope = searchParams.get("scope");
 
+      console.log(`code: ${code} and scope: ${scope}`);
+
       if (code && scope && !isSocialLoginInProgress) {
         setIsSocialLoginInProgress(true);
         try {
           const {
-            data: { email, firstName, userId, isAccountExist },
+            data: { email, firstName, userId, password, isAccountExist },
           } = await axios.get(
             `${baseUrl}/api/v1/auth/google/callback?code=${code}&scope=${scope}`
           );
+
+          console.log(
+            `email: ${email}, firstName: ${firstName}, userId: ${userId}, password: ${password} and isAccountExist: ${isAccountExist}`
+          );
+
           setUserId(userId);
 
           if (isAccountExist === true) {
             //sign in flow
+            const { iframeUrl, eventType } = iframeController.getVault({
+              triaName: null,
+              password,
+              userId,
+            });
+            setEventType(eventType);
+
+            console.log("inveisible iframe url: ", iframeUrl);
+            setLoginIframeUrl(iframeUrl);
+            setIframeUrl(iframeUrl);
           } else {
             //sign up flow
             const { data } = await axios.get(
@@ -205,6 +230,16 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
           console.log({ tempMap });
           const newMap = new Map([...globalData, ...tempMap]);
           setGlobalData(newMap);
+          console.log(`data from iframe: ${JSON.stringify(data)}`);
+          if (
+            data &&
+            data.type &&
+            data.type === "Log in" &&
+            data.success &&
+            data.success === true
+          ) {
+            setIsWelcomeToTriaScreenBeingShown(true);
+          }
         });
 
       return () =>
@@ -333,7 +368,8 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
   const triaLogo = async () =>
     (await import("../../wallets/walletConnectors/triaWallet/triaWallet.png"))
       .default;
-
+  const instagramLogo = async () =>
+    (await import("../Icons/instagram_icon.png")).default;
   const animationTiming = 300;
   const animationDelay = 100;
   const loginOptionFixedHeight = 26;
@@ -529,9 +565,13 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
                     {socialLogin.type === SocialLoginTypes.Google && (
                       <GoogleIcon />
                     )}
+                    {socialLogin.type === SocialLoginTypes.Instagram && (
+                      <AsyncImage height={40} src={instagramLogo} width={40} />
+                    )}
                     {socialLogin.type === SocialLoginTypes.X && <XIcon />}
                     {socialLogin.type !== SocialLoginTypes.Google &&
-                      socialLogin.type !== SocialLoginTypes.X && (
+                      socialLogin.type !== SocialLoginTypes.X &&
+                      socialLogin.type !== SocialLoginTypes.Instagram && (
                         <AsyncImage
                           borderRadius="full"
                           height={40}
@@ -623,22 +663,38 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
   const signInUsingTria = async (triaName, password) => {
     const iframeController = new IframeController({
       walletUrl: "https://tria-wallet.web.app", // wallet.tria.so
-      parentUrl: "http://localhost:3001", // get your own base url
+      parentUrl: "http://localhost:3000", // get your own base url
     });
-    if (iframeController !== null) {
-      setIframeController(iframeController);
-      const { iframeUrl, eventType } = iframeController.getVault({
-        triaName,
-        password,
-        userId,
-      });
-      setEventType(eventType);
+    setIframeController(iframeController);
+    const { iframeUrl, eventType } = iframeController.getVault({
+      triaName,
+      password,
+      userId,
+    });
+    setEventType(eventType);
 
-      console.log(
-        `invisible iframe url: ${iframeUrl} and event type: ${eventType}`
-      );
-      setLoginIframeUrl(iframeUrl);
-    }
+    console.log("inveisible iframe url: ", iframeUrl);
+    setLoginIframeUrl(iframeUrl);
+    setIframeUrl(iframeUrl);
+
+    // const iframeController = new IframeController({
+    //   walletUrl: "https://tria-wallet.web.app", // wallet.tria.so
+    //   parentUrl: "http://localhost:3001", // get your own base url
+    // });
+    // if (iframeController !== null) {
+    //   setIframeController(iframeController);
+    //   const { iframeUrl, eventType } = iframeController.getVault({
+    //     triaName,
+    //     password,
+    //     userId,
+    //   });
+    //   setEventType(eventType);
+
+    //   console.log(
+    //     `invisible iframe url: ${iframeUrl} and event type: ${eventType}`
+    //   );
+    //   setLoginIframeUrl(iframeUrl);
+    // }
     // const keyringController = new KeyringController({
     //   baseUrl,
     // });
@@ -679,25 +735,57 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
       walletUrl: "https://tria-wallet.web.app", // wallet.tria.so
       parentUrl: "http://localhost:3001", // get your own base url
     });
-    if (iframeController !== null) {
-      setIframeController(iframeController);
-      const { iframeUrl, eventType } = iframeController.socialogin({
-        triaName: name,
-        platform: SocialLoginTypes.Google,
-        password: null,
-        userId,
-        isPasswordLess: true,
-      });
-      setEventType(eventType);
+    const { iframeUrl, eventType } = iframeController.socialogin({
+      triaName: name,
+      platform: "google",
+      userId,
+      isPasswordLess: true,
+      password: null,
+    });
+    setEventType(eventType);
 
-      console.log(
-        `invisible iframe url: ${iframeUrl} and event type: ${eventType}`
-      );
-      setLoginIframeUrl(iframeUrl);
-    }
+    console.log("inveisible iframe url: ", iframeUrl.trim());
+    setLoginIframeUrl(iframeUrl);
+    setIframeUrl(iframeUrl);
+
+    // const iframeController = new IframeController({
+    //   walletUrl: "https://tria-wallet.web.app", // wallet.tria.so
+    //   parentUrl: "http://localhost:3001", // get your own base url
+    // });
+    // if (iframeController !== null) {
+    //   setIframeController(iframeController);
+    //   const { iframeUrl, eventType } = iframeController.socialogin({
+    //     triaName: name,
+    //     platform: SocialLoginTypes.Google,
+    //     password: null,
+    //     userId,
+    //     isPasswordLess: true,
+    //   });
+    //   setEventType(eventType);
+
+    //   console.log(
+    //     `invisible iframe url: ${iframeUrl} and event type: ${eventType}`
+    //   );
+    //   setLoginIframeUrl(iframeUrl);
+    // }
   };
 
   const createAccountUsingTria = async (triaName: string, password: string) => {
+    const iframeController = new IframeController({
+      walletUrl: "https://tria-wallet.web.app", // wallet.tria.so
+      parentUrl: "http://localhost:3000", // get your own base url
+    });
+    setIframeController(iframeController);
+    const { iframeUrl, eventType } = iframeController.createAccount({
+      triaName,
+      password,
+    });
+    setEventType(eventType);
+
+    console.log("inveisible iframe url: ", iframeUrl);
+    setLoginIframeUrl(iframeUrl);
+    setIframeUrl(iframeUrl);
+
     // const keyringController = new KeyringController({ baseUrl });
     // try {
     //   const res = await keyringController.createAccount({
@@ -712,20 +800,20 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
     // } catch (err) {
     //   console.log(err);
     // }
-    const iframeController = new IframeController({
-      walletUrl: "https://tria-wallet.web.app", // wallet.tria.so
-      parentUrl: "http://localhost:3001", // get your own base url
-    });
-    const { iframeUrl, eventType } = iframeController.createAccount({
-      triaName,
-      password,
-    });
-    setEventType(eventType);
+    // const iframeController = new IframeController({
+    //   walletUrl: "https://tria-wallet.web.app", // wallet.tria.so
+    //   parentUrl: "http://localhost:3001", // get your own base url
+    // });
+    // const { iframeUrl, eventType } = iframeController.createAccount({
+    //   triaName,
+    //   password,
+    // });
+    // setEventType(eventType);
 
-    console.log(
-      `invisible iframe url: ${iframeUrl} and event type: ${eventType}`
-    );
-    setLoginIframeUrl(iframeUrl);
+    // console.log(
+    //   `invisible iframe url: ${iframeUrl} and event type: ${eventType}`
+    // );
+    // setLoginIframeUrl(iframeUrl);
   };
 
   const isBackButtonHidden = () =>
@@ -739,26 +827,39 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
     getStartedWithTriaStep === GetStartedWithTriaStep.NotStarted;
 
   const backButtonClicked = () => {
+    console.log("1");
+
+    // setSocialLoginStep(SocialLoginStep.NotStarted);
+    // return;
+
+    console.log(`connectType: ${connectType}`);
     if (getStartedWithTriaStep !== GetStartedWithTriaStep.NotStarted) {
+      console.log("2");
       switch (getStartedWithTriaStep) {
         case GetStartedWithTriaStep.SetupPassword:
+          console.log("3");
           setGetStartedWithTriaStep(GetStartedWithTriaStep.CreateTriaName);
           break;
         case GetStartedWithTriaStep.CreateTriaName:
+          console.log("4");
           setGetStartedWithTriaStep(GetStartedWithTriaStep.NotStarted);
         default:
+          console.log("12");
           break;
       }
     } else {
+      console.log("5");
       switch (connectType) {
         case ConnectType.Tria:
           {
             switch (continueWithTriaStep) {
               case ContinueWithTriaStep.EnterPassword:
+                console.log("6");
                 setContinueWithTriaStep(ContinueWithTriaStep.EnterUserName);
                 break;
 
               default:
+                console.log("13");
                 break;
             }
           }
@@ -766,16 +867,21 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
 
         case ConnectType.EmailSocial:
           {
+            console.log("7");
             switch (socialLoginStep) {
               case SocialLoginStep.EnterPassword:
+                console.log("8");
                 setSocialLoginStep(SocialLoginStep.ExtraLayerSecurity);
                 break;
               case SocialLoginStep.ExtraLayerSecurity:
+                console.log("9");
                 setSocialLoginStep(SocialLoginStep.TriaNameCreation);
                 break;
               case SocialLoginStep.TriaNameCreation:
+                console.log("10");
                 setSocialLoginStep(SocialLoginStep.NotStarted);
               default:
+                console.log("14");
                 break;
             }
           }
@@ -783,11 +889,13 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
 
         case ConnectType.ConnectWallet:
           {
+            console.log("11");
             setIsSearchingOtherWallet(!searchingOtherWallet);
           }
           break;
 
         default:
+          console.log("15");
           break;
       }
     }
@@ -809,11 +917,6 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
             fontFamily: "Montserrat",
           }}
         >
-          <iframe
-            src={loginIframeUrl}
-            title="Login"
-            style={{ display: "none" }}
-          />
           <div
             style={{ position: "absolute", marginLeft: -10, marginTop: -10 }}
           >
@@ -1225,6 +1328,8 @@ export function DesktopOptions({ onClose }: { onClose: () => void }) {
   };
 
   const socialLoginClicked = async (socialLoginIndex) => {
+    setConnectType(ConnectType.EmailSocial);
+
     const socialNetwork =
       socialLogins[socialLoginIndex].type === SocialLoginTypes.Instagram
         ? "instagram"
