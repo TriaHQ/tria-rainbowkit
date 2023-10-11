@@ -9,7 +9,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Footer from "./Components/Footer";
 import HomeBackgroundVector from "./Components/UI/HomeBackgroundVector";
 import "./index.css";
+import { useState } from "react";
 const App = () => {
+  const[showWallet,setShowWallet]=useState(false);
   return (
     <>
       <div className="bg flex  justify-between">
@@ -39,7 +41,7 @@ const App = () => {
               <div className="p-10  text-center bordered rounded-2xl pb-2 md:pb-8 backdrop-blur-sm bg-black/50">
                 <h1 className="main_text font-sans  text-6xl font-bold leading-tighter tracking-tighter animate__animated animate__fadeIn animate__delay-1s text-white">
                 Welcome to Acme {" "}
-                  <div className="bg-clip-text text-transparent bg-gradient-to-r from-gray-500 to-teal-400 animate__animated animate__fadeIn animate__delay-1s pb-4">
+                  <div className="bg-clip-text text-transparent bg-gradient-to-r from-gray-500 to-teal-400 animate__animated animate__fadeIn animate__delay-1s pb-8">
                   Marketplace
                   </div>
                 </h1>
@@ -75,6 +77,7 @@ const App = () => {
           </div>
         </section>
         <div className="mt-4 mr-2 fixed right-2 top-2">
+          {showWallet &&
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
@@ -89,7 +92,14 @@ const App = () => {
             element={<TransactionDetails />}
           />
         </Routes>
+}
+        <div className="wallet_icon fixed w-[80px] bottom-4 right-8 cursor-pointer" onClick={()=>{
+          setShowWallet(!showWallet);
+        }}>
+          <img className="w-[80px] justify-end rounded-full " src="/images/wallet.jpeg" alt="wallet" />
         </div>
+        </div>
+       
       </div>
     </>
   );

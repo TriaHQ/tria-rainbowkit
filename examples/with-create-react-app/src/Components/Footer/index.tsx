@@ -36,6 +36,7 @@ const Footer: React.FC = () => {
 
   const handleIconClick = (icon: IconData) => {
     setSelectedIcon(icon.name);
+    isTextVisible(icon.name);
     navigate(icon.route);
   };
 
