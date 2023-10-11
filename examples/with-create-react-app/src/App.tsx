@@ -11,7 +11,7 @@ import HomeBackgroundVector from "./Components/UI/HomeBackgroundVector";
 import "./index.css";
 import { useState } from "react";
 const App = () => {
-  const[showWallet,setShowWallet]=useState(false);
+  const [showWallet, setShowWallet] = useState(false);
   return (
     <>
       <div className="bg flex  justify-between">
@@ -40,14 +40,15 @@ const App = () => {
               {/* Section header */}
               <div className="p-10  text-center bordered rounded-2xl pb-2 md:pb-8 backdrop-blur-sm bg-black/50">
                 <h1 className="main_text font-sans  text-6xl font-bold leading-tighter tracking-tighter animate__animated animate__fadeIn animate__delay-1s text-white">
-                Welcome to Acme {" "}
+                  Welcome to Acme{" "}
                   <div className="bg-clip-text text-transparent bg-gradient-to-r from-gray-500 to-teal-400 animate__animated animate__fadeIn animate__delay-1s pb-8">
-                  Marketplace
+                    Marketplace
                   </div>
                 </h1>
                 <div className="max-w-3xl mx-auto">
                   <p className="text-xl font-bold font-sans text-gray-600 mb-8 animate__animated animate__fadeIn animate__delay-1s text-white">
-                  A single place to buy and sell any digital asset across any chain from Ethereum, Solana, Polygon, and more!
+                    A single place to buy and sell any digital asset across any
+                    chain from Ethereum, Solana, Polygon, and more!
                   </p>
                   <div className="max-w-xs mx-auto sm:max-w-none sm:flex sm:justify-center animate__animated animate__fadeIn animate__delay-1s">
                     <div className="animate__animated animate__fadeIn animate__delay-1s">
@@ -55,7 +56,7 @@ const App = () => {
                         className="btn text-white bodered font-sans text-2xl rounded-lg text-black mt-2 py-4 pointer-cursor px-8 bg-blue-800 w-full mb-4 sm:w-auto sm:mb-0"
                         href="#0"
                       >
-                       Login
+                        Login
                       </a>
                     </div>
                     {/* <div className="animate__animated animate__fadeIn animate__delay-4s">
@@ -77,29 +78,40 @@ const App = () => {
           </div>
         </section>
         <div className="mt-4 mr-2 fixed right-2 top-2">
-          {showWallet &&
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/nfts" element={<Home />} />
-          <Route path="/home/buycrypto" element={<BuyCrypto />} />
-          <Route
-            path="/activity/TransactionList"
-            element={<TransactionListPage />}
-          />
-          <Route
-            path="/activity/TransactionDetails"
-            element={<TransactionDetails />}
-          />
-        </Routes>
-}
-        <div className="wallet_icon fixed w-[80px] bottom-4 right-8 cursor-pointer" onClick={()=>{
-          setShowWallet(!showWallet);
-        }}>
-          <img className="w-[80px] justify-end rounded-full " src="/images/wallet.jpeg" alt="wallet" />
+          {showWallet && (
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/home" element={<Home />} />
+              <Route path="/nfts" element={<Home />} />
+              <Route path="/home/buycrypto" element={<BuyCrypto />} />
+              <Route
+                path="/activity/TransactionList"
+                element={<TransactionListPage />}
+              />
+              <Route
+                path="/activity/TransactionDetails"
+                element={<TransactionDetails />}
+              />
+            </Routes>
+          )}
+          <div
+            className="wallet_icon fixed w-[80px] bottom-4 right-8 cursor-pointer"
+            onClick={() => {
+              setShowWallet(!showWallet);
+            }}
+          >
+            {/* <img className="w-[80px] justify-end rounded-full " src="/images/wallet.jpeg" alt="wallet" /> */}
+            <div className="w-[58.98px] h-[58.98px] relative bg-gradient-to-r from-violet-400 to-indigo-500 rounded-[100px] shadow border border-violet-400 backdrop-blur-2">
+              <div className="w-7 h-7 left-[15.49px] top-[15.49px] absolute rounded-md">
+                {" "}
+                <img src="/images/wallet.svg" alt="wallet" />
+              </div>
+            </div>
+            {/* <div className="w-16 h-16 relative  rounded-[100px] shadow">
+              <img src="/images/wallet.svg" alt="wallet" />
+            </div> */}
+          </div>
         </div>
-        </div>
-       
       </div>
     </>
   );
