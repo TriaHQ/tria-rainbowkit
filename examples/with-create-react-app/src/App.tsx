@@ -5,13 +5,29 @@ import TransactionDetails from "./pages/TransactionDetailsPage";
 import Landing from "./pages/Landing";
 import "./pages/Landing.css";
 import BuyCrypto from "./Components/Home/BuyCrypto";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route,useNavigate } from "react-router-dom";
 import Footer from "./Components/Footer";
 import HomeBackgroundVector from "./Components/UI/HomeBackgroundVector";
 import "./index.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+function RedirectToHome() {
+  const navigate = useNavigate();
+
+  // Redirect to the home page
+  navigate("/home");
+
+  // You can render something here if needed, but the navigation will happen immediately
+  return null;
+}
+
 const App = () => {
   const [showWallet, setShowWallet] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(()=>{
+    navigate("/home");
+  },[]);
+  
   return (
     <>
       <div className="bg flex  justify-between">
@@ -80,6 +96,7 @@ const App = () => {
         <div className="mb-4 mr-2 fixed right-2 bottom-24">
           {showWallet && (
             <Routes>
+               <Route element={<RedirectToHome />} />
               <Route path="/" element={<Home />} />
               <Route path="/home" element={<Home />} />
               <Route path="/nfts" element={<Home />} />
@@ -98,6 +115,7 @@ const App = () => {
             className="wallet_icon fixed w-[80px] bottom-4 right-8 cursor-pointer"
             onClick={() => {
               setShowWallet(!showWallet);
+
             }}
           >
             {/* <img className="w-[80px] justify-end rounded-full " src="/images/wallet.jpeg" alt="wallet" /> */}
