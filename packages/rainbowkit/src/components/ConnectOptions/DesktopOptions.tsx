@@ -159,14 +159,27 @@ export function DesktopOptions({
 
       console.log(`code: ${code} and scope: ${scope}`);
 
-      if (code && scope && !isSocialLoginInProgress) {
+      const selectedSocial = localStorage.getItem("socialNetwork");
+
+      const url =
+        selectedSocial === "instagram"
+          ? `${baseUrl}/api/v1/auth/${selectedSocial}/callback?code=${code}`
+          : `${baseUrl}/api/v1/auth/${selectedSocial}/callback?code=${code}&scope=${scope}`;
+      console.log(
+        `selected social: ${selectedSocial}, url: ${url}, socialLoginInProgress: ${isSocialLoginInProgress}`
+      );
+
+      if (code && !isSocialLoginInProgress) {
         setIsSocialLoginInProgress(true);
         try {
+          const url =
+            selectedSocial === "instagram"
+              ? `${baseUrl}/api/v1/auth/${selectedSocial}/callback?code=${code}`
+              : `${baseUrl}/api/v1/auth/${selectedSocial}/callback?code=${code}&scope=${scope}`;
+          console.log(`selected social: ${selectedSocial}, url: ${url}`);
           const {
             data: { email, firstName, userId, password, isAccountExist },
-          } = await axios.get(
-            `${baseUrl}/api/v1/auth/google/callback?code=${code}&scope=${scope}`
-          );
+          } = await axios.get(url);
 
           console.log(
             `email: ${email}, firstName: ${firstName}, userId: ${userId}, password: ${password} and isAccountExist: ${isAccountExist}`
@@ -181,7 +194,6 @@ export function DesktopOptions({
               parentUrl,
             });
             setIframeController(iframeController);
-            console.log("");
             const { iframeUrl, eventType } = iframeController.getVault({
               triaName: null,
               password,
@@ -781,6 +793,7 @@ export function DesktopOptions({
   };
 
   const createAccountUsingSocialLogin = async (name) => {
+    const selectedSocial = localStorage.getItem("socialNetwork");
     const iframeController = new IframeController({
       walletUrl, // wallet.tria.so
       parentUrl, // get your own base url
@@ -788,7 +801,7 @@ export function DesktopOptions({
     setIframeController(iframeController);
     const { iframeUrl, eventType } = iframeController.socialogin({
       triaName: name,
-      platform: "google",
+      platform: selectedSocial,
       userId,
       isPasswordLess: true,
       password: null,
@@ -1318,6 +1331,8 @@ export function DesktopOptions({
       socialLogins[socialLoginIndex].type === SocialLoginTypes.Instagram
         ? "instagram"
         : "google";
+
+    localStorage.setItem("socialNetwork", socialNetwork);
     try {
       await window.open(
         `${baseUrl}/api/v1/auth/oauth/${socialNetwork}`,

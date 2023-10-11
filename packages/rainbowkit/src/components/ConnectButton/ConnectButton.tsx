@@ -243,7 +243,7 @@ export function ConnectButton({
                           : "none"
                       )}
                     > */}
-                      Disconnect
+                      Logout
                     </Box>
                   </Box>
                 </Box>
