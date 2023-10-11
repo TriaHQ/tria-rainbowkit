@@ -1,20 +1,30 @@
 import { useState } from "react";
 import QR from "./QR";
+import QR2 from "./QR2";
 
 const Accounts = () => {
   const [showQr, setShowQr] = useState(false);
+  const[showQr2,setShowQr2]=useState(false);
   return (
     <div className="block-inline ">
-      {showQr && (
+      {showQr ? (
         // <div className="shadow-2xl absolute top-0 right-10  flex font-montserrat bg-white rounded-[45px]   ">
         <div
           className={` shadow-2xl absolute top-20 right-2  flex font-montserrat  bg-white rounded-lg  z-50 ${
             showQr ? "" : "hidden"
           }`}
         >
+          <QR2 />
+        </div>
+      ):
+      <div
+          className={` shadow-2xl absolute top-20 right-2  flex font-montserrat  bg-white rounded-lg  z-50 ${
+            showQr2 ? "" : "hidden"
+          }`}
+        >
           <QR />
         </div>
-      )}
+      }
       <div className="w-full h-16 px-5 py-3 bg-stone-50 flex-col justify-start items-center gap-2 inline-flex">
         <div className="self-stretch justify-start items-center gap-4 inline-flex">
           <div className="grow shrink basis-0 flex-col justify-start items-start gap-1 inline-flex">
@@ -55,7 +65,7 @@ const Accounts = () => {
             </div>
           </div>
           <div className="w-[18px] h-[18px] justify-center items-center flex cursor-pointer"
-           onClick={() => setShowQr(!showQr)}>
+           onClick={() => setShowQr2(!showQr2)}>
             <div className="w-[18px] h-[18px] relative">
               <img src="/scan-barcode.svg" alt="" />
             </div>

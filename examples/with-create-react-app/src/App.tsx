@@ -11,6 +11,20 @@ import Footer from "./Components/Footer";
 import HomeBackgroundVector from "./Components/UI/HomeBackgroundVector";
 import "./index.css";
 const App = () => {
+  const [showWalletPopup, setShowWalletPopup] = useState(false);
+  const [showWalletButton, setShowWalletButton] = useState(false);
+
+  useEffect(() => {
+    // const userDisplayName = localStorage.getItem("userDisplayName");
+    // const userAddress = localStorage.getItem("address");
+    // console.log(`user name : ${userDisplayName} and address: ${userAddress}`);
+    // setShowWalletButton(userDisplayName !== null && userAddress !== null);
+  }, []);
+
+  const loggedInStatusChanged = (isLoggedIn: boolean) => {
+    setShowWalletButton(isLoggedIn);
+  };
+
   return (
     <>
       <div className="bg flex  justify-between">
@@ -40,7 +54,7 @@ const App = () => {
               <div className="p-10  text-center bordered rounded-2xl pb-2 md:pb-8 backdrop-blur-sm bg-black/50">
                 <h1 className="main_text font-sans  text-6xl font-bold leading-tighter tracking-tighter animate__animated animate__fadeIn animate__delay-1s text-white">
                   Welcome to Acme{" "}
-                  <div className="bg-clip-text text-transparent bg-gradient-to-r from-gray-500 to-teal-400 animate__animated animate__fadeIn animate__delay-1s pb-4">
+                  <div className="bg-clip-text text-transparent bg-gradient-to-r from-gray-500 to-teal-400 animate__animated animate__fadeIn animate__delay-1s pb-8">
                     Marketplace
                   </div>
                 </h1>
@@ -55,7 +69,9 @@ const App = () => {
                         className="btn text-white bodered font-sans text-2xl rounded-lg text-black mt-2 py-4 pointer-cursor px-8 bg-blue-800 w-full mb-4 sm:w-auto sm:mb-0"
                         href="#0"
                       >
-                        <ConnectButton />
+                        <ConnectButton
+                          loggedInStatusChanged={loggedInStatusChanged}
+                        />
                       </a>
                     </div>
                     {/* <div className="animate__animated animate__fadeIn animate__delay-4s">
@@ -77,20 +93,36 @@ const App = () => {
           </div>
         </section>
         <div className="mt-4 mr-2 fixed right-2 top-2">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/nfts" element={<Home />} />
-            <Route path="/home/buycrypto" element={<BuyCrypto />} />
-            <Route
-              path="/activity/TransactionList"
-              element={<TransactionListPage />}
-            />
-            <Route
-              path="/activity/TransactionDetails"
-              element={<TransactionDetails />}
-            />
-          </Routes>
+          {showWalletPopup && (
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/home" element={<Home />} />
+              <Route path="/nfts" element={<Home />} />
+              <Route path="/home/buycrypto" element={<BuyCrypto />} />
+              <Route
+                path="/activity/TransactionList"
+                element={<TransactionListPage />}
+              />
+              <Route
+                path="/activity/TransactionDetails"
+                element={<TransactionDetails />}
+              />
+            </Routes>
+          )}
+          {showWalletButton && (
+            <div
+              className="wallet_icon fixed w-[80px] bottom-4 right-8 cursor-pointer"
+              onClick={() => {
+                setShowWalletPopup(!showWalletPopup);
+              }}
+            >
+              <img
+                className="w-[80px] justify-end rounded-full "
+                src="/images/wallet.jpeg"
+                alt="wallet"
+              />
+            </div>
+          )}
         </div>
       </div>
     </>

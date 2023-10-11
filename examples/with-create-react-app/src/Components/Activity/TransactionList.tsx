@@ -49,10 +49,10 @@ const jsonData: TransactionData[] = [
   {
     Date: "2023-10-05",
     Image: "https://via.placeholder.com/40x40",
-    Currency: "MATIC",
+    Currency: "USDC",
     Status: "Failed transaction",
-    Price: "$1.09",
-    Quantity: "2 MATIC",
+    Price: "$1402.74",
+    Quantity: ".05 BTC",
   },
 ];
 
@@ -60,9 +60,9 @@ const TransactionList = () => {
   const navigate = useNavigate();
   return (
     <>
-      <div className="w-[416px] grow shrink basis-0 flex-col justify-start items-center font-Montserrat flex">
+      <div className="w-[416px] flex-col justify-start items-center font-Montserrat flex h-860px">
         <div className="self-stretch h-[567px]  flex-col justify-center items-center gap-2 flex">
-          <div className="self-stretch h-[67px] px-5 rounded-2xl flex-col justify-center items-center gap-2 flex">
+          <div className="self-stretch h-[64px] px-5 rounded-2xl flex-col justify-center items-center gap-2 flex">
             <div className="self-stretch justify-start items-center gap-4 inline-flex">
               <div className="grow shrink basis-0 h-10 justify-start items-center gap-2 flex">
                 <div className="text-center text-xl font-semibold  leading-normal">

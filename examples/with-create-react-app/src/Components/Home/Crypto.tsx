@@ -9,28 +9,29 @@ interface CryptoData {
 }
 
 const jsonData: CryptoData[] = [
+ 
+  {
+    name: "ETH",
+    cost: "$1615.83",
+    number: "1 ETH",
+    chain_image: "icons/chain_1.png",
+    image:
+      "/icons/ether.png",
+  },
   {
     name: "USDT",
-    cost: "$1615.83",
+    cost: "$128",
     number: "128 USDT",
-    chain_image: "/icons/chain_1.png",
+    chain_image: "icons/chain_2.png",
     image: "/icons/tether.png",
   },
   {
-    name: "Matic",
-    cost: "$123",
-    number: "2 MATIC",
-    chain_image: "icons/chain_2.png",
-    image:
-      "https://s3.coinmarketcap.com/static-gravity/image/b8db9a2ac5004c1685a39728cdf4e100.png",
-  },
-  {
-    name: "Bitcoin",
-    cost: "$1402",
-    number: "0.05 BTC",
+    name: "USDC",
+    cost: "$95",
+    number: "95 USDC",
     chain_image: "/icons/chain_3.png",
     image:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Bitcoin.svg/800px-Bitcoin.svg.png",
+      "/icons/usdc.png",
   },
 ];
 
@@ -81,7 +82,7 @@ const Crypto = () => {
             <div className="self-stretch justify-start items-center gap-4 inline-flex">
               <div className="grow shrink basis-0 h-10 justify-start items-center gap-2 flex">
                 <div className="w-10 h-10 relative rounded-[40px] shadow border-2">
-                  <div className="w-10 h-10 pl-1 pr-[5px] pt-1 pb-[5px] left-0 top-0 absolute bg-white rounded-[40px] font-montserrat border-2 border-white backdrop-blur-[5px] flex-col justify-center items-center inline-flex">
+                  <div className="w-10 h-10 left-0 top-0 absolute bg-white rounded-[40px] font-montserrat  flex-col justify-center items-center inline-flex">
                     <img
                       src={item.image}
                       alt={`image of ${item.name}`}

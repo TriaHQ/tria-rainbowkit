@@ -38,7 +38,7 @@ const EnterTriaPassword = ({
       >
         {logo}
         <Text
-          color="accentColor"
+          color="modalText"
           style={{
             alignSelf: "center",
             marginTop: 24,

@@ -22,12 +22,13 @@ export interface ConnectButtonProps {
   showBalance?: ResponsiveValue<boolean>;
   chainStatus?: ResponsiveValue<ChainStatus>;
   label?: string;
+  loggedInStatusChanged: (boolean) => void;
 }
 
 const defaultProps = {
   accountStatus: "full",
   chainStatus: { largeScreen: "full", smallScreen: "icon" },
-  label: "Connect Wallet",
+  label: "Login",
   showBalance: { largeScreen: true, smallScreen: false },
 } as const;
 
@@ -36,9 +37,12 @@ export function ConnectButton({
   chainStatus = defaultProps.chainStatus,
   label = defaultProps.label,
   showBalance = defaultProps.showBalance,
+  loggedInStatusChanged,
 }: ConnectButtonProps) {
   const chains = useRainbowKitChains();
   const connectionStatus = useConnectionStatus();
+
+  const [loggedInStatus, setLoggedInStatus] = useState(false);
 
   return (
     <ConnectButtonRenderer>
@@ -65,6 +69,10 @@ export function ConnectButton({
         }, []);
 
         useEffect(() => {
+          loggedInStatusChanged(loggedInStatus);
+        }, [loggedInStatus]);
+
+        useEffect(() => {
           const userDisplayName = localStorage.getItem("userDisplayName");
           if (userDisplayName) {
             setUserDisplayName(userDisplayName);
@@ -77,6 +85,10 @@ export function ConnectButton({
           console.log(
             `user name : ${userDisplayName} and address: ${userAddress}`
           );
+          setLoggedInStatus(
+            isUserLoggedInAsNonWallet ||
+              (ready && account && connectionStatus === "connected")
+          );
         });
 
         const disconnectUser = () => {
@@ -84,6 +96,7 @@ export function ConnectButton({
           localStorage.removeItem("address");
           setUserDisplayName(null);
           setUserAddress(null);
+          setLoggedInStatus(false);
         };
 
         const isUserLoggedInAsNonWallet = () => userDisplayName && userAddress;
@@ -153,7 +166,6 @@ export function ConnectButton({
                     > */}
                       {userDisplayName}
                     </Box>
-                    <DropdownIcon />
                   </Box>
                 </Box>
                 {/* </Box> */}
@@ -176,6 +188,9 @@ export function ConnectButton({
                 testId="account-button"
                 transition="default"
                 type="button"
+                style={{
+                  marginTop: 10,
+                }}
               >
                 <Box
                   background={
@@ -218,9 +233,8 @@ export function ConnectButton({
                           : "none"
                       )}
                     > */}
-                      "Disconnect"
+                      Disconnect
                     </Box>
-                    <DropdownIcon />
                   </Box>
                 </Box>
                 {/* </Box> */}
