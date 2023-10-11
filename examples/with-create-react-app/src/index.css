@@ -23,3 +23,8 @@ font-size: 10px;
 .bg{
   background-image: url('../public//images/bg.jpg')!important;
 }
+.wallet_icon{
+  margin-top: 25px;
+  height: 150px;
+  width: auto;
+}

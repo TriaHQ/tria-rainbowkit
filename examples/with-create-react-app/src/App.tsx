@@ -101,10 +101,10 @@ const App = () => {
             }}
           >
             {/* <img className="w-[80px] justify-end rounded-full " src="/images/wallet.jpeg" alt="wallet" /> */}
-            <div className="w-[58.98px] h-[58.98px] relative bg-gradient-to-r from-violet-400 to-indigo-500 rounded-[100px] shadow border border-violet-400 backdrop-blur-2">
-              <div className="w-7 h-7 left-[15.49px] top-[15.49px] absolute rounded-md">
+            <div className="relative ">
+              <div className="    left-[15.49px] top-[15.49px]">
                 {" "}
-                <img src="/images/wallet.svg" alt="wallet" />
+                <img  className="wallet_icon " src="/images/wallet.png" alt="wallet" />
               </div>
             </div>
             {/* <div className="w-16 h-16 relative  rounded-[100px] shadow">
