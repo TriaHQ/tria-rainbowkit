@@ -1064,6 +1064,7 @@ export function DesktopOptions({
             screenType={PasswordScreenType.EnterAndConfirmPassword}
             secondaryPlaceholder="Confirm password"
             title="Creating your Tria account"
+            isPasswordTypeForBoth={true}
           />
         </div>
       );

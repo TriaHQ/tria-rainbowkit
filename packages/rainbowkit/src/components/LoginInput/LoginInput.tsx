@@ -9,6 +9,7 @@ const LoginInput = ({
   placeholder = "",
   value = "",
   isLoadingButton = true,
+  isPasswordType = false,
 }) => {
   const [input, setInput] = useState(value);
   const [buttonClicked, setIsButtonClicked] = useState(false);
@@ -23,6 +24,7 @@ const LoginInput = ({
       }}
     >
       <input
+        type={isPasswordType ? "password" : "text"}
         disabled={!isEditable}
         onChange={(e) => setInput(e.target.value)}
         placeholder={placeholder}
@@ -43,8 +45,13 @@ const LoginInput = ({
         <button
           color="white"
           onClick={() => {
-            setIsButtonClicked(true);
-            ctaClicked(input);
+            if (
+              input.replace(/\s/g, "") &&
+              input.replace(/\s/g, "").length > 0
+            ) {
+              setIsButtonClicked(true);
+              ctaClicked(input);
+            }
           }}
           style={{
             background: "black",

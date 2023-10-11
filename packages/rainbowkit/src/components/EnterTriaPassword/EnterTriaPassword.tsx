@@ -18,6 +18,7 @@ const EnterTriaPassword = ({
   screenType = PasswordScreenType.Login,
   secondaryPlaceholder = "Password",
   title = "Continue with Tria",
+  isPasswordTypeForBoth = false,
 }) => {
   return (
     <div
@@ -51,6 +52,7 @@ const EnterTriaPassword = ({
       <BorderedContainer>
         <Text color="accentColor"> {title} </Text>
         <LoginInput
+          isPasswordType={isPasswordTypeForBoth}
           isCTAButton={false}
           placeholder={primaryPlaceholder}
           value={primaryText}
@@ -63,6 +65,7 @@ const EnterTriaPassword = ({
           ctaTitle={ctaTitle}
           placeholder={secondaryPlaceholder}
           isLoadingButton={true}
+          isPasswordType={true}
         />
       </BorderedContainer>
     </div>
