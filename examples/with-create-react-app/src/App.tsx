@@ -15,7 +15,7 @@ const App = () => {
   return (
     <>
       <div className="bg flex  justify-between">
-        <section className=" w-[80%]">
+        <section className=" w-[100%]">
           {/* Glass background */}
           <div className="absolute inset-0 backdrop-blur-md"></div>
 
@@ -38,7 +38,7 @@ const App = () => {
             {/* Hero content */}
             <div className="pt-32 pb-12 md:pt-20 md:pb-20">
               {/* Section header */}
-              <div className="p-10  text-center bordered rounded-2xl pb-2 md:pb-8 backdrop-blur-sm bg-black/50">
+              <div className="p-20  text-center bordered rounded-2xl   backdrop-blur-sm bg-black/50">
                 <h1 className="main_text font-sans  text-6xl font-bold leading-tighter tracking-tighter animate__animated animate__fadeIn animate__delay-1s text-white">
                   Welcome to Acme{" "}
                   <div className="bg-clip-text text-transparent bg-gradient-to-r from-gray-500 to-teal-400 animate__animated animate__fadeIn animate__delay-1s pb-8">
@@ -77,7 +77,7 @@ const App = () => {
             </div>
           </div>
         </section>
-        <div className="mt-4 mr-2 fixed right-2 top-2">
+        <div className="mb-4 mr-2 fixed right-2 bottom-24">
           {showWallet && (
             <Routes>
               <Route path="/" element={<Home />} />
