@@ -50,23 +50,23 @@ const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 
+// root.render(
+//   <WagmiConfig config={wagmiConfig}>
+//     <RainbowKitProvider chains={chains}>
+//       <App />
+//     </RainbowKitProvider>
+//   </WagmiConfig>
+// );
+
 root.render(
   <WagmiConfig config={wagmiConfig}>
     <RainbowKitProvider chains={chains}>
-      <App />
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
     </RainbowKitProvider>
   </WagmiConfig>
 );
-
-// root.render(
-//   // <WagmiConfig config={wagmiConfig}>
-//   //   <RainbowKitProvider chains={chains}>
-//   <BrowserRouter>
-//     <App />
-//   </BrowserRouter>
-//   //   </RainbowKitProvider>
-//   // </WagmiConfig>
-// );
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

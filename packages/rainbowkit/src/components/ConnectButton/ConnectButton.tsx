@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ResponsiveValue,
   mapResponsiveValue,
@@ -53,9 +53,181 @@ export function ConnectButton({
         const ready = mounted && connectionStatus !== "loading";
         const unsupportedChain = chain?.unsupported ?? false;
 
+        const [userDisplayName, setUserDisplayName] = useState(null);
+        const [userAddress, setUserAddress] = useState(null);
+
         useEffect(() => {
-          openConnectModal();
+          const isPopupOpen =
+            JSON.parse(localStorage.getItem("isModalOpen")) === true;
+          if (isPopupOpen) {
+            openConnectModal();
+          }
         }, []);
+
+        useEffect(() => {
+          const userDisplayName = localStorage.getItem("userDisplayName");
+          if (userDisplayName) {
+            setUserDisplayName(userDisplayName);
+          }
+
+          const address = localStorage.getItem("address");
+          if (address) {
+            setUserAddress(address);
+          }
+          console.log(
+            `user name : ${userDisplayName} and address: ${userAddress}`
+          );
+        });
+
+        const disconnectUser = () => {
+          localStorage.removeItem("userDisplayName");
+          localStorage.removeItem("address");
+          setUserDisplayName(null);
+          setUserAddress(null);
+        };
+
+        const isUserLoggedInAsNonWallet = () => userDisplayName && userAddress;
+
+        if (isUserLoggedInAsNonWallet()) {
+          return (
+            <>
+              <Box
+                alignItems="center"
+                as="button"
+                background="connectButtonBackground"
+                borderRadius="connectButton"
+                boxShadow="connectButton"
+                className={touchableStyles({
+                  active: "shrink",
+                  hover: "grow",
+                })}
+                color="connectButtonText"
+                display="flex"
+                fontFamily="body"
+                fontWeight="bold"
+                onClick={openAccountModal}
+                testId="account-button"
+                transition="default"
+                type="button"
+              >
+                <Box
+                  background={
+                    normalizeResponsiveValue(showBalance)[
+                      isMobile() ? "smallScreen" : "largeScreen"
+                    ]
+                      ? "connectButtonInnerBackground"
+                      : "connectButtonBackground"
+                  }
+                  borderColor="connectButtonBackground"
+                  borderRadius="connectButton"
+                  borderStyle="solid"
+                  borderWidth="2"
+                  color="connectButtonText"
+                  fontFamily="body"
+                  fontWeight="bold"
+                  paddingX="8"
+                  paddingY="6"
+                  transition="default"
+                >
+                  <Box alignItems="center" display="flex" gap="6" height="24">
+                    {/* <Box
+                    display={mapResponsiveValue(accountStatus, (value) =>
+                      value === "full" || value === "avatar" ? "block" : "none"
+                    )}
+                  >
+                    <Avatar
+                      address={account.address}
+                      imageUrl={account.ensAvatar}
+                      loading={account.hasPendingTransactions}
+                      size={24}
+                    />
+                  </Box> */}
+
+                    <Box alignItems="center" display="flex" gap="6">
+                      {/* <Box
+                      display={mapResponsiveValue(accountStatus, (value) =>
+                        value === "full" || value === "address"
+                          ? "block"
+                          : "none"
+                      )}
+                    > */}
+                      {userDisplayName}
+                    </Box>
+                    <DropdownIcon />
+                  </Box>
+                </Box>
+                {/* </Box> */}
+              </Box>
+              <Box
+                alignItems="center"
+                as="button"
+                background="connectButtonBackground"
+                borderRadius="connectButton"
+                boxShadow="connectButton"
+                className={touchableStyles({
+                  active: "shrink",
+                  hover: "grow",
+                })}
+                color="connectButtonText"
+                display="flex"
+                fontFamily="body"
+                fontWeight="bold"
+                onClick={disconnectUser}
+                testId="account-button"
+                transition="default"
+                type="button"
+              >
+                <Box
+                  background={
+                    normalizeResponsiveValue(showBalance)[
+                      isMobile() ? "smallScreen" : "largeScreen"
+                    ]
+                      ? "connectButtonInnerBackground"
+                      : "connectButtonBackground"
+                  }
+                  borderColor="connectButtonBackground"
+                  borderRadius="connectButton"
+                  borderStyle="solid"
+                  borderWidth="2"
+                  color="connectButtonText"
+                  fontFamily="body"
+                  fontWeight="bold"
+                  paddingX="8"
+                  paddingY="6"
+                  transition="default"
+                >
+                  <Box alignItems="center" display="flex" gap="6" height="24">
+                    {/* <Box
+                    display={mapResponsiveValue(accountStatus, (value) =>
+                      value === "full" || value === "avatar" ? "block" : "none"
+                    )}
+                  >
+                    <Avatar
+                      address={account.address}
+                      imageUrl={account.ensAvatar}
+                      loading={account.hasPendingTransactions}
+                      size={24}
+                    />
+                  </Box> */}
+
+                    <Box alignItems="center" display="flex" gap="6">
+                      {/* <Box
+                      display={mapResponsiveValue(accountStatus, (value) =>
+                        value === "full" || value === "address"
+                          ? "block"
+                          : "none"
+                      )}
+                    > */}
+                      "Disconnect"
+                    </Box>
+                    <DropdownIcon />
+                  </Box>
+                </Box>
+                {/* </Box> */}
+              </Box>
+            </>
+          );
+        }
 
         return (
           <Box
@@ -251,6 +423,95 @@ export function ConnectButton({
                     </Box>
                   </Box>
                 )}
+                {
+                  <Box
+                    alignItems="center"
+                    as="button"
+                    background="connectButtonBackground"
+                    borderRadius="connectButton"
+                    boxShadow="connectButton"
+                    className={touchableStyles({
+                      active: "shrink",
+                      hover: "grow",
+                    })}
+                    color="connectButtonText"
+                    display="flex"
+                    fontFamily="body"
+                    fontWeight="bold"
+                    onClick={openAccountModal}
+                    testId="account-button"
+                    transition="default"
+                    type="button"
+                  >
+                    {account.displayBalance && (
+                      <Box
+                        display={mapResponsiveValue(showBalance, (value) =>
+                          value ? "block" : "none"
+                        )}
+                        padding="8"
+                        paddingLeft="12"
+                      >
+                        {account.displayBalance}
+                      </Box>
+                    )}
+                    <Box
+                      background={
+                        normalizeResponsiveValue(showBalance)[
+                          isMobile() ? "smallScreen" : "largeScreen"
+                        ]
+                          ? "connectButtonInnerBackground"
+                          : "connectButtonBackground"
+                      }
+                      borderColor="connectButtonBackground"
+                      borderRadius="connectButton"
+                      borderStyle="solid"
+                      borderWidth="2"
+                      color="connectButtonText"
+                      fontFamily="body"
+                      fontWeight="bold"
+                      paddingX="8"
+                      paddingY="6"
+                      transition="default"
+                    >
+                      <Box
+                        alignItems="center"
+                        display="flex"
+                        gap="6"
+                        height="24"
+                      >
+                        <Box
+                          display={mapResponsiveValue(accountStatus, (value) =>
+                            value === "full" || value === "avatar"
+                              ? "block"
+                              : "none"
+                          )}
+                        >
+                          <Avatar
+                            address={account.address}
+                            imageUrl={account.ensAvatar}
+                            loading={account.hasPendingTransactions}
+                            size={24}
+                          />
+                        </Box>
+
+                        <Box alignItems="center" display="flex" gap="6">
+                          <Box
+                            display={mapResponsiveValue(
+                              accountStatus,
+                              (value) =>
+                                value === "full" || value === "address"
+                                  ? "block"
+                                  : "none"
+                            )}
+                          >
+                            {account.displayName}
+                          </Box>
+                          <DropdownIcon />
+                        </Box>
+                      </Box>
+                    </Box>
+                  </Box>
+                }
               </>
             ) : (
               <Box
@@ -264,7 +525,10 @@ export function ConnectButton({
                 fontWeight="bold"
                 height="40"
                 key="connect"
-                onClick={openConnectModal}
+                onClick={() => {
+                  localStorage.setItem("isModalOpen", "true");
+                  openConnectModal();
+                }}
                 paddingX="14"
                 testId="connect-button"
                 transition="default"

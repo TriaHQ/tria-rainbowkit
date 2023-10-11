@@ -1,14 +1,14 @@
-import { Chain } from '../components/RainbowKitProvider/RainbowKitChainContext';
-import { WalletList } from './Wallet';
-import { connectorsForWallets } from './connectorsForWallets';
-import { braveWallet } from './walletConnectors/braveWallet/braveWallet';
-import { coinbaseWallet } from './walletConnectors/coinbaseWallet/coinbaseWallet';
-import { injectedWallet } from './walletConnectors/injectedWallet/injectedWallet';
-import { metaMaskWallet } from './walletConnectors/metaMaskWallet/metaMaskWallet';
+import { Chain } from "../components/RainbowKitProvider/RainbowKitChainContext";
+import { WalletList } from "./Wallet";
+import { connectorsForWallets } from "./connectorsForWallets";
+import { braveWallet } from "./walletConnectors/braveWallet/braveWallet";
+import { coinbaseWallet } from "./walletConnectors/coinbaseWallet/coinbaseWallet";
+import { injectedWallet } from "./walletConnectors/injectedWallet/injectedWallet";
+import { metaMaskWallet } from "./walletConnectors/metaMaskWallet/metaMaskWallet";
 // import { rainbowWallet } from './walletConnectors/rainbowWallet/rainbowWallet';
-import { safeWallet } from './walletConnectors/safeWallet/safeWallet';
-import { triaWallet } from './walletConnectors/triaWallet/triaWallet';
-import { walletConnectWallet } from './walletConnectors/walletConnectWallet/walletConnectWallet';
+import { safeWallet } from "./walletConnectors/safeWallet/safeWallet";
+import { triaWallet } from "./walletConnectors/triaWallet/triaWallet";
+import { walletConnectWallet } from "./walletConnectors/walletConnectWallet/walletConnectWallet";
 
 export const getDefaultWallets = ({
   appName,
@@ -24,16 +24,16 @@ export const getDefaultWallets = ({
 } => {
   const wallets: WalletList = [
     {
-      groupName: 'Popular',
+      groupName: "Popular",
       wallets: [
         injectedWallet({ chains }),
         safeWallet({ chains }),
         // rainbowWallet({ chains, projectId }),
-        triaWallet({ chains, projectId }),
         coinbaseWallet({ appName, chains }),
         metaMaskWallet({ chains, projectId }),
         walletConnectWallet({ chains, projectId }),
         braveWallet({ chains }),
+        triaWallet({ chains, projectId }),
       ],
     },
   ];

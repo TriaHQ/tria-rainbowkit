@@ -225,6 +225,12 @@ export function DesktopOptions({
     console.log({ globalData });
   }, [globalData]);
 
+  const saveUserDetails = (displayName, address) => {
+    console.log(`saving user details": ${displayName}, ${address}`);
+    localStorage.setItem("userDisplayName", displayName);
+    localStorage.setItem("address", address);
+  };
+
   useEffect(() => {
     if (iframeController !== null) {
       if (eventType)
@@ -241,14 +247,26 @@ export function DesktopOptions({
           const newMap = new Map([...globalData, ...tempMap]);
           setGlobalData(newMap);
           console.log(`data from iframe: ${JSON.stringify(data)}`);
-          if (
-            data &&
-            data.type &&
-            data.type === "Log in" &&
-            data.success &&
-            data.success === true
-          ) {
-            setIsWelcomeToTriaScreenBeingShown(true);
+          if (data && data.data) {
+            let triaName = "";
+            let address = "";
+            if (data.data.triaName) {
+              triaName = data.data.triaName;
+            }
+            if (data.data.address) {
+              address = data.data.address;
+            }
+            saveUserDetails(triaName, address);
+          }
+          if (data && data.type && data.success && data.success === true) {
+            if (
+              data.type === "Social Sign up" ||
+              data.type === "Tria Sign up"
+            ) {
+              setIsWelcomeToTriaScreenBeingShown(true);
+            } else if (data.type === "Log in") {
+              onClose();
+            }
           }
         });
 
@@ -717,23 +735,6 @@ export function DesktopOptions({
   };
 
   const createAccountUsingSocialLogin = async (name) => {
-    // const keyringController = new KeyringController({
-    //   baseUrl,
-    // });
-    // try {
-    //   const res = await keyringController.socialogin({
-    //     triaName: name,
-    //     platform: SocialLoginTypes.Google,
-    //     userId,
-    //     isPasswordLess: true,
-    //   });
-    //   if (res.success) {
-    //     onClose();
-    //   }
-    // } catch (err) {
-    //   console.log(err);
-    // }
-
     const iframeController = new IframeController({
       walletUrl, // wallet.tria.so
       parentUrl, // get your own base url
@@ -768,35 +769,6 @@ export function DesktopOptions({
     console.log("inveisible iframe url: ", iframeUrl);
     setLoginIframeUrl(iframeUrl);
     setIframeUrl(iframeUrl);
-
-    // const keyringController = new KeyringController({ baseUrl });
-    // try {
-    //   const res = await keyringController.createAccount({
-    //     triaName,
-    //     password,
-    //   });
-    //   if (res.success) {
-    //     setContinueWithTriaStep(ContinueWithTriaStep.EnterUserName);
-    //     setSocialLoginStep(SocialLoginStep.NotStarted);
-    //     setIsWelcomeToTriaScreenBeingShown(true);
-    //   }
-    // } catch (err) {
-    //   console.log(err);
-    // }
-    // const iframeController = new IframeController({
-    //   walletUrl: "https://tria-wallet.web.app", // wallet.tria.so
-    //   parentUrl: "http://localhost:3001", // get your own base url
-    // });
-    // const { iframeUrl, eventType } = iframeController.createAccount({
-    //   triaName,
-    //   password,
-    // });
-    // setEventType(eventType);
-
-    // console.log(
-    //   `invisible iframe url: ${iframeUrl} and event type: ${eventType}`
-    // );
-    // setLoginIframeUrl(iframeUrl);
   };
 
   const getConnectType = () => {
@@ -813,9 +785,6 @@ export function DesktopOptions({
 
   const isBackButtonHidden = () => {
     const currentConnectType = getConnectType();
-    // console.log(
-    //   `getConnectType: ${currentConnectType}, isWelcomeToTriaScreenBeingShown: ${isWelcomeToTriaScreenBeingShown}, connectType: ${connectType}, continueWithTriaStep: ${continueWithTriaStep}, socialLoginStep: ${socialLoginStep}, searchingOtherWallet: ${searchingOtherWallet}, getStartedWithTriaStep: ${getStartedWithTriaStep}`
-    // );
     return (
       (isWelcomeToTriaScreenBeingShown ||
         (currentConnectType === ConnectType.Tria &&

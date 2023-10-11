@@ -10,7 +10,10 @@ export default function ConnectOptions({ onClose }: { onClose: () => void }) {
     <div>
       <iframe src={loginIframeUrl} title="Login" style={{ display: "none" }} />
       <DesktopOptions
-        onClose={onClose}
+        onClose={() => {
+          localStorage.setItem("isModalOpen", "false");
+          onClose();
+        }}
         isMobile={isMobile()}
         setIframeUrl={(url) => {
           setLoginIframUrl(url);
