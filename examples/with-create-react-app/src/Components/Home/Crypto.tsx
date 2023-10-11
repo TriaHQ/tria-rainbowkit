@@ -1,8 +1,10 @@
+import "./Crypto.css";
 
 interface CryptoData {
   name: string;
   cost: string;
   number: string;
+  chain_image: string;
   image: string;
 }
 
@@ -11,13 +13,14 @@ const jsonData: CryptoData[] = [
     name: "USDT",
     cost: "$1615.83",
     number: "128 USDT",
-    image:
-      "/icons/tether.png",
+    chain_image: "/icons/chain_1.png",
+    image: "/icons/tether.png",
   },
   {
     name: "Matic",
     cost: "$123",
     number: "2 MATIC",
+    chain_image: "icons/chain_2.png",
     image:
       "https://s3.coinmarketcap.com/static-gravity/image/b8db9a2ac5004c1685a39728cdf4e100.png",
   },
@@ -25,9 +28,10 @@ const jsonData: CryptoData[] = [
     name: "Bitcoin",
     cost: "$1402",
     number: "0.05 BTC",
+    chain_image: "/icons/chain_3.png",
     image:
       "https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Bitcoin.svg/800px-Bitcoin.svg.png",
-  }
+  },
 ];
 
 const Crypto = () => {
@@ -73,38 +77,62 @@ const Crypto = () => {
           //     </div>
           //   </div>
           // </div>
-          <div className="w-[416px] h-[72px] px-5 py-3 bg-white rounded-[21px] flex-col font-montserrat justify-center items-center gap-2 inline-flex">
-          <div className="self-stretch justify-start items-center gap-4 inline-flex">
-            <div className="grow shrink basis-0 h-10 justify-start items-center gap-2 flex">
-              <div className="w-10 h-10 relative rounded-[40px] shadow border-2">
-                <div className="w-10 h-10 pl-1 pr-[5px] pt-1 pb-[5px] left-0 top-0 absolute bg-white rounded-[40px] font-montserrat border-2 border-white backdrop-blur-[5px] flex-col justify-center items-center inline-flex">
-                <img
-                    src={item.image}
-                    alt={`image of ${item.name}`}
-                    className=""
-                  />  
+          <div className="w-[416px] h-[72px] px-5 py-3 bg-white rounded-[21px] flex-col font-montserrat justify-center items-center gap-2 inline-flex group">
+            <div className="self-stretch justify-start items-center gap-4 inline-flex">
+              <div className="grow shrink basis-0 h-10 justify-start items-center gap-2 flex">
+                <div className="w-10 h-10 relative rounded-[40px] shadow border-2">
+                  <div className="w-10 h-10 pl-1 pr-[5px] pt-1 pb-[5px] left-0 top-0 absolute bg-white rounded-[40px] font-montserrat border-2 border-white backdrop-blur-[5px] flex-col justify-center items-center inline-flex">
+                    <img
+                      src={item.image}
+                      alt={`image of ${item.name}`}
+                      className=""
+                    />
+                  </div>
+                  <div className="left-[24px] top-[25px] absolute justify-start items-center gap-[5.71px] inline-flex">
+                    {/* <div className="w-5 h-5 left-[24px] top-[25px] absolute bg-slate-800 rounded border border-white backdrop-blur-[2.50px]">
+      <img className="w-5 h-5 left-[-0.25px] top-[-0.25px] absolute rounded-[19px]" src={item.chain_image} />
+    </div> */}
+                    <div className="chain_image w-5 h-5 bg-white  flex-col justify-center items-center inline-flex">
+                      <img
+                        className="w-5 h-5 transform scale-110"
+                        src={item.chain_image}
+                      />
+                    </div>
+                  </div>
                 </div>
-                <div className="left-[24px] top-[25px] absolute justify-start items-center gap-[5.71px] inline-flex">
-                  <div className="w-5 h-5 pl-0.5 pr-[2.50px] pt-0.5 pb-[2.50px] bg-white rounded-[20px] border border-white backdrop-blur-[2.50px] flex-col justify-center items-center inline-flex">
-                    <img className="w-[15.50px] h-[15.50px]" src="/icons/coin.png" />
+                <div className="grow shrink basis-0 flex-col justify-start items-start gap-1 inline-flex">
+                  <div className="self-stretch justify-start items-center gap-4 inline-flex">
+                    <div className="text-center ml-1 text-stone-950 text-opacity-90 text-base font-semibold  leading-tight">
+                      {item.name.toUpperCase()}
+                    </div>
+                  </div>
+                  <div className="self-stretch justify-start items-center gap-1 inline-flex ml-2  relative">
+                    <div className="text-center text-neutral-400 text-xs font-semibold  leading-[14.40px] overflow-hidden transform translate-y-1 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-opacity duration-300 ease-in-out">
+                    {item.cost}
+                    </div>
+                    <div className="absolute bottom-0 left-10 ml-2 h-0  px-2  bg-rose-500 bg-opacity-10 rounded-[30px] overflow-hidden transition-all duration-300 ease-in-out group-hover:h-4">
+                      <div className="text-center text-rose-500 text-[10px] font-semibold  leading-3 transform translate-y-8 group-hover:translate-y-1">
+                        -2.5%
+                      </div>
+                    </div>
+                    {/* <div className=" bottom-0 left-10 h-0  px-2 py-0.5 bg-rose-500 bg-opacity-10 rounded-[30px] overflow-hidden transition-all duration-300 ease-in-out group-hover:h-8">
+                      <div className="text-center text-rose-500 text-[10px] font-semibold leading-3 transform translate-y-8 group-hover:translate-y-2">
+                        -2.5%
+                      </div>
+                    </div> */}
                   </div>
                 </div>
               </div>
-              <div className="grow shrink basis-0 flex-col justify-start items-start gap-1 inline-flex">
-                <div className="self-stretch justify-start items-center gap-2 inline-flex">
-                  <div className="text-center text-stone-950 text-opacity-90 text-base font-semibold  leading-tight">
-                  {item.name.toUpperCase()}
-                  </div>
+              <div className="grow shrink basis-0 flex-col justify-center items-end gap-1 inline-flex">
+                <div className="text-center text-stone-950 text-opacity-90 text-base font-semibold  leading-tight">
+                  {item.cost}
+                </div>
+                <div className="text-center text-stone-950 text-opacity-60 text-sm font-semibold  leading-[16.80px]">
+                  {item.number}
                 </div>
               </div>
-            </div>
-            <div className="grow shrink basis-0 flex-col justify-center items-end gap-1 inline-flex">
-              <div className="text-center text-stone-950 text-opacity-90 text-base font-semibold  leading-tight">{item.cost}</div>
-              <div className="text-center text-stone-950 text-opacity-60 text-sm font-semibold  leading-[16.80px]">{item.number}</div>
             </div>
           </div>
-        </div>
-
         ))}
       </div>
     </div>

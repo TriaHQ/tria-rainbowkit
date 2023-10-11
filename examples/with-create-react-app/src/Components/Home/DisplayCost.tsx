@@ -33,12 +33,15 @@ const DisplayCost = () => {
             </div>
           </div>
         </div>
-        <div className="self-stretch py-3 justify-center items-center gap-4 inline-flex mb-12">
+        <div className="self-stretch py-3 justify-center items-center gap-4 inline-flex mb-12 "
+              >
           <div
             className="grow shrink basis-0 h-10 px-3 py-2 rounded-lg border border-zinc-300 bg-white border-opacity-60  justify-center items-center gap-3 flex cursor-pointer "
             onClick={() => navigate("/home/buycrypto")}
           >
-            <div className="text-center text-base font-semibold  leading-tight text-violet-600">
+            <div className="text-center text-base font-semibold  leading-tight text-violet-600 cursor-pointer"
+             onClick={() => navigate("/home/buycrypto")}
+            >
               Buy
             </div>
             <div className="w-[18px] h-[18px] relative">
