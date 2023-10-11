@@ -52,10 +52,7 @@ const WelcomeView = ({
     >
       <div style={{ display: "flex", flex: 0.5, flexDirection: "column" }}>
         {logo}
-        <Text
-          color="accentColor"
-          style={{ alignSelf: "center", marginTop: 24 }}
-        >
+        <Text color="modalText" style={{ alignSelf: "center", marginTop: 24 }}>
           {" "}
           Welcome to Tria{" "}
         </Text>
@@ -83,8 +80,8 @@ const WelcomeView = ({
               padding: 16,
             }}
           >
-            <Text color="accentColor"> Continue to Opensea!</Text>
-            <Text color="accentColor">
+            <Text color="modalText"> Continue to Opensea!</Text>
+            <Text color="modalText">
               Your @tria wallet is created and can be used on any device and
               blockchain.
             </Text>
@@ -109,7 +106,7 @@ const WelcomeView = ({
               padding: 16,
             }}
           >
-            <Text color="accentColor"> Continue to dApp </Text>
+            <Text color="modalText"> Continue to dApp </Text>
           </Box>
         )}
         {welcomeStep === WelcomeStep.EnhancedSecurity && (
@@ -124,7 +121,7 @@ const WelcomeView = ({
               padding: 16,
             }}
           >
-            <Text color="accentColor"> Enhanced Security </Text>
+            <Text color="modalText"> Enhanced Security </Text>
             <Text color="modalTextDim">
               {" "}
               Elevate your wallet protection with a strong password!{" "}
@@ -151,7 +148,7 @@ const WelcomeView = ({
               padding: 16,
             }}
           >
-            <Text color="accentColor"> Enhanced Security </Text>
+            <Text color="modalText"> Enhanced Security </Text>
           </Box>
         )}
       </div>

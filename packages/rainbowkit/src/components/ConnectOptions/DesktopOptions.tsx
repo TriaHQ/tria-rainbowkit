@@ -436,6 +436,52 @@ export function DesktopOptions({
     );
   }, []);
 
+  const triaIntroText = (
+    <div
+      style={{
+        width: 360,
+        height: 34,
+        marginTop: 8,
+        mixBlendMode: "difference",
+      }}
+    >
+      <span
+        style={{
+          color: "rgba(255, 255, 255, 0.50)",
+          fontSize: 14,
+          fontFamily: "Montserrat",
+          fontWeight: "400",
+          wordWrap: "break-word",
+        }}
+      >
+        Your{" "}
+      </span>
+      <span
+        style={{
+          color: "rgba(255, 255, 255, 0.90)",
+          fontSize: 14,
+          fontFamily: "Montserrat",
+          fontWeight: "700",
+          wordWrap: "break-word",
+        }}
+      >
+        @tria
+      </span>
+      <span
+        style={{
+          color: "rgba(255, 255, 255, 0.50)",
+          fontSize: 14,
+          fontFamily: "Montserrat",
+          fontWeight: "400",
+          wordWrap: "break-word",
+        }}
+      >
+        {" "}
+        is like Gmail, for Web3. Pay, receive and log-in to apps on any device,
+        and blockchain.
+      </span>
+    </div>
+  );
   let walletContent = null;
   let socialLoginContent = null;
   let getStartedWithTriaContent = null;
@@ -522,7 +568,7 @@ export function DesktopOptions({
                 }}
               >
                 <Text
-                  color="accentColor"
+                  color="modalText"
                   size="14"
                   weight="bold"
                   style={{
@@ -925,7 +971,7 @@ export function DesktopOptions({
 
   const searchWallet = (
     <BorderedContainer>
-      <Text color="accentColor">Connect a Wallet</Text>
+      <Text color="modalText">Connect a Wallet</Text>
       <input
         placeholder="Search wallet"
         style={{
@@ -973,7 +1019,7 @@ export function DesktopOptions({
                 setIsSearchingOtherWallet(true);
               }}
             >
-              <Text color="accentColor"> Dont have a wallet? </Text>
+              <Text color="modalText"> Dont have a wallet? </Text>
             </Box>
           </Fragment>
         )}
@@ -995,7 +1041,7 @@ export function DesktopOptions({
           <div style={{ display: "flex", flex: 0.5, flexDirection: "column" }}>
             {triaAndOpenSeaLogoIntersection}
             <Text
-              color="accentColor"
+              color="modalText"
               style={{ alignSelf: "center", marginTop: 24 }}
             >
               {" "}
@@ -1013,7 +1059,7 @@ export function DesktopOptions({
           >
             <BorderedContainer>
               <Text
-                color="accentColor"
+                color="modalText"
                 style={{
                   color: "rgba(51, 51, 51, 1.0)",
                   fontSize: 18,
@@ -1023,17 +1069,7 @@ export function DesktopOptions({
                 {" "}
                 Create your tria name{" "}
               </Text>
-              <Text
-                color="accentColor"
-                style={{
-                  color: "rgba(128, 128, 128, 1.0)",
-                  fontSize: 14,
-                  fontWeight: 400,
-                }}
-              >
-                Your @tria is like Gmail, for Web3. Pay, receive and log-in to
-                apps on any device, and blockchain.
-              </Text>
+              {triaIntroText}
               <LoginInput
                 ctaClicked={(input) => {
                   //perform password validations here
@@ -1088,7 +1124,7 @@ export function DesktopOptions({
           <div style={{ display: "flex", flex: 0.5, flexDirection: "column" }}>
             {triaAndOpenSeaLogoIntersection}
             <Text
-              color="accentColor"
+              color="modalText"
               style={{ alignSelf: "center", marginTop: 24 }}
             >
               {" "}
@@ -1105,12 +1141,8 @@ export function DesktopOptions({
             }}
           >
             <BorderedContainer>
-              <Text color="accentColor"> Create your tria name </Text>
-              <Text color="accentColor">
-                {" "}
-                Your @tria name is your shareable identity to get paid, log-in
-                to Web3 applications, or to get on every blockchain network.{" "}
-              </Text>
+              <Text color="modalText"> Create your tria name </Text>
+              {triaIntroText}
               <LoginInput
                 ctaClicked={(name) => {
                   console.log(`name from callback: ${name}`);

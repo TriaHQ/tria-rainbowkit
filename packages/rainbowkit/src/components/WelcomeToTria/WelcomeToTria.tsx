@@ -27,7 +27,7 @@ const WelcomeToTria = ({
       >
         {logo}
         <Text
-          color="accentColor"
+          color="modalText"
           style={{
             marginTop: 24,
             color: "rgba(16, 16, 16, 1.0)",
@@ -39,7 +39,7 @@ const WelcomeToTria = ({
           Welcome to Tria{" "}
         </Text>
         <Text
-          color="accentColor"
+          color="modalText"
           style={{
             color: "rgba(16, 16, 16, 1.0)",
             fontSize: 18,
@@ -70,7 +70,7 @@ const WelcomeToTria = ({
             }}
           >
             <Text
-              color="accentColor"
+              color="modalText"
               style={{
                 color: "rgba(25, 25, 25, 1.0)",
                 fontSize: 24,
@@ -82,7 +82,7 @@ const WelcomeToTria = ({
               {"Continue to "}{" "}
             </Text>
             <Text
-              color="accentColor"
+              color="modalText"
               style={{
                 color: "black",
                 fontSize: 24,
@@ -94,7 +94,7 @@ const WelcomeToTria = ({
             </Text>
           </div>
           <Text
-            color="accentColor"
+            color="modalText"
             style={{
               color: "rgba(128, 128, 128, 1.0)",
               fontSize: 14,

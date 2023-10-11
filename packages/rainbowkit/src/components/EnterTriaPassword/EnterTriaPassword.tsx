@@ -50,7 +50,7 @@ const EnterTriaPassword = ({
       </div>
 
       <BorderedContainer>
-        <Text color="accentColor"> {title} </Text>
+        <Text color="modalText"> {title} </Text>
         <LoginInput
           isPasswordType={isPasswordTypeForBoth}
           isCTAButton={false}

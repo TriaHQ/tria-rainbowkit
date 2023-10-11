@@ -19,10 +19,7 @@ const EnterTriaNameComponent = (
     >
       <div style={{ display: "flex", flex: 0.5, flexDirection: "column" }}>
         {logo}
-        <Text
-          color="accentColor"
-          style={{ alignSelf: "center", marginTop: 24 }}
-        >
+        <Text color="modalText" style={{ alignSelf: "center", marginTop: 24 }}>
           {" "}
           Creating your Tria account{" "}
         </Text>
@@ -37,11 +34,20 @@ const EnterTriaNameComponent = (
         }}
       >
         <BorderedContainer>
-          <Text color="accentColor"> Create your tria name </Text>
-          <Text color="accentColor">
-            Your @tria is like Gmail, for Web3. Pay, receive and log-in to apps
-            on any device, and blockchain.
-          </Text>
+          <Text color="modalText"> Create your tria name </Text>
+          <div style={{ width: 360, height: 34, mixBlendMode: "difference" }}>
+            <span style="color: 'rgba(255, 255, 255, 0.50)', fontSize: 14, fontFamily: 'Montserrat', fontWeight: '400', wordWrap: 'break-word'">
+              Your{" "}
+            </span>
+            <span style="color: 'rgba(255, 255, 255, 0.90)', fontSize: 14, fontFamily: 'Montserrat', fontWeight: '700', wordWrap: 'break-word'">
+              @tria
+            </span>
+            <span style="color: 'rgba(255, 255, 255, 0.50)', fontSize: 14, fontFamily: 'Montserrat', fontWeight: '400', wordWrap: 'break-word'">
+              {" "}
+              is like Gmail, for Web3. Pay, receive and log-in to apps on any
+              device, and blockchain.
+            </span>
+          </div>
           <LoginInput
             ctaClicked={(input) => {
               //perform password validations here

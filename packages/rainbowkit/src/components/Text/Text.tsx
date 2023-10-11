@@ -35,7 +35,7 @@ export const Text = React.forwardRef(
       as = "div",
       children,
       className,
-      color = "accentColor",
+      color = "modalText",
       display,
       font = "body",
       id,
