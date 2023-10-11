@@ -62,6 +62,7 @@ const EnterTriaPassword = ({
           }}
           ctaTitle={ctaTitle}
           placeholder={secondaryPlaceholder}
+          isLoadingButton={true}
         />
       </BorderedContainer>
     </div>

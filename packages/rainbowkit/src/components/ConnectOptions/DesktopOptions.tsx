@@ -7,6 +7,7 @@ import React, {
   Fragment,
   useContext,
   useEffect,
+  useMemo,
   useState,
   useCallback,
 } from "react";
@@ -49,6 +50,8 @@ import XIcon from "../SVG/XIcon";
 import PoweredByTriaVector from "../SVG/PoweredByTriaVector";
 import { BorderedContainer } from "../BorderedContainer/BorderedContainer";
 import { BackButton } from "../BackButton/BackButton";
+import logo from "./OpenSea.png";
+import triaLogo from "../../wallets/walletConnectors/triaWallet/triaWallet.png";
 
 import {
   ConnectDetail,
@@ -364,51 +367,49 @@ export function DesktopOptions({
   );
 
   const imageSize = 96;
-  const logo = async () => (await import("./Opensea.png")).default;
-  const triaLogo = async () =>
-    (await import("../../wallets/walletConnectors/triaWallet/triaWallet.png"))
-      .default;
   const instagramLogo = async () =>
     (await import("../Icons/instagram_icon.png")).default;
   const animationTiming = 300;
   const animationDelay = 100;
   const loginOptionFixedHeight = 26;
 
-  const triaAndOpenSeaLogoIntersection = (
-    <div
-      style={{
-        alignItems: "center",
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "center",
-        marginTop: 28,
-        marginRight: 36,
-      }}
-    >
+  const triaAndOpenSeaLogoIntersection = useMemo(() => {
+    return (
       <div
         style={{
-          borderRadius: "58px",
-          borderStyle: "solid",
-          borderWidth: "0px",
-          overflow: "hidden",
-          marginTop: 10,
-          marginLeft: 10,
-          zIndex: 2,
+          alignItems: "center",
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center",
+          marginTop: 28,
+          marginRight: 36,
         }}
       >
-        {" "}
-        <AsyncImage
-          height={imageSize + 20}
-          src={triaLogo}
-          width={imageSize + 20}
-        />{" "}
+        <div
+          style={{
+            borderRadius: "58px",
+            borderStyle: "solid",
+            borderWidth: "0px",
+            overflow: "hidden",
+            marginTop: 10,
+            marginLeft: 10,
+            zIndex: 2,
+          }}
+        >
+          {" "}
+          <AsyncImage
+            height={imageSize + 20}
+            src={triaLogo}
+            width={imageSize + 20}
+          />{" "}
+        </div>
+        <div style={{ marginRight: -120, position: "absolute" }}>
+          {" "}
+          <AsyncImage height={imageSize} src={logo} width={imageSize} />{" "}
+        </div>
       </div>
-      <div style={{ marginRight: -120, position: "absolute" }}>
-        {" "}
-        <AsyncImage height={imageSize} src={logo} width={imageSize} />{" "}
-      </div>
-    </div>
-  );
+    );
+  }, []);
 
   let walletContent = null;
   let socialLoginContent = null;
@@ -483,6 +484,7 @@ export function DesktopOptions({
             <div>
               <LoginInput
                 ctaClicked={triaNameEntered}
+                isLoadingButton={false}
                 placeholder="@tria name"
               />
               <Box

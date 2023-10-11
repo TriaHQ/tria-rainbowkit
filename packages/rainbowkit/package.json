@@ -52,20 +52,20 @@
     "@testing-library/user-event": "^14.4.3",
     "@tria-sdk/connect": "^1.0.6",
     "@tria-sdk/web": "^3.5.13",
-    "axios": "^1.5.1",
-    "react-animate-height": "^3.2.2",
     "@types/qrcode": "^1.4.2",
     "@vanilla-extract/css-utils": "0.1.2",
     "@vanilla-extract/private": "^1.0.3",
+    "@wagmi/core": "~1.4.2",
     "autoprefixer": "^10.4.15",
+    "axios": "^1.5.1",
     "jsdom": "^22.1.0",
     "nock": "^13.2.4",
     "postcss": "^8.4.4",
     "react": "^18.2.0",
+    "react-animate-height": "^3.2.2",
     "viem": "~1.12.2",
     "vitest": "^0.33.0",
-    "wagmi": "~1.4.2",
-    "@wagmi/core": "~1.4.2"
+    "wagmi": "~1.4.2"
   },
   "dependencies": {
     "@vanilla-extract/css": "1.9.1",
@@ -73,6 +73,7 @@
     "@vanilla-extract/sprinkles": "1.5.0",
     "clsx": "1.1.1",
     "qrcode": "1.5.0",
+    "react-loader-spinner": "^5.4.5",
     "react-remove-scroll": "2.5.4"
   },
   "repository": {

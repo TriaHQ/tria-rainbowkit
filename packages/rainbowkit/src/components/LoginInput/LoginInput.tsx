@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { ThreeDots } from "react-loader-spinner";
 
 const LoginInput = ({
   ctaClicked = (f) => f,
@@ -7,8 +8,11 @@ const LoginInput = ({
   isEditable = true,
   placeholder = "",
   value = "",
+  isLoadingButton = true,
 }) => {
   const [input, setInput] = useState(value);
+  const [buttonClicked, setIsButtonClicked] = useState(false);
+
   return (
     <div
       style={{
@@ -35,10 +39,13 @@ const LoginInput = ({
         }}
         value={input}
       />
-      {isCTAButton && (
+      {isCTAButton && !buttonClicked && (
         <button
           color="white"
-          onClick={() => ctaClicked(input)}
+          onClick={() => {
+            setIsButtonClicked(true);
+            ctaClicked(input);
+          }}
           style={{
             background: "black",
             borderRadius: "20px",
@@ -52,6 +59,26 @@ const LoginInput = ({
         >
           {ctaTitle}
         </button>
+      )}
+      {isCTAButton && buttonClicked && (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            background: "black",
+            height: 40,
+            width: 99,
+            borderRadius: 20,
+          }}
+        >
+          <ThreeDots
+            height="20"
+            width="40"
+            color="white"
+            ariaLabel="three-dots-loading"
+          />
+        </div>
       )}
     </div>
   );
