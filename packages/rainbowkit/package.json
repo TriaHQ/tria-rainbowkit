@@ -63,6 +63,7 @@
     "postcss": "^8.4.4",
     "react": "^18.2.0",
     "react-animate-height": "^3.2.2",
+    "react-app-rewired": "^2.2.1",
     "viem": "~1.12.2",
     "vitest": "^0.33.0",
     "wagmi": "~1.4.2"
