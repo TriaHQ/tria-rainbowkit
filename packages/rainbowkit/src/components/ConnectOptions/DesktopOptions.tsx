@@ -49,7 +49,7 @@ import XIcon from "../SVG/XIcon";
 import PoweredByTriaVector from "../SVG/PoweredByTriaVector";
 import { BorderedContainer } from "../BorderedContainer/BorderedContainer";
 import { BackButton } from "../BackButton/BackButton";
-import logo from "./OpenSea.png";
+import logo from "src/components/ConnectOptions/Opensea.png";
 import triaLogo from "../../wallets/walletConnectors/triaWallet/triaWallet.png";
 
 import {
