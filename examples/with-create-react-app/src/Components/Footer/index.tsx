@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useLocation  } from "react-router-dom";
 
 interface IconData {
   name: string;
@@ -33,6 +33,9 @@ const Footer: React.FC = () => {
   const [selectedIcon, setSelectedIcon] = useState<string | null>(iconData[0].name);
   const navigate = useNavigate();
 
+  const location = useLocation();
+  const currentRoute = location.pathname;
+
 
   const handleIconClick = (icon: IconData) => {
     setSelectedIcon(icon.name);
@@ -40,8 +43,8 @@ const Footer: React.FC = () => {
     navigate(icon.route);
   };
 
-  const isTextVisible = (iconName: string) => {
-    return iconName === selectedIcon ? "block" : "none";
+  const isTextVisible = (route: string) => {
+    return route === currentRoute ? "block" : "none";
   };
 
   return (
@@ -51,7 +54,7 @@ const Footer: React.FC = () => {
           {iconData.map((item) => (
             <div
               key={item.name}
-              className={`px-3 py-2  rounded-[25px] flex justify-center items-center cursor-pointer ${item.name == selectedIcon?"bg-black":"bg-slate-50 "}`}
+              className={`px-3 py-2  rounded-[25px] flex justify-center items-center cursor-pointer ${item.route == currentRoute?"bg-black":"bg-slate-50 "}`}
               onClick={() => handleIconClick(item)}
             >
               <div className="flex-col justify-center items-center gap-1.5 inline-flex">
@@ -62,7 +65,7 @@ const Footer: React.FC = () => {
              
               <div
                 className="text-center pl-2 text-white text-m font-semibold font-montserrat leading-[10px] "
-                style={{ display: isTextVisible(item.name) }}
+                style={{ display: isTextVisible(item.route) }}
               >
                 {item.text}
               </div>

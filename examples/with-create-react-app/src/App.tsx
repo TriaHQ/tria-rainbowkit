@@ -6,13 +6,28 @@ import TransactionDetails from "./pages/TransactionDetailsPage";
 import Landing from "./pages/Landing";
 import "./pages/Landing.css";
 import BuyCrypto from "./Components/Home/BuyCrypto";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import Footer from "./Components/Footer";
 import HomeBackgroundVector from "./Components/UI/HomeBackgroundVector";
 import "./index.css";
+function RedirectToHome() {
+  const navigate = useNavigate();
+
+  // Redirect to the home page
+  // navigate("/home");
+
+  // You can render something here if needed, but the navigation will happen immediately
+  return null;
+}
 const App = () => {
   const [showWalletPopup, setShowWalletPopup] = useState(false);
   const [showWalletButton, setShowWalletButton] = useState(false);
+
+  const navigate = useNavigate();
+
+  // useEffect(() => {
+  //   navigate("/home");
+  // }, []);
 
   useEffect(() => {
     if (!showWalletButton) {
@@ -23,7 +38,6 @@ const App = () => {
   const loggedInStatusChanged = (isLoggedIn: boolean) => {
     setShowWalletButton(isLoggedIn);
   };
-
   return (
     <>
       <div className="bg flex  justify-between">
@@ -66,7 +80,7 @@ const App = () => {
                   <div className="max-w-xs mx-auto sm:max-w-none sm:flex sm:justify-center animate__animated animate__fadeIn animate__delay-1s">
                     <div className="animate__animated animate__fadeIn animate__delay-1s">
                       <a
-                        className="btn text-white bodered font-sans text-2xl rounded-lg text-black mt-2 py-4 pointer-cursor px-8 bg-blue-800 w-full mb-4 sm:w-auto sm:mb-0"
+                        className="btn text-white bodered font-sans text-2xl rounded-lg text-black mt-2  pointer-cursor bg-blue-800 w-full mb-4 sm:w-auto sm:mb-0"
                         href="#0"
                       >
                         <div className="fixed top-4 right-4">
@@ -97,6 +111,7 @@ const App = () => {
         <div className="mb-4 mr-2 fixed right-2 bottom-24">
           {showWalletPopup && showWalletButton && (
             <Routes>
+              <Route element={<RedirectToHome />} />
               <Route path="/" element={<Home />} />
               <Route path="/home" element={<Home />} />
               <Route path="/nfts" element={<Home />} />
@@ -119,10 +134,14 @@ const App = () => {
               }}
             >
               {/* <img className="w-[80px] justify-end rounded-full " src="/images/wallet.jpeg" alt="wallet" /> */}
-              <div className="w-[58.98px] h-[58.98px] relative bg-gradient-to-r from-violet-400 to-indigo-500 rounded-[100px] shadow border border-violet-400 backdrop-blur-2">
-                <div className="w-7 h-7 left-[15.49px] top-[15.49px] absolute rounded-md">
+              <div className="relative ">
+                <div className="left-[15.49px] top-[15.49px]">
                   {" "}
-                  <img src="/images/wallet.svg" alt="wallet" />
+                  <img
+                    className="wallet_icon "
+                    src="/images/wallet.png"
+                    alt="wallet"
+                  />
                 </div>
               </div>
               {/* <div className="w-16 h-16 relative  rounded-[100px] shadow">

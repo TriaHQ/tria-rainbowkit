@@ -10,7 +10,7 @@ function Home() {
     <>
       <div className="flex items-center justify-center relative   ">
         <div
-          style={{ marginLeft: "-150px", marginTop: "10px" }}
+          style={{ marginLeft: "-150px"  }}
           className="absolute top-0 "
         >
           {" "}
