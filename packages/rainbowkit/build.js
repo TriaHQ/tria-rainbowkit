@@ -1,13 +1,13 @@
-import { vanillaExtractPlugin } from '@vanilla-extract/esbuild-plugin';
-import autoprefixer from 'autoprefixer';
-import * as esbuild from 'esbuild';
-import { replace } from 'esbuild-plugin-replace';
-import postcss from 'postcss';
-import prefixSelector from 'postcss-prefix-selector';
-import readdir from 'recursive-readdir-files';
+import { vanillaExtractPlugin } from "@vanilla-extract/esbuild-plugin";
+import autoprefixer from "autoprefixer";
+import * as esbuild from "esbuild";
+import { replace } from "esbuild-plugin-replace";
+import postcss from "postcss";
+import prefixSelector from "postcss-prefix-selector";
+import readdir from "recursive-readdir-files";
 
-const isWatching = process.argv.includes('--watch');
-const isCssMinified = process.env.MINIFY_CSS === 'true';
+const isWatching = process.argv.includes("--watch");
+const isCssMinified = true;
 
 const getAllEntryPoints = async (rootPath) =>
   (await readdir(rootPath))
@@ -15,8 +15,8 @@ const getAllEntryPoints = async (rootPath) =>
     .filter(
       (path) =>
         /\.tsx?$/.test(path) &&
-        !path.endsWith('.css.ts') &&
-        !path.includes('.test.'),
+        !path.endsWith(".css.ts") &&
+        !path.includes(".test.")
     );
 
 const baseBuildConfig = {
@@ -24,12 +24,12 @@ const baseBuildConfig = {
     js: '"use client";', // Required for Next 13 App Router
   },
   bundle: true,
-  format: 'esm',
+  format: "esm",
   loader: {
-    '.png': 'dataurl',
-    '.svg': 'dataurl',
+    ".png": "dataurl",
+    ".svg": "dataurl",
   },
-  platform: 'browser',
+  platform: "browser",
   plugins: [
     replace({
       include: /src\/components\/RainbowKitProvider\/useFingerprint.ts$/,
@@ -38,11 +38,11 @@ const baseBuildConfig = {
       },
     }),
     vanillaExtractPlugin({
-      identifiers: isCssMinified ? 'short' : 'debug',
+      identifiers: isCssMinified ? "short" : "debug",
       processCss: async (css) => {
         const result = await postcss([
           autoprefixer,
-          prefixSelector({ prefix: '[data-rk]' }),
+          prefixSelector({ prefix: "[data-rk]" }),
         ]).process(css, {
           from: undefined, // suppress source map warning
         });
@@ -51,7 +51,7 @@ const baseBuildConfig = {
       },
     }),
     {
-      name: 'make-all-packages-external',
+      name: "make-all-packages-external",
       setup(build) {
         const filter = /^[^./]|^\.[^./]|^\.\.[^/]/; // Must not start with "/" or "./" or "../"
         build.onResolve({ filter }, (args) => ({
@@ -67,21 +67,21 @@ const baseBuildConfig = {
 const mainBuild = esbuild.build({
   ...baseBuildConfig,
   entryPoints: [
-    './src/index.ts',
+    "./src/index.ts",
 
     // esbuild needs these additional entry points in order to support tree shaking while also supporting CSS
-    ...(await getAllEntryPoints('src/themes')),
+    ...(await getAllEntryPoints("src/themes")),
 
     // The build output is cleaner when bundling all components into a single chunk
     // This is done assuming that consumers use most of the components in the package, which is a reasonable assumption for now
-    './src/components/index.ts',
+    "./src/components/index.ts",
   ],
-  outdir: 'dist',
+  outdir: "dist",
   watch: isWatching
     ? {
         onRebuild(error, result) {
-          if (error) console.error('main build failed:', error);
-          else console.log('main build succeeded:', result);
+          if (error) console.error("main build failed:", error);
+          else console.log("main build succeeded:", result);
         },
       }
     : undefined,
@@ -89,13 +89,13 @@ const mainBuild = esbuild.build({
 
 const walletsBuild = esbuild.build({
   ...baseBuildConfig,
-  entryPoints: await getAllEntryPoints('src/wallets/walletConnectors'),
-  outdir: 'dist/wallets/walletConnectors',
+  entryPoints: await getAllEntryPoints("src/wallets/walletConnectors"),
+  outdir: "dist/wallets/walletConnectors",
   watch: isWatching
     ? {
         onRebuild(error, result) {
-          if (error) console.error('wallets build failed:', error);
-          else console.log('wallets build succeeded:', result);
+          if (error) console.error("wallets build failed:", error);
+          else console.log("wallets build succeeded:", result);
         },
       }
     : undefined,
@@ -104,7 +104,7 @@ const walletsBuild = esbuild.build({
 Promise.all([mainBuild, walletsBuild])
   .then(() => {
     if (isWatching) {
-      console.log('watching...');
+      console.log("watching...");
     }
   })
   .catch(() => process.exit(1));
