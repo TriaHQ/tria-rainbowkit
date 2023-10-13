@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { ConnectButton } from "@rainbow-me/rainbowkit/dist";
 import Home from "./pages/Home";
 import TransactionListPage from "./pages/TransactionListPage";
 import TransactionDetails from "./pages/TransactionDetailsPage";
