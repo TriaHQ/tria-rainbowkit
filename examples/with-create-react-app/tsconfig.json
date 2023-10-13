@@ -16,6 +16,13 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
+  "baseUrl": ".",
+  "paths": {
+    "@rainbow-me/rainbowkit": [
+      "../../packages/rainbowkit/src",
+      "../../packages/rainbowkit/assets.d.ts"
+    ]
+  },
   "include": [
     "src",
     "../../packages/rainbowkit/src",
