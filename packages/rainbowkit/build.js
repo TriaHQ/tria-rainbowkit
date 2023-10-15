@@ -50,16 +50,16 @@ const baseBuildConfig = {
         return result.css;
       },
     }),
-    {
-      name: "make-all-packages-external",
-      setup(build) {
-        const filter = /^[^./]|^\.[^./]|^\.\.[^/]/; // Must not start with "/" or "./" or "../"
-        build.onResolve({ filter }, (args) => ({
-          external: true,
-          path: args.path,
-        }));
-      },
-    },
+    // {
+    //   name: "make-all-packages-external",
+    //   setup(build) {
+    //     const filter = /^[^./]|^\.[^./]|^\.\.[^/]/; // Must not start with "/" or "./" or "../"
+    //     build.onResolve({ filter }, (args) => ({
+    //       external: true,
+    //       path: args.path,
+    //     }));
+    //   },
+    // },
   ],
   splitting: true, // Required for tree shaking
 };
