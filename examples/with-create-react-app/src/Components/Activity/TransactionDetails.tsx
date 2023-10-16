@@ -2,7 +2,7 @@ import React from "react";
 
 function TransactionDetails() {
   return (
-    <div className="w-[455px] h-auto p-4 flex-col justify-center items-center gap-3 inline-flex font-Montserrat]">
+    <div className="w-[455px] h-100% p-4 flex-col justify-center items-center gap-3 inline-flex font-Montserrat]">
       <div className="w-[420px] grow shrink basis-0 flex-col justify-start items-center flex">
         <div className="self-stretch h-[75px] px-5  rounded-[21px] justify-center items-center gap-2 inline-flex">
           <div className="w-[18px] h-[18px] relative">

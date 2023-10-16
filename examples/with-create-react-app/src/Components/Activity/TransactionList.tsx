@@ -60,11 +60,11 @@ const TransactionList = () => {
   const navigate = useNavigate();
   return (
     <>
-      <div className="w-[416px] flex-col justify-start items-center font-Montserrat flex h-860px">
-        <div className="self-stretch h-[567px]  flex-col justify-center items-center gap-2 flex">
-          <div className="self-stretch h-[64px] px-5 rounded-2xl flex-col justify-center items-center gap-2 flex">
+      <div className="w-[416px] pb-9 flex-col justify-start items-center font-Montserrat flex  ">
+        <div className="self-stretch  flex-col justify-center items-center gap-2 flex">
+          <div className="self-stretch  px-5 rounded-2xl flex-col justify-center items-center gap-2 flex">
             <div className="self-stretch justify-start items-center gap-4 inline-flex">
-              <div className="grow shrink basis-0 h-10 justify-start items-center gap-2 flex">
+              <div className="grow shrink basis-0  justify-start items-center gap-2 flex">
                 <div className="text-center text-xl font-semibold  leading-normal">
                   Activities
                 </div>

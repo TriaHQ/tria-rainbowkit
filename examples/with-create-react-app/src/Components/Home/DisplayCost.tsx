@@ -4,7 +4,7 @@ import "./BuyCrypto.css"
 const DisplayCost = () => {
   const navigate = useNavigate();
   return (
-    <div className="card self-stretch h-[179px] mb  rounded-2xl border-2  border-opacity-30 flex-col justify-center items-center gap-3 flex font-montserrat text-white ">
+    <div className="card self-stretch h-[230px] mb  rounded-2xl border-2  border-opacity-30 flex-col justify-center items-center gap-3 flex font-montserrat text-white ">
       <div className="self-stretch h-[179px] px-5 py-4 rounded-2xl flex-col justify-center items-start gap-4 flex ">
         <div className="flex items-center mt-16">
           <div className="mr-4">Assets up</div>

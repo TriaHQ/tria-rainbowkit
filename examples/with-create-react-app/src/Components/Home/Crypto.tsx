@@ -37,7 +37,7 @@ const jsonData: CryptoData[] = [
 
 const Crypto = () => {
   return (
-    <div className="self-stretch h-[390px] rounded-2xl flex-col justify-center items-center gap-2 flex">
+    <div className="self-stretch h-[370px] rounded-2xl flex-col justify-center items-center gap-2 flex">
       <div className="self-stretch h-[67px] px-5 py-3 rounded-2xl flex-col justify-center items-center gap-2 flex">
         <div className="self-stretch justify-start items-center gap-4 inline-flex">
           <div className="grow shrink basis-0 h-6 justify-start items-center gap-2 flex">
@@ -48,7 +48,7 @@ const Crypto = () => {
           <div className="grow shrink basis-0 flex-col justify-center items-end gap-1 inline-flex" />
         </div>
       </div>
-      <div className="self-stretch h-[500px] scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-stone-100 overflow-y-auto">
+      <div className="self-stretch scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-stone-100 overflow-y-auto">
         {jsonData.map((item, index) => (
           // <div className="self-stretch h-[72px] px-5 py-3 bg-stone-50 rounded-[21px] flex-col justify-center items-center gap-2 flex">
           //   <div className="self-stretch justify-start items-center gap-4 inline-flex">

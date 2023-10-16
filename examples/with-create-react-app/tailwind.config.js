@@ -8,6 +8,9 @@ module.exports = {
       backgroundColor: {
         'custom-blue': '#547FEF',
       },
+      borderColor:{
+        'blue':'#9F8BFF',
+      },
     },
   },
   plugins: [

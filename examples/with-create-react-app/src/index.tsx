@@ -52,11 +52,13 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
+    <BrowserRouter>
     {/* <WagmiConfig config={wagmiConfig}> */}
       {/* <RainbowKitProvider chains={chains}> */}
         <App />
       {/* </RainbowKitProvider> */}
     {/* </WagmiConfig> */}
+    </BrowserRouter>
   </React.StrictMode>
 );
 
