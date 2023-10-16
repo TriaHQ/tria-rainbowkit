@@ -5,9 +5,9 @@ import reportWebVitals from "./reportWebVitals";
 import "./index.css";
 import { BrowserRouter} from "react-router-dom";
 
-// import "@rainbow-me/rainbowkit/styles.css";
-// import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
-import { configureChains, createConfig, WagmiConfig } from "wagmi";
+// import '@rainbow-me/rainbowkit/styles.css';
+// import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit';
+import { configureChains, createConfig, WagmiConfig } from 'wagmi';
 import {
   mainnet,
   polygon,
@@ -34,8 +34,8 @@ import App from "./App";
 // );
 
 // const { connectors } = getDefaultWallets({
-//   appName: "RainbowKit demo",
-//   projectId: "YOUR_PROJECT_ID",
+//   appName: 'RainbowKit demo',
+//   projectId: 'YOUR_PROJECT_ID',
 //   chains,
 // });
 
@@ -51,13 +51,13 @@ const root = ReactDOM.createRoot(
 );
 
 root.render(
-  // <WagmiConfig config={wagmiConfig}>
-  //   <RainbowKitProvider chains={chains}>
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>
-  //   </RainbowKitProvider>
-  // </WagmiConfig>
+  <React.StrictMode>
+    {/* <WagmiConfig config={wagmiConfig}> */}
+      {/* <RainbowKitProvider chains={chains}> */}
+        <App />
+      {/* </RainbowKitProvider> */}
+    {/* </WagmiConfig> */}
+  </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function
