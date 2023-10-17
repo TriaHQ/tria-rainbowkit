@@ -1,10 +1,15 @@
 import "../index.css";
 import Nav from "../Components/Home/Nav";
+import Header from "../Components/Activity/Header";
 import DisplayCost from "../Components/Home/DisplayCost";
 import Crypto from "../Components/Home/Crypto";
-import TransactionList from "../Components/Activity/TransactionList";
+import TransactionListHistory from "../Components/Activity/TransactionListHistory";
+import TransactionListRecent from "../Components/Activity/TransactionListRecent";
+import TransactionListUsers from "../Components/Activity/TransactionListUsers";
+import TransactionTabs from "../Components/Activity/TransactionTabs";
 import Footer from "../Components/Footer/index";
 import HomeBackgroundVector from "../Components/UI/HomeBackgroundVector";
+import { useState } from "react";
 
 interface CryptoData {
   name: string;
@@ -31,6 +36,12 @@ const jsonData: CryptoData[] = [
 ];
 
 function TransactionListPage() {
+  const [activeTab, setActiveTab] = useState('history'); // Default active tab
+
+  const handleTabClick = (tab: string) => {
+    setActiveTab(tab);
+  };
+
   return (
     <>
       <div className="flex items-center justify-center relative  ">
@@ -42,10 +53,15 @@ function TransactionListPage() {
           <HomeBackgroundVector />
         </div>
 
-        <div className="w-[100%] h-[840px] p-4 flex-col justify-center items-center gap-3 inline-flex bg-white rounded-xl font-montserrat">
+        <div className="w-[100%] h-[840px] p-4 flex-col  items-center gap-3 inline-flex bg-white rounded-xl font-montserrat">
           <div className="w-[100%] flex-col justify-start items-center flex"></div>
           <Nav />
-          <TransactionList />
+          <Header />
+          
+          <TransactionTabs handleTabClick={handleTabClick} activeTab={activeTab} />
+        {activeTab === 'history' && <TransactionListHistory />}
+        {activeTab === 'users' && <TransactionListUsers />}
+        {activeTab === 'recent' && <TransactionListRecent />}
           <Footer />
         </div>
       

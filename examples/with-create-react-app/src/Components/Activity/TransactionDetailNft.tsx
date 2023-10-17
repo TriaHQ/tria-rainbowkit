@@ -1,13 +1,23 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 function TransactionDetailNft() {
+
+  let navigate = useNavigate();
+    function HandleClick() {
+      navigate("/activity/TransactionList");
+    }
+
   return (
 <div className="w-[448px] h-[840px] p-4 flex-col justify-between items-center inline-flex">
   <div className="self-stretch h-[643.25px] flex-col justify-start items-center flex">
     <div className="self-stretch h-[72px] px-5 py-3 rounded-[21px] justify-center items-center gap-2 inline-flex">
       <div className="w-[18px] h-[18px] justify-center items-center flex">
         <div className="w-[18px] h-[18px] relative">
-        <img src="/icons/arrow-left.svg"></img>
+          
+        <button type="button" onClick={HandleClick}>
+          <img src="/icons/arrow-left.svg"></img>
+    </button>
         </div>
       </div>
       <div className="grow shrink basis-0 h-9 justify-center items-center gap-4 flex">
@@ -56,7 +66,7 @@ function TransactionDetailNft() {
         </div>
         <div className="grow shrink basis-0 flex-col justify-center items-start inline-flex">
           <div className="self-stretch py-2 justify-start items-center gap-3 inline-flex">
-            <img className="w-[50px] h-[50px] rounded-[50px]" src="/icons/profile.png" />
+            <img className="w-[50px] h-[50px] rounded-[50px]" src="/icons/profile2.svg" />
             <div className="px-2 justify-start items-center flex">
               <div className="text-center text-zinc-500 text-sm font-semibold font-['Montserrat'] leading-[16.80px]">avi@tria</div>
             </div>
@@ -69,7 +79,7 @@ function TransactionDetailNft() {
             </div>
           </div>
           <div className="self-stretch py-2 justify-start items-center gap-3 inline-flex">
-            <img className="w-[50px] h-[50px] rounded-[50px]" src="/icons/user.png" />
+            <img className="w-[50px] h-[50px] rounded-[50px]" src="/icons/user2.svg" />
             <div className="px-2 justify-start items-center flex">
               <div className="text-center text-zinc-500 text-sm font-semibold font-['Montserrat'] leading-[16.80px]">thekaypo@tria</div>
             </div>

@@ -1,5 +1,6 @@
 // import { ConnectButton } from "@rainbow-me/rainbowkit";
 import Home from "./pages/Home";
+import Nft from "./pages/Nft";
 import TransactionListPage from "./pages/TransactionListPage";
 import TransactionDetails from "./pages/TransactionDetailsPage";
 import Landing from "./pages/Landing";
@@ -90,7 +91,7 @@ const App = () => {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/home" element={<Home />} />
-              <Route path="/nfts" element={<Home />} />
+              <Route path="/nfts" element={<Nft />} />
               <Route path="/home/buycrypto" element={<BuyCrypto />} />
               <Route
                 path="/activity/TransactionList"
