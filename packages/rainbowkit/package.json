@@ -52,6 +52,7 @@
     "@testing-library/user-event": "^14.4.3",
     "@tria-sdk/connect": "^1.0.9",
     "@tria-sdk/web": "^3.5.16",
+    "@tria-sdk/core": "^3.8.1",
     "@types/qrcode": "^1.4.2",
     "@vanilla-extract/css-utils": "0.1.2",
     "@vanilla-extract/private": "^1.0.3",

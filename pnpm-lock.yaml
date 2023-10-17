@@ -125,6 +125,9 @@ importers:
       '@tria-sdk/connect':
         specifier: ^1.0.6
         version: 1.0.6
+      '@tria-sdk/core':
+        specifier: ^3.8.1
+        version: 3.8.2
       '@tria-sdk/web':
         specifier: ^3.5.13
         version: 3.5.13(@types/react@18.2.21)(lokijs@1.5.12)(react@18.2.0)(typescript@5.0.4)
@@ -456,6 +459,9 @@ importers:
       '@tria-sdk/connect':
         specifier: ^1.0.9
         version: 1.0.9
+      '@tria-sdk/core':
+        specifier: ^3.8.1
+        version: 3.8.2
       '@tria-sdk/web':
         specifier: ^3.5.16
         version: 3.5.16(@types/react@18.2.21)(lokijs@1.5.12)(react@18.2.0)(typescript@5.0.4)
@@ -8768,6 +8774,13 @@ packages:
   /@tria-sdk/connect@1.0.9:
     resolution: {integrity: sha512-OnUwaOfiGZFI0PRN9XzsaPt0wift2pj81r36njVRjQLAMf0BUm5UobTivcP0jzfQv0UKglcxCxrxQ2ZFB8Ch/A==}
     dev: true
+
+  /@tria-sdk/core@3.8.2:
+    resolution: {integrity: sha512-n/pID+zwLfpcOiso2h+lcY2kimKvCZHSrT6WHCkhMQLy/r5oEKiOP0vAb69c5NI7yyV2qcqXHOVLZgaALOjsng==}
+    dependencies:
+      axios: 1.5.1
+    transitivePeerDependencies:
+      - debug
 
   /@tria-sdk/web@3.5.13(@types/react@18.2.21)(lokijs@1.5.12)(react@18.2.0)(typescript@5.0.4):
     resolution: {integrity: sha512-WtrWgAnvd9Y9Xw+fASJyh+5aArxYcO+5CHxj+oEjglXec2w/+vn7hLaBeGHEr4vy/DHdbJWKlh0tX2XrLTbuVA==}

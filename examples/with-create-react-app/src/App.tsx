@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { UserController } from "@tria-sdk/core";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import Home from "./pages/Home";
 import TransactionListPage from "./pages/TransactionListPage";
@@ -23,8 +24,18 @@ const App = () => {
   const [showWalletPopup, setShowWalletPopup] = useState(false);
   const [showWalletButton, setShowWalletButton] = useState(false);
 
+  const baseUrl = "https://staging.tria.so";
   const navigate = useNavigate();
-
+  useEffect(() => {
+    const localUserController = new UserController(baseUrl, "dev@tria");
+    let balance: number = 0;
+    localUserController
+      .getTotalBalance()
+      .then((res) => console.log(`app tsx : ${JSON.stringify(res)}`));
+    // console.log(
+    //   `user controller balance: ${localUserController.getTotalBalance()}`
+    // );
+  }, []);
   // useEffect(() => {
   //   navigate("/home");
   // }, []);

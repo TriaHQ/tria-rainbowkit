@@ -1,6 +1,7 @@
 import axios from "axios";
 import { KeyringController } from "@tria-sdk/web";
 import { IframeController } from "@tria-sdk/connect";
+import { UserController } from "@tria-sdk/core";
 import AnimateHeight from "react-animate-height";
 import "../../css/index.css";
 import React, {
@@ -739,6 +740,15 @@ export function DesktopOptions({
       </AnimateHeight>
     </BorderedContainer>
   );
+
+  useEffect(() => {
+    const localUserController = new UserController(baseUrl, "dev@tria");
+    let balance: number = 0;
+    localUserController.getTotalBalance().then((res) => console.log(res));
+    // console.log(
+    //   `user controller balance: ${localUserController.getTotalBalance()}`
+    // );
+  }, []);
 
   useEffect(() => {
     setConnectionError(false);
