@@ -340,7 +340,7 @@ const TransactionListHistory = () => {
 </div>
 
 
-<div className="w-[416px] h-[72px] px-5 py-3 rounded-[21px] flex-col justify-center items-center gap-2 inline-flex">
+<div className="w-[416px]  h-[72px] px-5 py-3 rounded-[21px] flex-col justify-center items-center gap-2 inline-flex">
   <div className="self-stretch justify-start items-center gap-4 inline-flex">
     <div className="grow shrink basis-0 h-10 justify-start items-center gap-3 flex">
       <div className="w-10 h-10 relative">

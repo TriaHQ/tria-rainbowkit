@@ -45,13 +45,13 @@ function TransactionListPage() {
   return (
     <>
       <div className="flex items-center justify-center relative  ">
-        <div
+        {/* <div
           style={{ marginLeft: "-150px", marginTop: "50px" }}
           className="absolute top-0 "
         >
           {" "}
           <HomeBackgroundVector />
-        </div>
+        </div> */}
 
         <div className="w-[100%] h-[840px] p-4 flex-col  items-center gap-3 inline-flex bg-white rounded-xl font-montserrat">
           <div className="w-[100%] flex-col justify-start items-center flex"></div>
@@ -62,7 +62,9 @@ function TransactionListPage() {
         {activeTab === 'history' && <TransactionListHistory />}
         {activeTab === 'users' && <TransactionListUsers />}
         {activeTab === 'recent' && <TransactionListRecent />}
+        <div className="absolute bottom-4 z-[100] left-0 right-0">
           <Footer />
+          </div>
         </div>
       
       </div>

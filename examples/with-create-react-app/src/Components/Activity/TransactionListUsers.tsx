@@ -34,14 +34,9 @@ import React from "react";
 // ]
 
 const TransactionListUsers = () => {
-    // const navigate = useNavigate();
+    
     return (
         <>
-{/* {jsonData.map((transaction, index) => (
-
-)
-)
-} */}
 <div className="flex font-'Montserrat' ">
     <div className="grid grid-cols-2">
 <div className="w-[199px]  h-16 pl-5 pr-2.5 py-2 bg-white rounded-[21px] justify-start items-center inline-flex">

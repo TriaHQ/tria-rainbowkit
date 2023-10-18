@@ -11,6 +11,9 @@ import Footer from "./Components/Footer";
 import HomeBackgroundVector from "./Components/UI/HomeBackgroundVector";
 import "./index.css";
 import { useEffect, useState } from "react";
+import OneNft from "./Components/Nfts/OneNft";
+import MultipleNft from "./Components/Nfts/MultipleNft";
+
 // import { UserController } from "@tria-sdk/core";
 
 
@@ -101,6 +104,9 @@ const App = () => {
                 path="/activity/TransactionDetails"
                 element={<TransactionDetails />}
               />
+              <Route path="/nfts/oneNft" element={<OneNft/>} />
+              <Route path="/nfts/multipleNft" element={<MultipleNft/>} />
+              
             </Routes>
           )}
           <div

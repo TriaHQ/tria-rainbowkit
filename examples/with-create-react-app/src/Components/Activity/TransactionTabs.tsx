@@ -12,7 +12,7 @@ interface TransactionTabsProps {
 const TransactionTabs: React.FC<TransactionTabsProps> = ({ handleTabClick, activeTab }) => {
   return (
     <div>
-      <div className="w-[416px] h-[34px] px-5 py-2.5 justify-start items-center gap-5 inline-flex">
+      <div className="w-[416px] h-[34px] relative  px-5 py-2.5 justify-start items-center gap-5 inline-flex">
         <div
           className={`justify-start items-center gap-4 flex ${
             activeTab === 'history' ? 'active' : ''
@@ -46,9 +46,9 @@ const TransactionTabs: React.FC<TransactionTabsProps> = ({ handleTabClick, activ
       </div>
       <div>
         {/* Render the component based on the active tab */}
-        {activeTab === 'history' && <TransactionListHistory />}
+        {/* {activeTab === 'history' && <TransactionListHistory />}
         {activeTab === 'users' && <TransactionListUsers />}
-        {activeTab === 'recent' && <TransactionListRecent />}
+        {activeTab === 'recent' && <TransactionListRecent />} */}
       </div>
     </div>
   );
