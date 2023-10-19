@@ -9,8 +9,9 @@ export default function OneNft() {
     }
 
   return (
-    <div>
-        <div className="w-[448px] h-[840px] p-4 flex-col justify-between items-center inline-flex">
+    
+      <div className="flex items-center justify-center relative   ">
+        <div className="w-[448px] h-[840px] p-4 flex-col bg-white rounded-xl font-montserrat justify-between items-center inline-flex">
   <div className="w-[416px] h-[703px] flex-col justify-start items-center flex">
     <div className="self-stretch h-[72px] px-5 py-3 rounded-[21px] justify-center items-center gap-2 inline-flex">
       <div className="w-[18px] h-[18px] justify-center items-center flex">

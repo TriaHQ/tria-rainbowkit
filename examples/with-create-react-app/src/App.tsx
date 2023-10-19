@@ -2,7 +2,9 @@
 import Home from "./pages/Home";
 import Nft from "./pages/Nft";
 import TransactionListPage from "./pages/TransactionListPage";
-import TransactionDetails from "./pages/TransactionDetailsPage";
+import TransactionDetailCrypto from "./Components/Activity/TransactionDetailCrypto";
+import TransactionDetailNft from "./Components/Activity/TransactionDetailNft";
+import TransactionDetailMultipleNft from "./Components/Activity/TransactionDetailMultipleNft";
 import Landing from "./pages/Landing";
 import "./pages/Landing.css";
 import BuyCrypto from "./Components/Home/BuyCrypto";
@@ -13,6 +15,7 @@ import "./index.css";
 import { useEffect, useState } from "react";
 import OneNft from "./Components/Nfts/OneNft";
 import MultipleNft from "./Components/Nfts/MultipleNft";
+// import TransactionDetailMultipleNft from "./Components/Activity/TransactionDetailMultipleNft";
 
 // import { UserController } from "@tria-sdk/core";
 
@@ -97,12 +100,20 @@ const App = () => {
               <Route path="/nfts" element={<Nft />} />
               <Route path="/home/buycrypto" element={<BuyCrypto />} />
               <Route
-                path="/activity/TransactionList"
+                path="/activity"
                 element={<TransactionListPage />}
               />
               <Route
-                path="/activity/TransactionDetails"
-                element={<TransactionDetails />}
+                path="/activity/TransactionDetailCrypto"
+                element={<TransactionDetailCrypto/>}
+              />
+              <Route
+                path="/activity/TransactionDetailNft"
+                element={<TransactionDetailNft/>}
+              />
+              <Route
+                path="/activity/TransactionDetailMultipleNft"
+                element={<TransactionDetailMultipleNft/>}
               />
               <Route path="/nfts/oneNft" element={<OneNft/>} />
               <Route path="/nfts/multipleNft" element={<MultipleNft/>} />
@@ -116,7 +127,7 @@ const App = () => {
 
             }}
           >
-            {/* <img className="w-[80px] justify-end rounded-full " src="/images/wallet.jpeg" alt="wallet" /> */}
+            
             <div className="relative ">
               <div className="left-[15.49px] top-[15.49px]">
                 {" "}

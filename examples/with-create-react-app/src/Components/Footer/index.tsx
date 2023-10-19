@@ -25,7 +25,7 @@ const iconData: IconData[] = [
     name: "arrangesquare",
     iconSrc: "/icons/clock.svg",
     text: "activity",
-    route: "/activity/TransactionList",
+    route: "/activity",
   },
 ];
 

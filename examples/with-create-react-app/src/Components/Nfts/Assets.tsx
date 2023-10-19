@@ -1,6 +1,18 @@
 import React from 'react'
+import { Navigate, useNavigate } from 'react-router-dom'
 
 export default function Assets() {
+
+  const navigate =useNavigate();
+
+  function HandleClick(){
+navigate("/nfts/oneNft")
+  }
+
+  function handleClick(){
+    navigate("/nfts/multipleNft")
+      }
+
   return (
     <div>
         <div className="w-[416px] h-[67px] px-5 py-3 rounded-2xl flex-col justify-center items-center gap-2 inline-flex">
@@ -16,7 +28,7 @@ export default function Assets() {
 <div className=' grid grid-cols-2'>
 <div className="w-[183px] h-[244px] p-2 bg-white rounded-[10px] border-2 border-neutral-50 flex-col justify-center items-center gap-2 inline-flex">
   <div className="w-[167px] h-[187px] relative">
-    <img className="w-[167px] h-[187px] left-0 top-0 absolute rounded" src="/images/Rectangle1.svg" />
+   <button onClick={HandleClick}> <img className="w-[167px] h-[187px] left-0 top-0 absolute rounded" src="/images/Rectangle1.svg" /></button>
     <div className="w-10 h-10 p-2 left-0 top-0 absolute justify-center items-center gap-2 inline-flex">
       <div className="w-6 h-6  from-stone-950 to-stone-950 " />
       <img className="w-[24px] h-[24px]" src="/icons/ether2.svg" />
@@ -31,7 +43,7 @@ export default function Assets() {
 
 <div className="w-[183px] h-[244px] p-2 bg-white rounded-[10px] border-2 border-neutral-50 flex-col justify-center items-center gap-2 inline-flex">
   <div className="w-[167px] h-[187px] relative">
-    <img className="w-[167px] h-[187px] left-0 top-0 absolute rounded" src="/images/Rectangle2.svg" />
+  <button onClick={handleClick}><img className="w-[167px] h-[187px] left-0 top-0 absolute rounded" src="/images/Rectangle2.svg" /> </button>
     <div className="w-10 h-10 p-2 left-0 top-0 absolute justify-center items-center gap-2 inline-flex">
       <div className="w-6 h-6  from-stone-950 to-stone-950 rounded-full shadow" />
       <img className="w-[24px] h-[24px]" src="/icons/ether2.svg" />

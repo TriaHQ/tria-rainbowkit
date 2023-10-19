@@ -44,7 +44,7 @@ function TransactionListPage() {
 
   return (
     <>
-      <div className="flex items-center justify-center relative  ">
+      <div className="flex items-center justify-center relative font-montserrat">
         {/* <div
           style={{ marginLeft: "-150px", marginTop: "50px" }}
           className="absolute top-0 "

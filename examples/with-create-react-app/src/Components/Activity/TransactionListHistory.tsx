@@ -57,7 +57,18 @@ import { useNavigate } from "react-router-dom";
 // ];
 
 const TransactionListHistory = () => {
-  //   const navigate = useNavigate();
+    const navigate = useNavigate();
+
+    function HandleClick(){
+      navigate ("/activity/TransactionDetailCrypto")
+    }
+
+    function handleClick(){
+      navigate("/activity/TransactionDetailNft")
+    }
+    function handleClick2(){
+      navigate("/activity/TransactionDetailMultipleNft");
+    }
   return (
     <>
       {/* <div className="w-[416px] pb-9 flex-col justify-start items-center font-Montserrat flex  ">
@@ -134,7 +145,7 @@ const TransactionListHistory = () => {
               src="/icons/user_2.svg"
             />
             <div className="w-[69px] self-stretch justify-start items-center gap-2 flex">
-              <div className="text-center text-stone-950 text-opacity-80 text-base font-semibold font-['Montserrat'] leading-tight">
+              <div className="text-center text-stone-950 text-opacity-80 text-base font-semibold  leading-tight">
                 gus0sus
               </div>
             </div>
@@ -151,7 +162,7 @@ const TransactionListHistory = () => {
               src="/icons/opensea.png"
             />
             <div className="w-[69px] self-stretch justify-start items-center gap-2 flex">
-              <div className="text-center text-stone-950 text-opacity-80 text-base font-semibold font-['Montserrat'] leading-tight">
+              <div className="text-center text-stone-950 text-opacity-80 text-base font-semibold  leading-tight">
                 gus0sus
               </div>
             </div>
@@ -168,7 +179,7 @@ const TransactionListHistory = () => {
               src="/icons/user_3.svg"
             />
             <div className="w-[69px] self-stretch justify-start items-center gap-2 flex">
-              <div className="text-center text-stone-950 text-opacity-80 text-base font-semibold font-['Montserrat'] leading-tight">
+              <div className="text-center text-stone-950 text-opacity-80 text-base font-semibold  leading-tight">
                 gus0sus
               </div>
             </div>
@@ -185,7 +196,7 @@ const TransactionListHistory = () => {
               src="/icons/j.svg"
             />
             <div className="w-[69px] self-stretch justify-start items-center gap-2 flex">
-              <div className="text-center text-stone-950 text-opacity-80 text-base font-semibold font-['Montserrat'] leading-tight">
+              <div className="text-center text-stone-950 text-opacity-80 text-base font-semibold  leading-tight">
                 gus0sus
               </div>
             </div>
@@ -195,7 +206,7 @@ const TransactionListHistory = () => {
 
       <div className="w-[416px] h-[17px] px-3 justify-start items-center gap-4 inline-flex">
   <div className="grow shrink basis-0 h-3 justify-start items-center gap-2 flex">
-    <div className="text-center text-stone-950 text-opacity-40 text-[10px] font-bold font-['Montserrat'] uppercase leading-3 tracking-tight">Today</div>
+    <div className="text-center text-stone-950 text-opacity-40 text-[10px] font-bold  uppercase leading-3 tracking-tight">Today</div>
   </div>
   <div className="grow shrink basis-0 flex-col justify-center items-end gap-1 inline-flex" />
 </div>
@@ -207,7 +218,7 @@ const TransactionListHistory = () => {
         <div className="w-10 h-10 left-0 top-0 absolute bg-yellow-400 bg-opacity-25 rounded-[80px] justify-center items-center inline-flex">
           <div className="grow shrink basis-0 self-stretch p-[6.67px] justify-center items-center inline-flex">
             <div className="w-[26.67px] h-[26.67px] relative flex-col justify-start items-start flex">
-            <img src="/icons/Loader.svg"></img>
+            <button onClick={HandleClick}><img src="/icons/Loader.svg"></img></button>
               <div className="w-[26.67px] h-[26.67px] justify-center items-center inline-flex">
                 <div className="w-[26.67px] h-[26.67px] justify-center items-center inline-flex">
                   <div className="grow shrink basis-0 self-stretch justify-center items-center inline-flex">
@@ -263,17 +274,17 @@ const TransactionListHistory = () => {
       </div>
       <div className="grow shrink basis-0 flex-col justify-start items-start gap-1 inline-flex">
         <div className="self-stretch justify-start items-center gap-2 inline-flex">
-          <div className="text-center text-stone-950 text-opacity-80 text-base font-semibold font-['Montserrat'] leading-tight">MATIC</div>
+          <div className="text-center text-stone-950 text-opacity-80 text-base font-semibold  leading-tight">MATIC</div>
         </div>
         <div className="self-stretch justify-start items-center gap-1 inline-flex">
-          <div className="text-center text-yellow-400 text-xs font-medium font-['Montserrat'] leading-[14.40px]">Pending</div>
-          <div className="text-center text-stone-950 text-opacity-40 text-xs font-medium font-['Montserrat'] leading-[14.40px]">To: avi@tria</div>
+          <div className="text-center text-yellow-400 text-xs font-medium  leading-[14.40px]">Pending</div>
+          <div className="text-center text-stone-950 text-opacity-40 text-xs font-medium  leading-[14.40px]">To: avi@tria</div>
         </div>
       </div>
     </div>
     <div className="grow shrink basis-0 flex-col justify-center items-end gap-1 inline-flex">
-      <div className="text-center text-zinc-500 text-base font-semibold font-['Montserrat'] leading-tight">$1.09</div>
-      <div className="text-center text-stone-950 text-opacity-40 text-sm font-semibold font-['Montserrat'] leading-[16.80px]">2 MATIC</div>
+      <div className="text-center text-zinc-500 text-base font-semibold  leading-tight">$1.09</div>
+      <div className="text-center text-stone-950 text-opacity-40 text-sm font-semibold  leading-[16.80px]">2 MATIC</div>
     </div>
   </div>
 </div>
@@ -289,21 +300,21 @@ const TransactionListHistory = () => {
         </div>
         <div className="w-[18px] h-[18px] pl-[2.31px] pr-[2.19px] pt-[2.43px] pb-[2.07px] left-[27px] top-[27px] absolute bg-violet-600 rounded border border-white backdrop-blur-[2.25px] justify-center items-center inline-flex">
           <div className="w-[13.50px] h-[13.50px] relative flex-col justify-start items-start flex" />
-          <img src="/icons/chain_3.png"></img>
+          <button onClick={handleClick}><img src="/icons/chain_3.png"></img></button>
         </div>
       </div>
       <div className="grow shrink basis-0 flex-col justify-start items-start gap-1 inline-flex">
         <div className="self-stretch justify-start items-center gap-2 inline-flex">
-          <div className="text-center text-stone-950 text-opacity-80 text-base font-semibold font-['Montserrat'] leading-tight">MATIC</div>
+          <div className="text-center text-stone-950 text-opacity-80 text-base font-semibold  leading-tight">MATIC</div>
         </div>
         <div className="self-stretch justify-start items-center gap-2 inline-flex">
-          <div className="text-center text-stone-950 text-opacity-40 text-xs font-medium font-['Montserrat'] leading-[14.40px]">Sent by 0x44s2...348J</div>
+          <div className="text-center text-stone-950 text-opacity-40 text-xs font-medium  leading-[14.40px]">Sent by 0x44s2...348J</div>
         </div>
       </div>
     </div>
     <div className="grow shrink basis-0 flex-col justify-center items-end gap-1 inline-flex">
-      <div className="text-center text-green-500 text-base font-semibold font-['Montserrat'] leading-tight">$10.03</div>
-      <div className="text-center text-stone-950 text-opacity-40 text-sm font-semibold font-['Montserrat'] leading-[16.80px]">0.00124 ETH</div>
+      <div className="text-center text-green-500 text-base font-semibold  leading-tight">$10.03</div>
+      <div className="text-center text-stone-950 text-opacity-40 text-sm font-semibold  leading-[16.80px]">0.00124 ETH</div>
     </div>
   </div>
 </div>
@@ -311,7 +322,7 @@ const TransactionListHistory = () => {
 
 <div className="w-[416px] h-[17px] px-3 justify-start items-center gap-4 inline-flex">
   <div className="grow shrink basis-0 h-3 justify-start items-center gap-2 flex">
-    <div className="text-center text-stone-950 text-opacity-40 text-[10px] font-bold font-['Montserrat'] uppercase leading-3 tracking-tight">yesterday</div>
+    <div className="text-center text-stone-950 text-opacity-40 text-[10px] font-bold  uppercase leading-3 tracking-tight">yesterday</div>
   </div>
   <div className="grow shrink basis-0 flex-col justify-center items-end gap-1 inline-flex" />
 </div>
@@ -321,7 +332,7 @@ const TransactionListHistory = () => {
     <div className="grow shrink basis-0 h-10 justify-start items-center gap-3 flex">
       <div className="w-10 h-10 relative rounded-[45px] border-2 border-neutral-100">
         <div className="w-10 h-10 left-0 top-0 absolute rounded-[42px] justify-center items-center inline-flex">
-          <img className="w-10 h-[49.98px]" src="/icons/image 284.svg" />
+        <button onClick={handleClick2}><img className="w-10 h-[49.98px]" src="/icons/image 284.svg" /></button>
         </div>
         <div className="w-[18px] h-[18px] left-[27px] top-[27px] absolute bg-red-600 rounded border border-white backdrop-blur-[2.25px] justify-center items-center inline-flex">
           <img className="w-[18px] h-[18px]" src="/icons/chain.svg" />
@@ -329,10 +340,10 @@ const TransactionListHistory = () => {
       </div>
       <div className="grow shrink basis-0 flex-col justify-start items-start gap-1 inline-flex">
         <div className="self-stretch justify-start items-center gap-2 inline-flex">
-          <div className="text-stone-950 text-opacity-80 text-base font-semibold font-['Montserrat'] leading-tight">NFT - Sneakerheads</div>
+          <div className="text-stone-950 text-opacity-80 text-base font-semibold  leading-tight">NFT - Sneakerheads</div>
         </div>
         <div className="self-stretch justify-start items-center gap-2 inline-flex">
-          <div className="text-center text-stone-950 text-opacity-40 text-xs font-medium font-['Montserrat'] leading-[14.40px]">Received from opensea.io</div>
+          <div className="text-center text-stone-950 text-opacity-40 text-xs font-medium  leading-[14.40px]">Received from opensea.io</div>
         </div>
       </div>
     </div>
@@ -357,17 +368,17 @@ const TransactionListHistory = () => {
       </div>
       <div className="grow shrink basis-0 flex-col justify-start items-start gap-1 inline-flex">
         <div className="self-stretch justify-start items-center gap-2 inline-flex">
-          <div className="text-center text-stone-950 text-opacity-80 text-base font-semibold font-['Montserrat'] leading-tight">MATIC</div>
+          <div className="text-center text-stone-950 text-opacity-80 text-base font-semibold  leading-tight">MATIC</div>
         </div>
         <div className="self-stretch justify-start items-center gap-1 inline-flex">
-          <div className="text-center text-red-500 text-xs font-medium font-['Montserrat'] leading-[14.40px]">Failed</div>
-          <div className="text-center text-stone-950 text-opacity-40 text-xs font-medium font-['Montserrat'] leading-[14.40px]">To: avi@tria</div>
+          <div className="text-center text-red-500 text-xs font-medium  leading-[14.40px]">Failed</div>
+          <div className="text-center text-stone-950 text-opacity-40 text-xs font-medium  leading-[14.40px]">To: avi@tria</div>
         </div>
       </div>
     </div>
     <div className="grow shrink basis-0 flex-col justify-center items-end gap-1 inline-flex">
-      <div className="text-center text-zinc-500 text-base font-semibold font-['Montserrat'] leading-tight">$1.09</div>
-      <div className="text-center text-stone-950 text-opacity-40 text-sm font-semibold font-['Montserrat'] leading-[16.80px]">2 MATIC</div>
+      <div className="text-center text-zinc-500 text-base font-semibold  leading-tight">$1.09</div>
+      <div className="text-center text-stone-950 text-opacity-40 text-sm font-semibold  leading-[16.80px]">2 MATIC</div>
     </div>
   </div>
 </div>

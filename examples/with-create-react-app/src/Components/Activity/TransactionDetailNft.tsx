@@ -5,11 +5,11 @@ function TransactionDetailNft() {
 
   let navigate = useNavigate();
     function HandleClick() {
-      navigate("/activity/TransactionList");
+      navigate("/activity");
     }
 
   return (
-<div className="w-[448px] h-[840px] p-4 flex-col justify-between items-center inline-flex">
+<div className="w-[448px] h-[840px] bg-white rounded-2xl p-4 flex-col justify-between items-center inline-flex">
   <div className="self-stretch h-[643.25px] flex-col justify-start items-center flex">
     <div className="self-stretch h-[72px] px-5 py-3 rounded-[21px] justify-center items-center gap-2 inline-flex">
       <div className="w-[18px] h-[18px] justify-center items-center flex">

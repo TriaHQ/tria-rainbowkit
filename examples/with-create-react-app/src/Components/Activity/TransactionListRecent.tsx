@@ -9,7 +9,7 @@ const TransactionListRecent =()=>{
   <div className="w-[126px] justify-start items-center gap-3 flex">
     <img className="w-10 h-10 rounded-[25px]" src="/icons/image 8.svg" />
     <div className="w-[74px] self-stretch justify-start items-center gap-2 flex">
-      <div className="text-center text-stone-950 text-opacity-80 text-base font-semibold font-['Montserrat'] leading-tight">Opensea</div>
+      <div className="text-center text-stone-950 text-opacity-80 text-base font-semibold  leading-tight">Opensea</div>
     </div>
   </div>
 </div>
@@ -18,7 +18,7 @@ const TransactionListRecent =()=>{
   <div className="w-[126px] justify-start items-center gap-3 flex">
     <img className="w-10 h-10 rounded-[25px]" src="/icons/image 8.svg" />
     <div className="w-[74px] self-stretch justify-start items-center gap-2 flex">
-      <div className="text-center text-stone-950 text-opacity-80 text-base font-semibold font-['Montserrat'] leading-tight">Ultiverse</div>
+      <div className="text-center text-stone-950 text-opacity-80 text-base font-semibold  leading-tight">Ultiverse</div>
     </div>
   </div>
 </div>
@@ -27,7 +27,7 @@ const TransactionListRecent =()=>{
   <div className="w-[126px] justify-start items-center gap-3 flex">
     <img className="w-10 h-10 rounded-[25px]" src="/icons/image 8.svg" />
     <div className="w-[74px] self-stretch justify-start items-center gap-2 flex">
-      <div className="text-center text-stone-950 text-opacity-80 text-base font-semibold font-['Montserrat'] leading-tight">1inch.io</div>
+      <div className="text-center text-stone-950 text-opacity-80 text-base font-semibold  leading-tight">1inch.io</div>
     </div>
   </div>
 </div>
