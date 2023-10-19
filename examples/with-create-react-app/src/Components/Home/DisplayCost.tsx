@@ -50,7 +50,8 @@ const DisplayCost = () => {
               </div>
             </div>
           </div>
-          <div className="grow shrink basis-0 h-10 px-3 py-2 rounded-lg border border-zinc-300 bg-white border-opacity-60 justify-center items-center gap-3 flex cursor-pointer">
+          <div className="grow shrink basis-0 h-10 px-3 py-2 rounded-lg border border-zinc-300 bg-white border-opacity-60 justify-center items-center gap-3 flex cursor-pointer"
+          onClick={() => navigate("/home/sendCrypto")} >
             <div className="text-center text-base font-semibold  leading-tight   text-violet-600">
               Send
             </div>

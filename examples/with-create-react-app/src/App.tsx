@@ -8,6 +8,8 @@ import TransactionDetailMultipleNft from "./Components/Activity/TransactionDetai
 import Landing from "./pages/Landing";
 import "./pages/Landing.css";
 import BuyCrypto from "./Components/Home/BuyCrypto";
+import SendCrypto from "./Components/Home/SendCrypto";
+import CryptoUserDetail from "./Components/Home/CryptoUserDetail";
 import { BrowserRouter, Routes, Route,useNavigate } from "react-router-dom";
 import Footer from "./Components/Footer";
 import HomeBackgroundVector from "./Components/UI/HomeBackgroundVector";
@@ -99,6 +101,8 @@ const App = () => {
               <Route path="/home" element={<Home />} />
               <Route path="/nfts" element={<Nft />} />
               <Route path="/home/buycrypto" element={<BuyCrypto />} />
+              <Route path="/home/sendCrypto" element={<SendCrypto/>} />
+              <Route path="/home/sendCrypto/cryptoUserDetail" element={<CryptoUserDetail/>} />
               <Route
                 path="/activity"
                 element={<TransactionListPage />}

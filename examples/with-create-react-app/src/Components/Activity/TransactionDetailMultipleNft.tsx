@@ -41,6 +41,7 @@ function TransactionDetailMultipleNft() {
         </div>
         <div className="w-[18px] h-[18px] relative">
           <div className="w-[18px] h-[18px] left-0 top-0 absolute">
+            <img src="/icons/copy.svg"></img>
           </div>
         </div>
       </div>
@@ -51,7 +52,7 @@ function TransactionDetailMultipleNft() {
               <img className="w-[122.92px] h-[137.49px] left-0 top-0 absolute rounded-[2.94px] rotate-[97.5deg]" src="/images/Rectangle_3786.svg" />
               <div className="w-[17.66px] h-[17.65px] left-[4.42px] top-[5.52px] absolute shadow justify-start items-center gap-[5.04px] inline-flex">
                 <div className="w-[17.66px] h-[17.65px] pl-[1.77px] pr-[2.21px] pt-[1.76px] pb-[2.21px] bg-white rounded-[17.65px] border border-white backdrop-blur-[2.21px] justify-center items-center flex">
-                  <img className="w-[13.69px] h-[13.68px]" src="/images/Rectangle_3786.svg"  />
+                  <img className="w-[7.68rem] h-[13.68px]" src="/images/Rectangle_3786.svg"  />
                 </div>
               </div>
             </div>
@@ -77,8 +78,8 @@ function TransactionDetailMultipleNft() {
             </div>
           </div>
           <div className="w-[134.69px] h-[179.34px] p-[5.88px] left-0 top-[23.39px] absolute origin-top-left rotate-[-10deg] bg-white rounded-lg shadow border border-neutral-50 flex-col justify-center items-center gap-[5.88px] inline-flex">
-            <div className="w-[122.92px] h-[137.49px] relative">
-              <img className="w-[122.92px] h-[137.49px] left-0 top-0 absolute rounded-[2.94px] rotate-[10deg]" src="/images/Rectangle_3786.svg"  />
+            <div className="w-7.68rem h-8.59rem relative">
+              <img className=" rotate-[10deg] " src="/images/Rectangle3784.svg"  />
               <div className="w-[17.66px] h-[17.65px] left-[4.42px] top-[5.51px] absolute shadow justify-start items-center gap-[5.04px] inline-flex">
                 <div className="w-[17.66px] h-[17.65px] pl-[1.77px] pr-[2.21px] pt-[1.77px] pb-[2.20px] bg-white rounded-[17.65px] border border-white backdrop-blur-[2.21px] justify-center items-center flex">
                   <img className="w-[13.69px] h-[13.68px]" src="/icons/ether2.svg"/>
@@ -171,6 +172,7 @@ function TransactionDetailMultipleNft() {
     <div className="self-stretch py-3 rounded-[44px] justify-start items-start inline-flex">
       <div className="grow shrink basis-0 h-[19px] justify-center items-center gap-2 flex">
         <div className="w-[19px] h-[19px] relative rounded-[5px]" />
+        <img src="/icons/logo.svg"></img>
         <div className="text-center text-stone-950 text-opacity-40 text-sm font-semibold  leading-[16.80px]">Powered by Tria</div>
       </div>
     </div>

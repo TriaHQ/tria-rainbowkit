@@ -117,6 +117,7 @@ function TransactionDetailCrypto() {
               <div className="text-center text-stone-950 text-opacity-80 text-lg font-semibold font-Montserrat leading-snug">Network Fee</div>
               <div className="w-[18px] h-[18px] relative">
                 <div className="w-[18px] h-[18px] left-0 top-0 absolute">
+                <img src="/icons/Vector.svg"></img>
                 </div>
               </div>
             </div>

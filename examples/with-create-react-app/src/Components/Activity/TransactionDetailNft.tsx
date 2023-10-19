@@ -108,6 +108,7 @@ function TransactionDetailNft() {
               <div className="text-center text-stone-950 text-opacity-80 text-lg font-semibold font-['Montserrat'] leading-snug">Network Fee</div>
               <div className="w-[18px] h-[18px] relative">
                 <div className="w-[18px] h-[18px] left-0 top-0 absolute">
+                  <img src="/icons/Vector.svg"></img>
                 </div>
               </div>
             </div>
@@ -141,6 +142,7 @@ function TransactionDetailNft() {
     <div className="self-stretch py-3 rounded-[44px] justify-start items-start inline-flex">
       <div className="grow shrink basis-0 h-[19px] justify-center items-center gap-2 flex">
         <div className="w-[19px] h-[19px] relative rounded-[5px]" />
+        <img src="/icons/logo.svg"></img>
         <div className="text-center text-stone-950 text-opacity-40 text-sm font-semibold font-['Montserrat'] leading-[16.80px]">Powered by Tria</div>
       </div>
     </div>
